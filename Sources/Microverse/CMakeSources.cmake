@@ -1,4 +1,4 @@
-set(POLYORBIS_HEADERS_
+set(MICROVERSE_HEADERS_
         "Configs/ConfigManager.hpp"
         "Scenes/Scene1.hpp"
         "Scenes/FpsCamera.hpp"
@@ -12,7 +12,7 @@ set(POLYORBIS_HEADERS_
         "Uis/UiInventory.hpp"
 )
 
-set(POLYORBIS_SOURCES_
+set(MICROVERSE_SOURCES_
         "Configs/ConfigManager.cpp"
         "Scenes/Scene1.cpp"
         "Scenes/FpsCamera.cpp"
@@ -27,10 +27,10 @@ set(POLYORBIS_SOURCES_
         "Uis/UiInventory.cpp"
 )
 
-source_group("Header Files" FILES ${POLYORBIS_HEADERS_})
-source_group("Source Files" FILES ${POLYORBIS_SOURCES_})
+source_group("Header Files" FILES ${MICROVERSE_HEADERS_})
+source_group("Source Files" FILES ${MICROVERSE_SOURCES_})
 
-set(POLYORBIS_SOURCES
-        ${POLYORBIS_HEADERS_}
-        ${POLYORBIS_SOURCES_}
+set(MICROVERSE_SOURCES
+        ${MICROVERSE_HEADERS_}
+        ${MICROVERSE_SOURCES_}
 )

@@ -1,8 +1,8 @@
 cmake_minimum_required (VERSION 3.1)
-project (Polyorbis)
+project (Microverse)
 
 # Options
-option(POLYORBIS_INSTALL "Generate installation target" ON)
+option(MICROVERSE_INSTALL "Generate installation target" ON)
 
 # Compiler Options
 message(STATUS "System: ${CMAKE_SYSTEM}")
@@ -50,4 +50,4 @@ message(${LIBRARIES_INCLUDES})
 message(${LIBRARIES_LINKS})
 
 # Sources
-add_subdirectory(Sources/Polyorbis)
+add_subdirectory(Sources/Microverse)
