@@ -9,7 +9,7 @@
 namespace Demo
 {
 	const float FpsCamera::NEAR_PLANE = 0.1f;
-	const float FpsCamera::FAR_PLANE = 2048.0f;
+	const float FpsCamera::FAR_PLANE = 10000.0f;
 	const float FpsCamera::FIELD_OF_VIEW = 60.0f;
 
 	const float FpsCamera::ROTATE_AGILITY = 32.0f;
@@ -91,11 +91,9 @@ namespace Demo
 			auto playerRotation = player->GetGameObject()->GetTransform()->GetRotation();
 			auto playerPosition = player->GetGameObject()->GetTransform()->GetPosition();
 
-			Vector3::Subtract(*playerPosition, *m_targetPosition, m_velocity);
-			*m_velocity /= delta;
-
-			m_targetPosition->Set(*playerPosition);
-			m_targetRotation->Set(*playerRotation);
+			*m_velocity = (*playerPosition - *m_targetPosition) / delta;
+			*m_targetPosition = *playerPosition;
+			*m_targetRotation = *playerRotation;
 		}
 
 		UpdateHorizontalAngle(delta);
@@ -241,7 +239,7 @@ namespace Demo
 
 	void FpsCamera::UpdatePosition()
 	{
-		m_position->Set(*m_targetPosition);
+		*m_position = *m_targetPosition;
 		m_rotation->m_x = m_angleOfElevation - m_targetRotation->m_z;
 		m_rotation->m_y = m_angleAroundPlayer + m_targetRotation->m_y + DEGREES_IN_HALF_CIRCLE;
 		m_rotation->m_z = 0.0f;

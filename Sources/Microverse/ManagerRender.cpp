@@ -10,7 +10,7 @@ namespace Demo
 	{
 		4096, 4096, // width / height
 		{
-			Attachment(0, TypeImage, VK_FORMAT_R16_UNORM) // shadows
+			Attachment(0, TypeImage, VK_FORMAT_R8_UNORM) // shadows
 		}, // images
 		{
 			SubpassType(0, {0})
@@ -39,6 +39,7 @@ namespace Demo
 		m_rendererShadows(new RendererShadows({0, 0})),
 		m_rendererSkyboxes(new RendererSkyboxes({1, 0})),
 		m_rendererTerrains(new RendererTerrains({1, 0})),
+		m_rendererVoxels(new RendererVoxels({1, 0})),
 		m_rendererWaters(new RendererWaters({1, 0})),
 		m_rendererEntities(new RendererEntities({1, 0})),
 	//	m_rendererParticles(new RendererParticles({1, 0})),
@@ -58,6 +59,7 @@ namespace Demo
 
 		delete m_rendererSkyboxes;
 		delete m_rendererTerrains;
+		delete m_rendererVoxels;
 		delete m_rendererWaters;
 		delete m_rendererEntities;
 	//	delete m_rendererParticles;
@@ -116,6 +118,7 @@ namespace Demo
 		// Subpass 0.
 		m_rendererSkyboxes->Render(commandBuffer, m_infinity, *camera);
 		m_rendererTerrains->Render(commandBuffer, m_infinity, *camera);
+		m_rendererVoxels->Render(commandBuffer, m_infinity, *camera);
 		m_rendererWaters->Render(commandBuffer, m_infinity, *camera);
 		m_rendererEntities->Render(commandBuffer, m_infinity, *camera);
 	//	m_rendererParticles->Render(commandBuffer, m_infinity, *camera);
@@ -128,10 +131,10 @@ namespace Demo
 		// Subpass 2.
 #ifndef FLOUNDER_PLATFORM_MACOS
 		m_filterFxaa->Render(commandBuffer);
-		m_filterLensflare->SetSunPosition(*Worlds::Get()->GetSunPosition());
-		m_filterLensflare->SetSunHeight(Worlds::Get()->GetSunHeight());
-		m_filterLensflare->Render(commandBuffer);
-		m_filterTiltshift->Render(commandBuffer);
+//		m_filterLensflare->SetSunPosition(*Worlds::Get()->GetSunPosition());
+//		m_filterLensflare->SetSunHeight(Worlds::Get()->GetSunHeight());
+//		m_filterLensflare->Render(commandBuffer);
+//		m_filterTiltshift->Render(commandBuffer);
 //		m_filterGrain->Render(commandBuffer);
 #endif
 		m_rendererGuis->Render(commandBuffer, m_infinity, *camera);

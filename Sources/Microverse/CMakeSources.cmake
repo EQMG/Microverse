@@ -1,5 +1,6 @@
 set(MICROVERSE_HEADERS_
         "Configs/ConfigManager.hpp"
+        "Planets/Planet.hpp"
         "Scenes/Scene1.hpp"
         "Scenes/FpsCamera.hpp"
         "Scenes/FpsPlayer.hpp"
@@ -14,6 +15,7 @@ set(MICROVERSE_HEADERS_
 
 set(MICROVERSE_SOURCES_
         "Configs/ConfigManager.cpp"
+        "Planets/Planet.cpp"
         "Scenes/Scene1.cpp"
         "Scenes/FpsCamera.cpp"
         "Scenes/FpsPlayer.cpp"

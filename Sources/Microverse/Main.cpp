@@ -1,12 +1,15 @@
 #include <iostream>
 #include <Devices/Mouse.hpp>
-#include <Engine/ModuleUpdater.hpp>
+#include <Engine/DefaultUpdater.hpp>
+#include <Files/Json/FileJson.hpp>
 #include <Helpers/FileSystem.hpp>
 #include <Renderer/Renderer.hpp>
 #include <Skyboxes/SkyboxRender.hpp>
 #include <Scenes/Scenes.hpp>
 #include <Objects/ComponentRegister.hpp>
-#include <Scenes/FpsPlayer.hpp>
+#include <Terrains/LodBehaviour.hpp>
+#include "Scenes/FpsPlayer.hpp"
+#include "Planets/Planet.hpp"
 #include "Configs/ConfigManager.hpp"
 #include "Scenes/Scene1.hpp"
 #include "ManagerRender.hpp"
@@ -21,35 +24,28 @@ int main(int argc, char **argv)
 {
 	// Creates the engine object.
 	auto m_engine = new Engine();
-	m_engine->SetUpdater(new ModuleUpdater());
+	m_engine->SetUpdater(new DefaultUpdater());
 
 	auto configManager = new ConfigManager();
 	printf("Working Directory: %s\n", FileSystem::GetWorkingDirectory().c_str());
 
 	// Adds to the component registry.
 	ComponentRegister::Register("FpsPlayer", REGISTER_CREATE(FpsPlayer));
+	ComponentRegister::Register("Planet", REGISTER_CREATE(Planet));
+	ComponentRegister::Register("LodBehaviour", REGISTER_CREATE(LodBehaviour));
+
+	// Registers modules.
+
 
 	// Initializes the engine modules.
-	if (Display::Get() != nullptr)
-	{
-		Display::Get()->SetTitle("Example Starting");
-		Display::Get()->SetIcon("Resources/Logos/Tail.png");
-	}
+	Display::Get()->SetTitle("Microverse");
+	Display::Get()->SetIcon("Resources/Logos/Tail.png");
 
-	if (Mouse::Get() != nullptr)
-	{
-		Mouse::Get()->SetCustomMouse("Resources/Guis/Cursor.png");
-	}
+	Mouse::Get()->SetCustomMouse("Resources/Guis/Cursor.png");
 
-	if (Renderer::Get() != nullptr)
-	{
-		Renderer::Get()->SetManager(new ManagerRender());
-	}
+	Renderer::Get()->SetManager(new ManagerRender());
 
-	if (Scenes::Get() != nullptr)
-	{
-		Scenes::Get()->SetScene(new Scene1());
-	}
+	Scenes::Get()->SetScene(new Scene1());
 
 	// Runs the engine loop.
 	const int exitCode = m_engine->Run();
