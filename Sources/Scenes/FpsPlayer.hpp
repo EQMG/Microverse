@@ -1,11 +1,11 @@
 #pragma once
 
-#include <Objects/Behaviour.hpp>
-#include <Objects/GameObject.hpp>
+#include <Scenes/Objects/Behaviour.hpp>
+#include <Scenes/Objects/GameObject.hpp>
 #include <Inputs/IAxis.hpp>
 #include <Inputs/IButton.hpp>
 
-using namespace Flounder;
+using namespace fl;
 
 namespace Demo
 {

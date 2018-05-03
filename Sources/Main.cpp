@@ -1,58 +1,53 @@
 #include <iostream>
-#include <Devices/Mouse.hpp>
-#include <Engine/DefaultUpdater.hpp>
 #include <Files/Json/FileJson.hpp>
 #include <Helpers/FileSystem.hpp>
+#include <Inputs/Mouse.hpp>
 #include <Renderer/Renderer.hpp>
-#include <Skyboxes/SkyboxRender.hpp>
 #include <Scenes/Scenes.hpp>
-#include <Objects/ComponentRegister.hpp>
 #include <Terrains/LodBehaviour.hpp>
-#include "Scenes/FpsPlayer.hpp"
-#include "Planets/Planet.hpp"
 #include "Configs/ConfigManager.hpp"
+#include "MainUpdater.hpp"
+#include "MainRenderer.hpp"
+#include "Scenes/FpsPlayer.hpp"
 #include "Scenes/Scene1.hpp"
-#include "ManagerRender.hpp"
 
 using namespace Demo;
+using namespace fl;
 
-//#if (FLOUNDER_CONFIG_RELEASE && FLOUNDER_PLATFORM_WINDOWS)
+//#if (FL_BUILD_RELEASE && FL_BUILD_WINDOWS)
 //int CALLBACK WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR pCmdLine, int nCmdShow)
 //#else
 int main(int argc, char **argv)
 //#endif
 {
-	// Creates the engine object.
-	auto m_engine = new Engine();
-	m_engine->SetUpdater(new DefaultUpdater());
+	// Creates the engine and updater objects.
+	auto engine = new Engine();
+	engine->SetUpdater(new MainUpdater());
 
 	auto configManager = new ConfigManager();
 	printf("Working Directory: %s\n", FileSystem::GetWorkingDirectory().c_str());
 
-	// Adds to the component registry.
-	ComponentRegister::Register("FpsPlayer", REGISTER_CREATE(FpsPlayer));
-	ComponentRegister::Register("Planet", REGISTER_CREATE(Planet));
-	ComponentRegister::Register("LodBehaviour", REGISTER_CREATE(LodBehaviour));
-
 	// Registers modules.
+//	Engine::Get()->RegisterModule<Example>("Example");
+//	Engine::Get()->DeregisterModule("shadows");
 
+	// Registers components.
+	Scenes::Get()->RegisterComponent<FpsPlayer>("FpsPlayer");
+	Scenes::Get()->RegisterComponent<LodBehaviour>("LodBehaviour");
 
-	// Initializes the engine modules.
+	// Initializes modules.
 	Display::Get()->SetTitle("Microverse");
 	Display::Get()->SetIcon("Resources/Logos/Tail.png");
-
 	Mouse::Get()->SetCustomMouse("Resources/Guis/Cursor.png");
-
-	Renderer::Get()->SetManager(new ManagerRender());
-
+	Renderer::Get()->SetManager(new MainRenderer());
 	Scenes::Get()->SetScene(new Scene1());
 
-	// Runs the engine loop.
-	const int exitCode = m_engine->Run();
+	// Runs the game loop.
+	const int exitCode = engine->Run();
 
 	// Deletes the engine.
 	delete configManager;
-	delete m_engine;
+	delete engine;
 
 	// Pauses the console.
 	std::cin.get();

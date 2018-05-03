@@ -33,7 +33,7 @@ namespace Demo
 		m_barBackground->SetScissor(Vector4(0.0f, 0.0f, 1.0f, 0.125f));
 		m_barBackground->SetColourOffset(Colour("#2969B0"));
 
-		m_barTitle = new Text(this, UiBound(Vector2(0.01f, 0.99f), "TopLeft", false), 4.0f, "Starting", Uis::Get()->m_proximaNova->GetBold(), JustifyLeft, 1.0f, 0.001f);
+		m_barTitle = new Text(this, UiBound(Vector2(0.01f, 0.99f), "TopLeft", false), 4.0f, "Microverse", Uis::Get()->m_proximaNova->GetBold(), JustifyLeft, 1.0f, 0.001f);
 		m_barCreatedBy = new Text(this, UiBound(Vector2(0.02f, 0.915f), "TopLeft", false), 1.1f, "Created By: Equilibrium Games", Uis::Get()->m_proximaNova->GetLight(), JustifyLeft, 1.0f, 0.0013f);
 
 		m_tabPuck = new Gui(this, UiBound(Vector2(0.0f, 0.875f), "BottomLeft", false, true, Vector2(0.0f, 0.01f)), textureWhite, 1);
@@ -81,14 +81,14 @@ namespace Demo
 
 			if (m_currentTab != nullptr)
 			{
-				Colour::Interpolate(m_currentTab->GetColour(), m_targetTab->GetColour(), progress, m_barBackground->GetColourOffset());
+				m_barBackground->SetColourOffset(m_currentTab->GetColour().Interpolate(m_targetTab->GetColour(), progress));
 				m_tabPuck->GetRectangle()->m_position->m_x = Maths::Interpolate(m_currentTab->GetRectangle()->m_position->m_x, m_targetTab->GetRectangle()->m_position->m_x, progress);
 				m_tabPuck->GetRectangle()->m_dimensions->m_x = Maths::Interpolate(m_currentTab->GetWidth(), m_targetTab->GetWidth(), progress);
 			}
 			else
 			{
 				progress = 1.0f;
-				m_barBackground->GetColourOffset()->Set(m_targetTab->GetColour());
+				m_barBackground->SetColourOffset(m_targetTab->GetColour());
 				m_tabPuck->GetRectangle()->m_position->m_x = m_targetTab->GetRectangle()->m_position->m_x;
 				m_tabPuck->GetRectangle()->m_dimensions->m_x = m_targetTab->GetWidth();
 			}
@@ -119,17 +119,17 @@ namespace Demo
 				}
 
 				delete m_driverTarget;
-				m_driverTarget = new DriverSlide(0.0f, 1.0f, 0.7f);
+				m_driverTarget = new DriverSlide(0.0f, 1.0f, 0.4f);
 				m_targetTab = tab;
 
 				if (m_currentTab != nullptr)
 				{
-					m_currentTab->GetContent()->SetAlphaDriver(new DriverSlide(1.0f, 0.0f, 0.3f));
+					m_currentTab->GetContent()->SetAlphaDriver(new DriverSlide(1.0f, 0.0f, 0.1f));
 				}
 
-				Events::Get()->AddEvent(new EventTime(0.4f, false, [&]()
+				Events::Get()->AddEvent(new EventTime(0.32f, false, [&]()
 				{
-					m_targetTab->GetContent()->SetAlphaDriver(new DriverSlide(0.0f, 1.0f, 0.3f));
+					m_targetTab->GetContent()->SetAlphaDriver(new DriverSlide(0.0f, 1.0f, 0.1f));
 				}));
 			}
 		}
