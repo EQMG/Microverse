@@ -28,7 +28,7 @@ namespace test
 		m_buttonCaptureMouse(new ButtonKeyboard({KEY_M})),
 		m_buttonScreenshot(new ButtonKeyboard({KEY_F12})),
 		m_buttonExit(new ButtonKeyboard({KEY_DELETE})),
-		m_soundScreenshot(new Sound("Resources/Sounds/Screenshot.ogg"))
+		m_soundScreenshot(new Sound("Sounds/Screenshot.ogg"))
 	{
 	}
 
@@ -52,7 +52,7 @@ namespace test
 		GameObject *playerObject = new GameObject(Transform(Vector3(), Vector3(0.0f, 180.0f, 0.0f), 1.0f));
 		playerObject->SetName("Player");
 		playerObject->AddComponent<FpsPlayer>();
-	//	playerObject->AddComponent<MeshAnimated>("Resources/Objects/Player/Model.json");
+	//	playerObject->AddComponent<MeshAnimated>("Objects/Player/Model.json");
 	//	playerObject->AddComponent<MaterialDefault>();
 	//	playerObject->AddComponent<MeshRender>();
 
@@ -61,7 +61,7 @@ namespace test
 		GameObject *skyboxObject = new GameObject(Transform(Vector3(), Vector3(), 2048.0f));
 		skyboxObject->SetName("SkyboxChapel");
 		skyboxObject->AddComponent<Mesh>(ShapeSphere::Resource(6, 6, 1.0f));
-		skyboxObject->AddComponent<MaterialSkybox>(Cubemap::Resource("Resources/Objects/SkyboxChapel", ".png"), false);
+		skyboxObject->AddComponent<MaterialSkybox>(Cubemap::Resource("Objects/SkyboxChapel", ".png"), false);
 		skyboxObject->AddComponent<MeshRender>();
 
 		// Entities.
@@ -74,8 +74,8 @@ namespace test
 			{
 				GameObject *sphere = new GameObject(Transform(Vector3(6.7f * i, 6.7f * j, -8.0f), Vector3(), 3.0f));
 				sphere->AddComponent<Mesh>(ShapeSphere::Resource(30, 30, 1.0f));
-				sphere->AddComponent<MaterialDefault>(Colour("#ffffff"), Texture::Resource("Resources/Objects/Testing/Diffuse.png"),
-					(float) j / 4.0f, (float) i / 4.0f, Texture::Resource("Resources/Objects/Testing/Material.png"), Texture::Resource("Resources/Objects/Testing/Normal.png"));
+				sphere->AddComponent<MaterialDefault>(Colour("#ffffff"), Texture::Resource("Objects/Testing/Diffuse.png"),
+					(float) j / 4.0f, (float) i / 4.0f, Texture::Resource("Objects/Testing/Material.png"), Texture::Resource("Objects/Testing/Normal.png"));
 			//	sphere->AddComponent<MeshRender>();
 			//	sphere->AddComponent<ShadowRender>();
 			}
