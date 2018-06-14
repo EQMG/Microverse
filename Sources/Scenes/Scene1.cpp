@@ -48,7 +48,7 @@ namespace test
 		//	cameraObject->AddComponent<FpsCamera>();
 
 		// Player.
-		// GameObject *playerObject = new GameObject("Player", Transform(Vector3(), Vector3(0.0f, 180.0f, 0.0f)));
+		// GameObject *playerObject = new GameObject("Objects/Player/Player.json", Transform(Vector3(), Vector3(0.0f, 180.0f, 0.0f)));
 		GameObject *playerObject = new GameObject(Transform(Vector3(), Vector3(0.0f, 180.0f, 0.0f), 1.0f));
 		playerObject->SetName("Player");
 		playerObject->AddComponent<FpsPlayer>();
@@ -57,11 +57,11 @@ namespace test
 	//	playerObject->AddComponent<MeshRender>();
 
 		// Skybox.
-		// GameObject *skyboxObject = new GameObject("SkyboxChapel", Transform(Vector3(), Vector3(), 2048.0f));
+		// GameObject *skyboxObject = new GameObject("Objects/SkyboxClouds/SkyboxClouds.json", Transform(Vector3(), Vector3(), 2048.0f));
 		GameObject *skyboxObject = new GameObject(Transform(Vector3(), Vector3(), 2048.0f));
-		skyboxObject->SetName("SkyboxChapel");
+		skyboxObject->SetName("SkyboxClouds");
 		skyboxObject->AddComponent<Mesh>(ShapeSphere::Resource(6, 6, 1.0f));
-		skyboxObject->AddComponent<MaterialSkybox>(Cubemap::Resource("Objects/SkyboxChapel", ".png"), false);
+		skyboxObject->AddComponent<MaterialSkybox>(Cubemap::Resource("Objects/SkyboxClouds", ".png"), false);
 		skyboxObject->AddComponent<MeshRender>();
 
 		// Entities.
@@ -86,7 +86,7 @@ namespace test
 		voxelChunk->SetName("Chunk_0_0");
 		voxelChunk->AddComponent<Mesh>();
 		voxelChunk->AddComponent<MaterialVoxel>();
-		voxelChunk->AddComponent<VoxelChunk>(MeshGreedy, true);
+		voxelChunk->AddComponent<VoxelChunk>(MESH_GREEDY, true);
 		voxelChunk->AddComponent<MeshRender>();
 
 		// Terrains.
