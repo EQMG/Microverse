@@ -1,20 +1,22 @@
 #pragma once
 
-#include "Maths/Colour.hpp"
-#include "Materials/IMaterial.hpp"
+#include <Maths/Colour.hpp>
+#include <Materials/IMaterial.hpp>
 
-namespace fl
+using namespace fl;
+
+namespace test
 {
 	/// <summary>
 	/// Class that represents a water material shader.
 	/// </summary>
-	class FL_EXPORT MaterialWater :
+	class MaterialWater :
 		public IMaterial
 	{
 	private:
-		Colour *m_colour;
+		Colour m_colour;
 
-		PipelineMaterial *m_material;
+		std::shared_ptr<PipelineMaterial> m_material;
 	public:
 		MaterialWater();
 
@@ -26,16 +28,16 @@ namespace fl
 
 		void Write(LoadedValue *destination) override;
 
-		void PushUniforms(UniformHandler *uniformObject) override;
+		void PushUniforms(UniformHandler &uniformObject) override;
 
-		void PushDescriptors(DescriptorsHandler *descriptorSet) override;
+		void PushDescriptors(DescriptorsHandler &descriptorSet) override;
 
 		std::string GetName() const override { return "MaterialWater"; };
 
-		Colour *GetColour() const { return m_colour; }
+		Colour GetColour() const { return m_colour; }
 
-		void SetColour(const Colour &colour) const { *m_colour = colour; }
+		void SetColour(const Colour &colour) { m_colour = colour; }
 
-		PipelineMaterial *GetMaterial() const override { return m_material; }
+		std::shared_ptr<PipelineMaterial> GetMaterial() const override { return m_material; }
 	};
 }

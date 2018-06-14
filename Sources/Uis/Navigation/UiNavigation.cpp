@@ -5,7 +5,7 @@
 #include <Events/EventTime.hpp>
 #include "ContentExit.hpp"
 
-namespace Demo
+namespace test
 {
 	const std::vector<std::pair<std::string, Colour>> TABS = {
 		{"Play",         Colour("#B8312F")},
@@ -26,15 +26,15 @@ namespace Demo
 		m_currentTab(nullptr),
 		m_targetTab(nullptr)
 	{
-		Texture *textureWhite = new Texture("Resources/Guis/White.png");
-		Texture *textureGeometry = new Texture("Resources/Guis/Geometry-Grain.png");
+		auto textureWhite = Texture::Resource("Resources/Guis/White.png");
+		auto textureGeometry = Texture::Resource("Resources/Guis/Geometry-Grain.png");
 
 		m_barBackground = new Gui(this, UiBound(Vector2(0.5f, 1.0f), "TopCentre", true, false, Vector2(1.0f, 1.0f)), textureGeometry, 1);
 		m_barBackground->SetScissor(Vector4(0.0f, 0.0f, 1.0f, 0.125f));
 		m_barBackground->SetColourOffset(Colour("#2969B0"));
 
-		m_barTitle = new Text(this, UiBound(Vector2(0.01f, 0.99f), "TopLeft", false), 4.0f, "Microverse", Uis::Get()->m_proximaNova->GetBold(), JustifyLeft, 1.0f, 0.001f);
-		m_barCreatedBy = new Text(this, UiBound(Vector2(0.02f, 0.915f), "TopLeft", false), 1.1f, "Created By: Equilibrium Games", Uis::Get()->m_proximaNova->GetLight(), JustifyLeft, 1.0f, 0.0013f);
+		m_barTitle = new Text(this, UiBound(Vector2(0.01f, 0.99f), "TopLeft", false), 4.0f, "Microverse", Uis::Get()->m_proximaNova->GetBold(), JUSTIFY_LEFT, 1.0f, 0.001f);
+		m_barCreatedBy = new Text(this, UiBound(Vector2(0.02f, 0.915f), "TopLeft", false), 1.1f, "Created By: Equilibrium Games", Uis::Get()->m_proximaNova->GetLight(), JUSTIFY_LEFT, 1.0f, 0.0013f);
 
 		m_tabPuck = new Gui(this, UiBound(Vector2(0.0f, 0.875f), "BottomLeft", false, true, Vector2(0.0f, 0.01f)), textureWhite, 1);
 		m_tabPuck->SetColourOffset(Colour("#386AB5"));
@@ -82,15 +82,15 @@ namespace Demo
 			if (m_currentTab != nullptr)
 			{
 				m_barBackground->SetColourOffset(m_currentTab->GetColour().Interpolate(m_targetTab->GetColour(), progress));
-				m_tabPuck->GetRectangle()->m_position->m_x = Maths::Interpolate(m_currentTab->GetRectangle()->m_position->m_x, m_targetTab->GetRectangle()->m_position->m_x, progress);
-				m_tabPuck->GetRectangle()->m_dimensions->m_x = Maths::Interpolate(m_currentTab->GetWidth(), m_targetTab->GetWidth(), progress);
+				m_tabPuck->GetRectangle()->m_position.m_x = Maths::Interpolate(m_currentTab->GetRectangle()->m_position.m_x, m_targetTab->GetRectangle()->m_position.m_x, progress);
+				m_tabPuck->GetRectangle()->m_dimensions.m_x = Maths::Interpolate(m_currentTab->GetWidth(), m_targetTab->GetWidth(), progress);
 			}
 			else
 			{
 				progress = 1.0f;
 				m_barBackground->SetColourOffset(m_targetTab->GetColour());
-				m_tabPuck->GetRectangle()->m_position->m_x = m_targetTab->GetRectangle()->m_position->m_x;
-				m_tabPuck->GetRectangle()->m_dimensions->m_x = m_targetTab->GetWidth();
+				m_tabPuck->GetRectangle()->m_position.m_x = m_targetTab->GetRectangle()->m_position.m_x;
+				m_tabPuck->GetRectangle()->m_dimensions.m_x = m_targetTab->GetWidth();
 			}
 
 			if (progress == 1.0f)

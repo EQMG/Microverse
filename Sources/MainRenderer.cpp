@@ -3,13 +3,13 @@
 #include <Scenes/Scenes.hpp>
 #include <Renderer/Renderer.hpp>
 
-namespace Demo
+namespace test
 {
 	RenderpassCreate *RENDERPASS_0_CREATE = new RenderpassCreate
 		{
 			4096, 4096, // width / height
 			{
-				Attachment(0, TypeImage, VK_FORMAT_R8_UNORM) // shadows
+				Attachment(0, ATTACHMENT_IMAGE, FORMAT_R8_UNORM) // shadows
 			}, // images
 			{
 				SubpassType(0, {0})
@@ -19,11 +19,11 @@ namespace Demo
 		{
 			0, 0, // width / height
 			{
-				Attachment(0, TypeDepth), // depth
-				Attachment(1, TypeSwapchain), // swapchain
-				Attachment(2, TypeImage, VK_FORMAT_R8G8B8A8_UNORM), // colours
-				Attachment(3, TypeImage, VK_FORMAT_R16G16_UNORM), // normals
-				Attachment(4, TypeImage, VK_FORMAT_R8G8B8A8_UNORM) // materials
+				Attachment(0, ATTACHMENT_DEPTH), // depth
+				Attachment(1, ATTACHMENT_SWAPCHAIN), // swapchain
+				Attachment(2, ATTACHMENT_IMAGE, FORMAT_R8G8B8A8_UNORM), // colours
+				Attachment(3, ATTACHMENT_IMAGE, FORMAT_R16G16_UNORM), // normals
+				Attachment(4, ATTACHMENT_IMAGE, FORMAT_R8G8B8A8_UNORM) // materials
 			}, // images
 			{
 				SubpassType(0, {0, 2, 3, 4}),
@@ -72,25 +72,25 @@ namespace Demo
 
 	void MainRenderer::RenderPass0()
 	{
-		RENDERPASS_0_CREATE->m_width = Shadows::Get()->GetShadowSize();
-		RENDERPASS_0_CREATE->m_height = Shadows::Get()->GetShadowSize();
+		RENDERPASS_0_CREATE->SetWidth(Shadows::Get()->GetShadowSize());
+		RENDERPASS_0_CREATE->SetHeight(Shadows::Get()->GetShadowSize());
 
 		const auto commandBuffer = Renderer::Get()->GetCommandBuffer();
 		const auto camera = Scenes::Get()->GetCamera();
 
 		// Starts Rendering.
-		VkResult startResult = Renderer::Get()->StartRenderpass(commandBuffer, 0);
+		auto startResult = Renderer::Get()->StartRenderpass(*commandBuffer, 0);
 
-		if (startResult != VK_SUCCESS)
+		if (!startResult)
 		{
 			return;
 		}
 
 		// Subpass 0.
-		m_rendererShadows->Render(commandBuffer, m_infinity, *camera);
+		m_rendererShadows->Render(*commandBuffer, m_infinity, *camera);
 
 		// Ends Rendering.
-		Renderer::Get()->EndRenderpass(commandBuffer, 0);
+		Renderer::Get()->EndRenderpass(*commandBuffer, 0);
 	}
 
 	void MainRenderer::RenderPass1()
@@ -99,35 +99,35 @@ namespace Demo
 		const auto camera = Scenes::Get()->GetCamera();
 
 		// Starts Rendering.
-		VkResult startResult = Renderer::Get()->StartRenderpass(commandBuffer, 1);
+		auto startResult = Renderer::Get()->StartRenderpass(*commandBuffer, 1);
 
-		if (startResult != VK_SUCCESS)
+		if (!startResult)
 		{
 			return;
 		}
 
 		// Subpass 0.
-		m_rendererMeshes->Render(commandBuffer, m_infinity, *camera);
-		//	m_rendererParticles->Render(commandBuffer, m_infinity, *camera);
-		Renderer::Get()->NextSubpass(commandBuffer);
+		m_rendererMeshes->Render(*commandBuffer, m_infinity, *camera);
+		//	m_rendererParticles->Render(*commandBuffer, m_infinity, *camera);
+		Renderer::Get()->NextSubpass(*commandBuffer);
 
 		// Subpass 1.
-		m_rendererDeferred->Render(commandBuffer, m_infinity, *camera);
-		Renderer::Get()->NextSubpass(commandBuffer);
+		m_rendererDeferred->Render(*commandBuffer, m_infinity, *camera);
+		Renderer::Get()->NextSubpass(*commandBuffer);
 
 		// Subpass 2.
 #ifndef FL_BUILD_MACOS
-		m_filterFxaa->Render(commandBuffer);
+		m_filterFxaa->Render(*commandBuffer);
 //		m_filterLensflare->SetSunPosition(*Worlds::Get()->GetSunPosition());
 //		m_filterLensflare->SetSunHeight(Worlds::Get()->GetSunHeight());
-//		m_filterLensflare->Render(commandBuffer);
-//		m_filterTiltshift->Render(commandBuffer);
-//		m_filterGrain->Render(commandBuffer);
+//		m_filterLensflare->Render(*commandBuffer);
+//		m_filterTiltshift->Render(*commandBuffer);
+//		m_filterGrain->Render(*commandBuffer);
 #endif
-		m_rendererGuis->Render(commandBuffer, m_infinity, *camera);
-		m_rendererFonts->Render(commandBuffer, m_infinity, *camera);
+		m_rendererGuis->Render(*commandBuffer, m_infinity, *camera);
+		m_rendererFonts->Render(*commandBuffer, m_infinity, *camera);
 
 		// Ends Rendering.
-		Renderer::Get()->EndRenderpass(commandBuffer, 1);
+		Renderer::Get()->EndRenderpass(*commandBuffer, 1);
 	}
 }

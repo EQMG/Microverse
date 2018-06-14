@@ -1,13 +1,13 @@
 #pragma once
 
-#include <Scenes/Objects/Behaviour.hpp>
-#include <Scenes/Objects/GameObject.hpp>
+#include <Objects/Behaviour.hpp>
+#include <Objects/GameObject.hpp>
 #include <Inputs/IAxis.hpp>
 #include <Inputs/IButton.hpp>
 
 using namespace fl;
 
-namespace Demo
+namespace test
 {
 	class FpsPlayer :
 		public Behaviour

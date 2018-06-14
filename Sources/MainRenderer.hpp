@@ -14,7 +14,7 @@
 
 using namespace fl;
 
-namespace Demo
+namespace test
 {
 	class MainRenderer :
 		public IManagerRender

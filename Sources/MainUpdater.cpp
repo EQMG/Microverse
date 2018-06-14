@@ -3,7 +3,7 @@
 #include <Engine/Engine.hpp>
 #include <Maths/Maths.hpp>
 
-namespace Demo
+namespace test
 {
 	MainUpdater::MainUpdater() :
 		IUpdater(),
@@ -28,7 +28,7 @@ namespace Demo
 		m_timerRender->SetInterval(1.0f / Engine::Get()->GetFpsLimit());
 
 		// Always-Update.
-		moduleRegister->RunUpdate(UpdateAlways);
+		moduleRegister->RunUpdate(UPDATE_ALWAYS);
 
 		if (m_timerUpdate->IsPassedTime())
 		{
@@ -36,13 +36,13 @@ namespace Demo
 			m_timerUpdate->ResetStartTime();
 
 			// Pre-Update.
-			moduleRegister->RunUpdate(UpdatePre);
+			moduleRegister->RunUpdate(UPDATE_PRE);
 
 			// Update.
-			moduleRegister->RunUpdate(UpdateNormal);
+			moduleRegister->RunUpdate(UPDATE_NORMAL);
 
 			// Post-Update.
-			moduleRegister->RunUpdate(UpdatePost);
+			moduleRegister->RunUpdate(UPDATE_POST);
 
 			// Updates the engines delta.
 			m_deltaUpdate->Update();
@@ -61,7 +61,7 @@ namespace Demo
 			m_timerRender->ResetStartTime();
 
 			// Render
-			moduleRegister->RunUpdate(UpdateRender);
+			moduleRegister->RunUpdate(UPDATE_RENDER);
 
 			// Updates the render delta, and render time extension.
 			m_deltaRender->Update();

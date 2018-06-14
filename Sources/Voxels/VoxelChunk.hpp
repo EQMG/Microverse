@@ -1,10 +1,12 @@
 #pragma once
 
-#include "Objects/Component.hpp"
-#include "Meshes/Mesh.hpp"
+#include <Objects/Component.hpp>
+#include <Meshes/Mesh.hpp>
 #include "VoxelBlock.hpp"
 
-namespace fl
+using namespace fl;
+
+namespace test
 {
 	enum ChunkMesh
 	{
@@ -12,7 +14,7 @@ namespace fl
 		MESH_SIMPLE = 1
 	};
 
-	class FL_EXPORT VoxelChunk :
+	class VoxelChunk :
 		public Component
 	{
 	private:

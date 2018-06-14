@@ -5,13 +5,15 @@
 #include <Renderer/Renderer.hpp>
 #include <Scenes/Scenes.hpp>
 #include <Terrains/LodBehaviour.hpp>
+#include <Worlds/Worlds.hpp>
 #include "Configs/ConfigManager.hpp"
 #include "MainUpdater.hpp"
 #include "MainRenderer.hpp"
 #include "Scenes/FpsPlayer.hpp"
 #include "Scenes/Scene1.hpp"
+#include "MainWorld.hpp"
 
-using namespace Demo;
+using namespace test;
 using namespace fl;
 
 //#if (FL_BUILD_RELEASE && FL_BUILD_WINDOWS)
@@ -41,6 +43,7 @@ int main(int argc, char **argv)
 	Mouse::Get()->SetCustomMouse("Resources/Guis/Cursor.png");
 	Renderer::Get()->SetManager(new MainRenderer());
 	Scenes::Get()->SetScene(new Scene1());
+	Worlds::Get()->SetWorld(new MainWorld());
 
 	// Runs the game loop.
 	const int exitCode = engine->Run();

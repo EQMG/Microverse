@@ -1,8 +1,8 @@
 #include "MeshTerrain.hpp"
 
-#include "Worlds/Worlds.hpp"
+#include <Worlds/Worlds.hpp>
 
-namespace fl
+namespace test
 {
 	const int MeshTerrain::SIDE_LENGTH = 200;
 	const std::vector<float> MeshTerrain::SQUARE_SIZES = {
@@ -20,7 +20,7 @@ namespace fl
 	const float COLOUR_AMPLITUDE = 20.0f;
 	const float COLOUR_PART = 1.0f / (COLOUR_BIOMES.size() - 1);
 
-	MeshTerrain::MeshTerrain(const float &sideLength, const float &squareSize, const int &vertexCount, const float &textureScale, const float &radius, Transform *transform) :
+	MeshTerrain::MeshTerrain(const float &sideLength, const float &squareSize, const int &vertexCount, const float &textureScale, const float &radius, const Transform &transform) :
 		MeshSimple(sideLength, squareSize, vertexCount, textureScale),
 		m_radius(radius),
 		m_transform(transform)
@@ -40,12 +40,12 @@ namespace fl
 		}
 
 		Vector4 cartesian = Vector4(x, 0.0f, z, 1.0f);
-		cartesian = m_transform->GetWorldMatrix().Multiply(cartesian);
+		cartesian = m_transform.GetWorldMatrix().Multiply(cartesian);
 		cartesian = Vector3(cartesian).ProjectCubeToSphere(m_radius);
 		Vector3 polar = Vector3(cartesian).CartesianToPolar();
 
 		//	polar.m_x = m_radius + (28.0f * Terrains::Get()->GetNoise()->GetValue((m_radius / 30.0f) * cartesian.m_x, (m_radius / 30.0f) * cartesian.m_y, (m_radius / 30.0f) * cartesian.m_z));
-		polar.m_x = Worlds::Get()->GetTerrainRadius(m_radius, polar.m_y, polar.m_z);
+		polar.m_x = Worlds::Get()->GetWorld()->GetTerrainRadius(m_radius, polar.m_y, polar.m_z);
 
 		return polar.PolarToCartesian();
 	}

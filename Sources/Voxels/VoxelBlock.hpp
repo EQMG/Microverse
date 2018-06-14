@@ -1,10 +1,12 @@
 #pragma once
 
 #include <map>
-#include "Maths/Colour.hpp"
-#include "Maths/Vector3.hpp"
+#include <Maths/Colour.hpp>
+#include <Maths/Vector3.hpp>
 
-namespace fl
+using namespace fl;
+
+namespace test
 {
 	class VoxelChunk;
 
@@ -18,10 +20,10 @@ namespace fl
 		FaceRight = 5
 	};
 
-	class FL_EXPORT VoxelBlock
+	class VoxelBlock
 	{
 	private:
-		static std::map<std::string, Colour *> s_colours;
+		static std::map<std::string, Colour *> BLOCK_COLOURS;
 
 		VoxelChunk *m_parent;
 

@@ -1,11 +1,13 @@
 #pragma once
 
-#include "Models/Shapes/MeshSimple.hpp"
-#include "Maths/Colour.hpp"
+#include <Models/Shapes/MeshSimple.hpp>
+#include <Maths/Colour.hpp>
 
-namespace fl
+using namespace fl;
+
+namespace test
 {
-	class FL_EXPORT MeshWater :
+	class MeshWater :
 		public MeshSimple
 	{
 	public:
