@@ -1,6 +1,6 @@
 #pragma once
 
-#include <Objects/Behaviour.hpp>
+#include <Objects/IBehaviour.hpp>
 #include <Objects/GameObject.hpp>
 #include <Models/Model.hpp>
 
@@ -9,7 +9,7 @@ using namespace fl;
 namespace test
 {
 	class LodBehaviour :
-		public Behaviour
+		public IBehaviour
 	{
 	private:
 		float m_radius;

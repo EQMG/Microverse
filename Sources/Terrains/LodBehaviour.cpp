@@ -8,7 +8,7 @@
 namespace test
 {
 	LodBehaviour::LodBehaviour(const float &radius, const Transform &transform) :
-		Behaviour(),
+		IBehaviour(),
 		m_radius(radius),
 		m_transform(Transform(transform)),
 		m_modelLods(std::vector<std::shared_ptr<Model>>()),

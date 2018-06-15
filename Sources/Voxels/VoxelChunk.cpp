@@ -10,7 +10,7 @@ namespace test
 	const Vector3 *VoxelChunk::CHUNK_SIZE = new Vector3(VOXEL_SIZE * CHUNK_WIDTH, VOXEL_SIZE * CHUNK_HEIGHT, VOXEL_SIZE * CHUNK_WIDTH);
 
 	VoxelChunk::VoxelChunk(const ChunkMesh &chunkMesh, const bool &generate) :
-		Component(),
+		IComponent(),
 		m_blocks(new std::vector<std::vector<std::vector<VoxelBlock *>>>(CHUNK_WIDTH, std::vector<std::vector<VoxelBlock *>>(CHUNK_WIDTH, std::vector<VoxelBlock *>(CHUNK_HEIGHT)))),
 		m_chunkMesh(chunkMesh),
 		m_generate(generate),

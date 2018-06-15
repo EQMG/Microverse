@@ -11,6 +11,7 @@
 #include <Post/Filters/FilterTiltshift.hpp>
 #include <Renderer/IManagerRender.hpp>
 #include <Shadows/RendererShadows.hpp>
+#include "Post/Filters/FilterDamage.hpp"
 
 using namespace fl;
 
@@ -22,18 +23,19 @@ namespace test
 	private:
 		Vector4 m_infinity;
 
-		RendererShadows *m_rendererShadows;
+		RendererShadows m_rendererShadows;
 
-		RendererMeshes *m_rendererMeshes;
-		//	RendererParticles *m_rendererParticles;
+		RendererMeshes m_rendererMeshes;
+		//	RendererParticles m_rendererParticles;
 
-		RendererDeferred *m_rendererDeferred;
-		FilterFxaa *m_filterFxaa;
-		FilterLensflare *m_filterLensflare;
-		FilterTiltshift *m_filterTiltshift;
-		FilterGrain *m_filterGrain;
-		RendererGuis *m_rendererGuis;
-		RendererFonts *m_rendererFonts;
+		RendererDeferred m_rendererDeferred;
+		FilterFxaa m_filterFxaa;
+		FilterLensflare m_filterLensflare;
+		FilterTiltshift m_filterTiltshift;
+		FilterDamage m_filterDamage;
+		FilterGrain m_filterGrain;
+		RendererGuis m_rendererGuis;
+		RendererFonts m_rendererFonts;
 	public:
 		MainRenderer();
 

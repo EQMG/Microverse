@@ -11,18 +11,18 @@
 
 namespace test
 {
-	const float WALK_SPEED = 3.1f;
-	const float RUN_SPEED = 5.7f;
-	const float CROUCH_SPEED = 1.2f;
-	const float JUMP_SPEED = 6.5f;
-	const float CROUCH_JUMP_SPEED = 3.0f;
-	const float NOCLIP_SPEED = 15.0f;
-	const float GRAVITY = -9.81f;
-	const Vector3 DAMP_NOCLIP = Vector3(10.0f, 10.0f, 10.0f);
-	const Vector3 DAMP_NORMAL = Vector3(20.0f, 1.0f, 20.0f);
+	static const float WALK_SPEED = 3.1f;
+	static const float RUN_SPEED = 5.7f;
+	static const float CROUCH_SPEED = 1.2f;
+	static const float JUMP_SPEED = 6.5f;
+	static const float CROUCH_JUMP_SPEED = 3.0f;
+	static const float NOCLIP_SPEED = 15.0f;
+	static const float GRAVITY = -9.81f;
+	static const Vector3 DAMP_NOCLIP = Vector3(10.0f, 10.0f, 10.0f);
+	static const Vector3 DAMP_NORMAL = Vector3(20.0f, 1.0f, 20.0f);
 
 	FpsPlayer::FpsPlayer() :
-		Behaviour(),
+		IBehaviour(),
 		m_velocity(new Vector3()),
 		m_jumping(false),
 		m_noclipEnabled(true),

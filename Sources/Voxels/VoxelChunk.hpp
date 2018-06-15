@@ -1,6 +1,6 @@
 #pragma once
 
-#include <Objects/Component.hpp>
+#include <Objects/IComponent.hpp>
 #include <Meshes/Mesh.hpp>
 #include "VoxelBlock.hpp"
 
@@ -15,7 +15,7 @@ namespace test
 	};
 
 	class VoxelChunk :
-		public Component
+		public IComponent
 	{
 	private:
 		std::vector<std::vector<std::vector<VoxelBlock *>>> *m_blocks;
