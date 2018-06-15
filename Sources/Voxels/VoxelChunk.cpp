@@ -30,11 +30,11 @@ namespace test
 
 	VoxelChunk::~VoxelChunk()
 	{
-		for (auto x : *m_blocks)
+		for (auto &x : *m_blocks)
 		{
-			for (auto z : x)
+			for (auto &z : x)
 			{
-				for (auto y : z)
+				for (auto &y : z)
 				{
 					delete y;
 				}

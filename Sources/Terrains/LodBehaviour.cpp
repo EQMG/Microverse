@@ -26,7 +26,7 @@ namespace test
 
 	void LodBehaviour::Update()
 	{
-		Vector3 cameraPosition = Vector3(Scenes::Get()->GetCamera()->GetPosition());
+		Vector3 cameraPosition = Scenes::Get()->GetCamera()->GetPosition();
 		Vector3 chunkPosition = m_transform.GetPosition().ProjectCubeToSphere(m_radius) + GetGameObject()->GetTransform()->GetPosition();
 		float distance = std::fabs(chunkPosition.Distance(cameraPosition));
 

@@ -1,15 +1,15 @@
 #include <iostream>
-#include <Files/Json/FileJson.hpp>
 #include <Files/Files.hpp>
+#include <Files/Json/FileJson.hpp>
 #include <Helpers/FileSystem.hpp>
 #include <Inputs/Mouse.hpp>
 #include <Renderer/Renderer.hpp>
 #include <Scenes/Scenes.hpp>
 #include <Terrains/LodBehaviour.hpp>
-#include <Worlds/Worlds.hpp>
-#include <Waters/MaterialWater.hpp>
-#include <Voxels/MaterialVoxel.hpp>
 #include <Terrains/MaterialTerrain.hpp>
+#include <Voxels/MaterialVoxel.hpp>
+#include <Waters/MaterialWater.hpp>
+#include <Worlds/Worlds.hpp>
 #include "Configs/ConfigManager.hpp"
 #include "MainUpdater.hpp"
 #include "MainRenderer.hpp"
@@ -38,8 +38,6 @@ int main(int argc, char **argv)
 	printf("Working Directory: %s\n", FileSystem::GetWorkingDirectory().c_str());
 
 	// Registers modules.
-//	Engine::Get()->RegisterModule<Example>("Example");
-//	Engine::Get()->DeregisterModule("shadows");
 
 	// Registers components.
 	Scenes::Get()->RegisterComponent<FpsPlayer>("FpsPlayer");

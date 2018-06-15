@@ -42,35 +42,27 @@ namespace test
 		Vector4 cartesian = Vector4(x, 0.0f, z, 1.0f);
 		cartesian = m_transform.GetWorldMatrix().Multiply(cartesian);
 		cartesian = Vector3(cartesian).ProjectCubeToSphere(m_radius);
+
 		Vector3 polar = Vector3(cartesian).CartesianToPolar();
-
-		//	polar.m_x = m_radius + (28.0f * Terrains::Get()->GetNoise()->GetValue((m_radius / 30.0f) * cartesian.m_x, (m_radius / 30.0f) * cartesian.m_y, (m_radius / 30.0f) * cartesian.m_z));
 		polar.m_x = Worlds::Get()->GetWorld()->GetTerrainRadius(m_radius, polar.m_y, polar.m_z);
-
 		return polar.PolarToCartesian();
 	}
 
 	Vector3 MeshTerrain::GetNormal(const Vector3 &position)
 	{
-		/*	Vector3 polar = Vector3::CartesianToPolar(position);
+		//Vector3 polar = position.CartesianToPolar();
 
-			float squareSize = 0.1f;
-			Vector3 positionL = GetPosition(polar.m_y - squareSize, polar.m_z);
-			Vector3 positionR = GetPosition(polar.m_y + squareSize, polar.m_z);
-			Vector3 positionD = GetPosition(polar.m_y, polar.m_z - squareSize);
-			Vector3 positionU = GetPosition(polar.m_y, polar.m_z + squareSize);
+		//float squareSize = 0.1f;
+		//Vector3 positionL = GetPosition(polar.m_y - squareSize, polar.m_z);
+		//Vector3 positionR = GetPosition(polar.m_y + squareSize, polar.m_z);
+		//Vector3 positionD = GetPosition(polar.m_y, polar.m_z - squareSize);
+		//Vector3 positionU = GetPosition(polar.m_y, polar.m_z + squareSize);
 
-			Vector3 normal = Vector3();
-			Vector3::Cross(positionL - positionR, positionD - positionU, &normal);
-			normal.Normalize();
-			return normal;*/
+		//Vector3 normal = (positionL - positionR).Cross(positionD - positionU);
+		////Vector3 normal = (positionL - positionR).Cross(positionR - positionD);
+		//return normal.Normalize();
 
-		//	Vector3 normal = Vector3();
-		//	Vector3::Cross(positionL - positionR, positionR - positionD, &normal);
-		//	normal.Normalize();
-		//	return normal;
-
-		//	return Vector3::ProjectCubeToSphere(m_radius, position);
+		//return position.ProjectCubeToSphere(m_radius);
 		return Vector3::ZERO;
 	}
 
