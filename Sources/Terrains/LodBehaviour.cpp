@@ -7,8 +7,9 @@
 
 namespace test
 {
-	LodBehaviour::LodBehaviour(const float &radius, const Transform &transform) :
+	LodBehaviour::LodBehaviour(const float &sideLength, const float &radius, const Transform &transform) :
 		IBehaviour(),
+		m_sideLength(sideLength),
 		m_radius(radius),
 		m_transform(Transform(transform)),
 		m_modelLods(std::vector<std::shared_ptr<Model>>()),
@@ -30,7 +31,7 @@ namespace test
 		Vector3 chunkPosition = m_transform.GetPosition().ProjectCubeToSphere(m_radius) + GetGameObject()->GetTransform()->GetPosition();
 		float distance = std::fabs(chunkPosition.Distance(cameraPosition));
 
-		float lod = std::floor(0.75f * distance / MeshTerrain::SIDE_LENGTH);
+		float lod = std::floor(0.75f * distance / m_sideLength);
 		lod = Maths::Clamp(lod, 0.0f, static_cast<float>(MeshTerrain::SQUARE_SIZES.size() - 1));
 		unsigned int lodi = static_cast<unsigned int>(lod);
 
@@ -38,7 +39,7 @@ namespace test
 		{
 			if (m_modelLods.at(lodi) == nullptr)
 			{
-				CreateLod(lodi);
+				CreateLod(lodi, static_cast<float>(m_sideLength));
 			}
 
 			auto mesh = GetGameObject()->GetComponent<Mesh>();
@@ -52,7 +53,7 @@ namespace test
 		}
 	}
 
-	void LodBehaviour::CreateLod(const unsigned int &lod)
+	void LodBehaviour::CreateLod(const unsigned int &lod, const float &sideLength)
 	{
 		if (m_modelLods.at(lod) != nullptr)
 		{
@@ -64,9 +65,9 @@ namespace test
 #endif
 		float squareSize = MeshTerrain::SQUARE_SIZES.at(lod);
 		float textureScale = MeshTerrain::TEXTURE_SCALES.at(lod);
-		int vertexCount = CalculateVertexCount(MeshTerrain::SIDE_LENGTH, squareSize);
+		int vertexCount = CalculateVertexCount(sideLength, squareSize);
 		float lodFixScale = 1.0f; // (lod == 0) ? 1.0f : 1.02f + (0.028f * lod);
-		m_modelLods.at(lod) = std::make_shared<MeshTerrain>(lodFixScale * static_cast<float>(MeshTerrain::SIDE_LENGTH), lodFixScale * squareSize, vertexCount, textureScale, m_radius, m_transform);
+		m_modelLods.at(lod) = std::make_shared<MeshTerrain>(lodFixScale * sideLength, lodFixScale * squareSize, vertexCount, textureScale, m_radius, m_transform);
 #if FL_VERBOSE
 		float debugEnd = Engine::Get()->GetTimeMs();
 
@@ -77,8 +78,8 @@ namespace test
 #endif
 	}
 
-	int LodBehaviour::CalculateVertexCount(const int &terrainLength, const float &squareSize)
+	int LodBehaviour::CalculateVertexCount(const float &sideLength, const float &squareSize)
 	{
-		return static_cast<int>((2.0 * terrainLength) / static_cast<float>(squareSize)) + 1;
+		return static_cast<int>((2.0f * sideLength) / static_cast<float>(squareSize)) + 1;
 	}
 }

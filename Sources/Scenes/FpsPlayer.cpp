@@ -8,6 +8,7 @@
 #include <Inputs/ButtonJoystick.hpp>
 #include <Uis/Uis.hpp>
 #include <Scenes/Scenes.hpp>
+#include <Worlds/Worlds.hpp>
 
 namespace test
 {
@@ -129,7 +130,13 @@ namespace test
 		Vector3 newPosition = GetGameObject()->GetTransform()->GetPosition();
 		Vector3 newRotation = GetGameObject()->GetTransform()->GetRotation();
 
-		float groundHeight = 0.0f;
+		// Planet collision.
+		Vector3 cartesian = newPosition - Vector3::ZERO;
+		Vector3 polar = cartesian.CartesianToPolar();
+		float planetRadius = Worlds::Get()->GetWorld()->GetTerrainRadius(300.0f, polar.m_y, polar.m_z) + 1.74f;
+		polar.m_x = std::max(polar.m_x, planetRadius);
+		cartesian = polar.PolarToCartesian();
+		newPosition = cartesian;
 
 		// Calculates the deltas to the moved distance, and rotation.
 		float theta = Maths::Radians(cameraRotation.m_y);
@@ -143,11 +150,11 @@ namespace test
 		newPosition += *m_amountMove;
 		newRotation += *m_amountRotate;
 
-		if (!m_noclipEnabled && newPosition.m_y <= groundHeight)
+		if (!m_noclipEnabled && polar.m_x <= planetRadius)
 		{
-			m_velocity->m_y = 0.0f;
+		//	m_velocity->m_y = 0.0f;
 			m_jumping = false;
-			newPosition.m_y = groundHeight;
+		//	newPosition.m_y = groundHeight;
 		}
 
 		GetGameObject()->GetTransform()->SetPosition(newPosition);

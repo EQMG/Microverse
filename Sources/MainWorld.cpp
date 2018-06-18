@@ -31,7 +31,7 @@ namespace test
 		m_skyColour(Colour("#3399ff"))
 	{
 		m_noiseTerrain.SetNoiseType(NoiseType::TYPE_PERLINFRACTAL);
-		m_noiseTerrain.SetFrequency(0.003f);
+		m_noiseTerrain.SetFrequency(0.0172f);
 		m_noiseTerrain.SetInterp(NoiseInterp::INTERP_QUINTIC);
 		m_noiseTerrain.SetFractalType(NoiseFractal::FRACTAL_FBM);
 		m_noiseTerrain.SetFractalOctaves(4);
@@ -117,10 +117,7 @@ namespace test
 
 	float MainWorld::GetTerrainRadius(const float &radius, const float &theta, const float &phi)
 	{
-		float height = m_noiseTerrain.GetValue(
-			(radius / 10.0f) * Maths::NormalizeAngle(Maths::Degrees(theta)),
-			(radius / 10.0f) * Maths::NormalizeAngle(Maths::Degrees(phi))
-		);
+		float height = m_noiseTerrain.GetValue(radius * theta, radius * phi);
 		return radius + (25.0f * height);
 	}
 }

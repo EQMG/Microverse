@@ -4,7 +4,6 @@
 
 namespace test
 {
-	const int MeshTerrain::SIDE_LENGTH = 200;
 	const std::vector<float> MeshTerrain::SQUARE_SIZES = {
 		4.0f, 8.0f, 25.0f, 50.0f, 100.0f
 	};
@@ -23,7 +22,7 @@ namespace test
 	MeshTerrain::MeshTerrain(const float &sideLength, const float &squareSize, const int &vertexCount, const float &textureScale, const float &radius, const Transform &transform) :
 		MeshSimple(sideLength, squareSize, vertexCount, textureScale),
 		m_radius(radius),
-		m_transform(transform)
+		m_worldMatrix(transform.GetWorldMatrix())
 	{
 		MeshSimple::GenerateMesh();
 	}
@@ -36,11 +35,11 @@ namespace test
 	{
 		if (m_radius == 0.0f)
 		{
-			return m_transform.GetWorldMatrix().Multiply(Vector3(x, 0.0f, z));
+			return m_worldMatrix.Multiply(Vector3(x, 0.0f, z));
 		}
 
 		Vector4 cartesian = Vector4(x, 0.0f, z, 1.0f);
-		cartesian = m_transform.GetWorldMatrix().Multiply(cartesian);
+		cartesian = m_worldMatrix.Multiply(cartesian);
 		cartesian = Vector3(cartesian).ProjectCubeToSphere(m_radius);
 
 		Vector3 polar = Vector3(cartesian).CartesianToPolar();

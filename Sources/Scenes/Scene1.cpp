@@ -91,20 +91,20 @@ namespace test
 		sun->AddComponent<Light>(Colour("#FFFFFF"), -1.0f);
 
 		// Terrains.
-		int n = 2;
-		float side = MeshTerrain::SIDE_LENGTH;
-		float radius = ((2 * n + 1) * side) / 2.0f;
+		int n = 1;
+		float sideLength = 200.0f;
+		float radius = ((2 * n + 1) * sideLength) / 2.0f;
 
 		for (int j = -n; j <= n; j++)
 		{
 			for (int w = -n; w <= n; w++)
 			{
-				CreateChunk(radius, Transform(Vector3(j * side, radius, w * side), Vector3(0.0f, 0.0f, 0.0f))); // Top.
-				CreateChunk(radius, Transform(Vector3(j * side, -radius, w * side), Vector3(180.0f, 0.0f, 0.0f))); // Bottom.
-				CreateChunk(radius, Transform(Vector3(w * side, j * side, radius), Vector3(90.0f, 0.0f, 0.0f))); // Back.
-				CreateChunk(radius, Transform(Vector3(w * side, j * side, -radius), Vector3(270.0f, 0.0f, 0.0f))); // Front.
-				CreateChunk(radius, Transform(Vector3(radius, j * side, w * side), Vector3(0.0f, 0.0f, 270.0f))); // Right.
-				CreateChunk(radius, Transform(Vector3(-radius, j * side, w * side), Vector3(0.0f, 0.0f, 90.0f))); // Left.
+				CreateChunk(sideLength, radius, Transform(Vector3(j * sideLength, radius, w * sideLength), Vector3(0.0f, 0.0f, 0.0f))); // Top.
+				CreateChunk(sideLength, radius, Transform(Vector3(j * sideLength, -radius, w * sideLength), Vector3(180.0f, 0.0f, 0.0f))); // Bottom.
+				CreateChunk(sideLength, radius, Transform(Vector3(w * sideLength, j * sideLength, radius), Vector3(90.0f, 0.0f, 0.0f))); // Back.
+				CreateChunk(sideLength, radius, Transform(Vector3(w * sideLength, j * sideLength, -radius), Vector3(270.0f, 0.0f, 0.0f))); // Front.
+				CreateChunk(sideLength, radius, Transform(Vector3(radius, j * sideLength, w * sideLength), Vector3(0.0f, 0.0f, 270.0f))); // Right.
+				CreateChunk(sideLength, radius, Transform(Vector3(-radius, j * sideLength, w * sideLength), Vector3(0.0f, 0.0f, 90.0f))); // Left.
 			}
 		}
 
@@ -169,14 +169,14 @@ namespace test
 		return m_uiStartLogo->IsStarting() || m_uiNavigation->GetAlpha() != 0.0f;
 	}
 
-	GameObject *Scene1::CreateChunk(const float &radius, const Transform &transform)
+	GameObject *Scene1::CreateChunk(const float &sideLength, const float &radius, const Transform &transform)
 	{
 	//	new GameObject("Objects/PlanetCentre/PlanetCentre.json", Transform(transform.GetPosition().ProjectCubeToSphere(radius), transform.GetRotation(), 5.0f));
 
 		GameObject *terrainChunk = new GameObject(Transform());
 		terrainChunk->SetName("Terrain");
 		terrainChunk->AddComponent<Mesh>();
-		terrainChunk->AddComponent<LodBehaviour>(radius, transform);
+		terrainChunk->AddComponent<LodBehaviour>(sideLength, 0.0f, transform);
 		terrainChunk->AddComponent<MaterialTerrain>();
 		terrainChunk->AddComponent<MeshRender>();
 		//terrainChunk->AddComponent<ShadowRender>();

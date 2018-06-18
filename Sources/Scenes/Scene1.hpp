@@ -44,7 +44,7 @@ namespace test
 
 		SelectorJoystick *GetSelectorJoystick() const override { return m_selectorJoystick; };
 	private:
-		GameObject *CreateChunk(const float &radius, const Transform &transform);
+		GameObject *CreateChunk(const float &sideLength, const float &radius, const Transform &transform);
 
 		void TogglePause();
 	};

@@ -13,9 +13,8 @@ namespace test
 	{
 	private:
 		float m_radius;
-		Transform m_transform;
+		Matrix4 m_worldMatrix;
 	public:
-		static const int SIDE_LENGTH;
 		static const std::vector<float> SQUARE_SIZES;
 		static const std::vector<float> TEXTURE_SCALES;
 
@@ -28,9 +27,5 @@ namespace test
 		Vector3 GetNormal(const Vector3 &position) override;
 
 		Vector3 GetColour(const Vector3 &position, const Vector3 &normal) override;
-	private:
-		static float GetHeight(const float &x, const float &z);
-
-		static Vector3 GetNormal(const float &x, const float &z);
 	};
 }
