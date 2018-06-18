@@ -17,8 +17,6 @@
 #include "Terrains/LodBehaviour.hpp"
 #include "Terrains/MeshTerrain.hpp"
 #include "Terrains/MaterialTerrain.hpp"
-#include "Voxels/MaterialVoxel.hpp"
-#include "Voxels/VoxelChunk.hpp"
 #include "Waters/MaterialWater.hpp"
 #include "FpsCamera.hpp"
 #include "FpsPlayer.hpp"
@@ -91,30 +89,7 @@ namespace test
 		sun->AddComponent<Light>(Colour("#FFFFFF"), -1.0f);
 
 		// Terrains.
-		int n = 1;
-		float sideLength = 200.0f;
-		float radius = ((2 * n + 1) * sideLength) / 2.0f;
-
-		for (int j = -n; j <= n; j++)
-		{
-			for (int w = -n; w <= n; w++)
-			{
-				CreateChunk(sideLength, radius, Transform(Vector3(j * sideLength, radius, w * sideLength), Vector3(0.0f, 0.0f, 0.0f))); // Top.
-				CreateChunk(sideLength, radius, Transform(Vector3(j * sideLength, -radius, w * sideLength), Vector3(180.0f, 0.0f, 0.0f))); // Bottom.
-				CreateChunk(sideLength, radius, Transform(Vector3(w * sideLength, j * sideLength, radius), Vector3(90.0f, 0.0f, 0.0f))); // Back.
-				CreateChunk(sideLength, radius, Transform(Vector3(w * sideLength, j * sideLength, -radius), Vector3(270.0f, 0.0f, 0.0f))); // Front.
-				CreateChunk(sideLength, radius, Transform(Vector3(radius, j * sideLength, w * sideLength), Vector3(0.0f, 0.0f, 270.0f))); // Right.
-				CreateChunk(sideLength, radius, Transform(Vector3(-radius, j * sideLength, w * sideLength), Vector3(0.0f, 0.0f, 90.0f))); // Left.
-			}
-		}
-
-		// Voxels.
-		/*GameObject *voxelChunk = new GameObject(Transform());
-		voxelChunk->SetName("Chunk_0_0");
-		voxelChunk->AddComponent<Mesh>();
-		voxelChunk->AddComponent<MaterialVoxel>();
-		voxelChunk->AddComponent<VoxelChunk>(MESH_GREEDY, true);
-		voxelChunk->AddComponent<MeshRender>();*/
+		GameObject *planet1 = CreatePlanet(500.0f, Vector3());
 
 		// Waters.
 		/*GameObject *water = new GameObject(Transform());
@@ -169,14 +144,35 @@ namespace test
 		return m_uiStartLogo->IsStarting() || m_uiNavigation->GetAlpha() != 0.0f;
 	}
 
-	GameObject *Scene1::CreateChunk(const float &sideLength, const float &radius, const Transform &transform)
+	GameObject *Scene1::CreatePlanet(const float &radius, const Vector3 &position)
+	{
+		//	GameObject *planet = new GameObject("Objects/PlanetCentre/PlanetCentre.json", Transform(position, Vector3(), 5.0f));
+		GameObject *planet = new GameObject(Transform(position));
+
+		GameObject *chunkTop = CreateChunk(radius, Transform(Vector3(0.0f, radius, 0.0f), Vector3(0.0f, 0.0f, 0.0f)));
+		chunkTop->SetParent(planet);
+		GameObject *chunkBottom = CreateChunk(radius, Transform(Vector3(0.0f, -radius, 0.0f), Vector3(180.0f, 0.0f, 0.0f)));
+		chunkBottom->SetParent(planet);
+		GameObject *chunkBack = CreateChunk(radius, Transform(Vector3(0.0f, 0.0f, radius), Vector3(90.0f, 0.0f, 0.0f)));
+		chunkBack->SetParent(planet);
+		GameObject *chunkFront = CreateChunk(radius, Transform(Vector3(0.0f, 0.0f, -radius), Vector3(270.0f, 0.0f, 0.0f)));
+		chunkFront->SetParent(planet);
+		GameObject *chunkRight = CreateChunk(radius, Transform(Vector3(radius, 0.0f, 0.0f), Vector3(0.0f, 0.0f, 270.0f)));
+		chunkRight->SetParent(planet);
+		GameObject *chunkLeft = CreateChunk(radius, Transform(Vector3(-radius, 0.0f, 0.0f), Vector3(0.0f, 0.0f, 90.0f)));
+		chunkLeft->SetParent(planet);
+
+		return planet;
+	}
+
+	GameObject *Scene1::CreateChunk(const float &radius, const Transform &transform)
 	{
 	//	new GameObject("Objects/PlanetCentre/PlanetCentre.json", Transform(transform.GetPosition().ProjectCubeToSphere(radius), transform.GetRotation(), 5.0f));
 
 		GameObject *terrainChunk = new GameObject(Transform());
 		terrainChunk->SetName("Terrain");
 		terrainChunk->AddComponent<Mesh>();
-		terrainChunk->AddComponent<LodBehaviour>(sideLength, 0.0f, transform);
+		terrainChunk->AddComponent<LodBehaviour>(2.0f * radius, radius, transform);
 		terrainChunk->AddComponent<MaterialTerrain>();
 		terrainChunk->AddComponent<MeshRender>();
 		//terrainChunk->AddComponent<ShadowRender>();

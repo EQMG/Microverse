@@ -15,9 +15,6 @@ set(MICROVERSE_HEADERS_
         "Terrains/LodBehaviour.hpp"
         "Terrains/MaterialTerrain.hpp"
         "Terrains/MeshTerrain.hpp"
-        "Voxels/MaterialVoxel.hpp"
-        "Voxels/VoxelBlock.hpp"
-        "Voxels/VoxelChunk.hpp"
         "Waters/MaterialWater.hpp"
         "Waters/MeshWater.hpp"
 )
@@ -40,9 +37,6 @@ set(MICROVERSE_SOURCES_
         "Terrains/LodBehaviour.cpp"
         "Terrains/MaterialTerrain.cpp"
         "Terrains/MeshTerrain.cpp"
-        "Voxels/MaterialVoxel.cpp"
-        "Voxels/VoxelBlock.cpp"
-        "Voxels/VoxelChunk.cpp"
         "Waters/MaterialWater.cpp"
         "Waters/MeshWater.cpp"
 )

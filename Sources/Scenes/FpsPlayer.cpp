@@ -84,6 +84,14 @@ namespace test
 
 		Vector3 targetVelocity = Vector3(0.0f, m_noclipEnabled ? 0.0f : GRAVITY, 0.0f);
 
+		/*if (!m_noclipEnabled)
+		{
+			Vector3 cartesian = GetGameObject()->GetTransform()->GetPosition() - Vector3::ZERO;
+			Vector3 polar = cartesian.CartesianToPolar();
+			polar.m_x = GRAVITY;
+			targetVelocity = polar.PolarToCartesian();
+		}*/
+
 		if (!Scenes::Get()->IsGamePaused())
 		{
 			bool sprintDown = m_inputSprint->IsDown();
@@ -127,16 +135,26 @@ namespace test
 		*m_velocity = m_velocity->SmoothDamp(targetVelocity, delta * (m_noclipEnabled ? DAMP_NOCLIP : DAMP_NORMAL));
 
 		auto cameraRotation = Scenes::Get()->GetCamera()->GetRotation();
-		Vector3 newPosition = GetGameObject()->GetTransform()->GetPosition();
-		Vector3 newRotation = GetGameObject()->GetTransform()->GetRotation();
+		Vector3 position = GetGameObject()->GetTransform()->GetPosition();
+		Vector3 rotation = GetGameObject()->GetTransform()->GetRotation();
 
 		// Planet collision.
-		Vector3 cartesian = newPosition - Vector3::ZERO;
-		Vector3 polar = cartesian.CartesianToPolar();
-		float planetRadius = Worlds::Get()->GetWorld()->GetTerrainRadius(300.0f, polar.m_y, polar.m_z) + 1.74f;
-		polar.m_x = std::max(polar.m_x, planetRadius);
-		cartesian = polar.PolarToCartesian();
-		newPosition = cartesian;
+		if (!m_noclipEnabled)
+		{
+			Vector3 cartesian = position - Vector3::ZERO;
+			Vector3 polar = cartesian.CartesianToPolar();
+			float planetRadius = Worlds::Get()->GetWorld()->GetTerrainRadius(500.0f, polar.m_y, polar.m_z) + 1.74f;
+			polar.m_x = std::max(polar.m_x, planetRadius);
+			cartesian = polar.PolarToCartesian();
+			position = cartesian;
+
+			if (polar.m_x <= planetRadius)
+			{
+			//	m_velocity->m_y = 0.0f;
+				m_jumping = false;
+			//	newPosition.m_y = groundHeight;
+			}
+		}
 
 		// Calculates the deltas to the moved distance, and rotation.
 		float theta = Maths::Radians(cameraRotation.m_y);
@@ -147,17 +165,10 @@ namespace test
 		*m_amountMove = Vector3(dx, dy, dz);
 		*m_amountRotate = Vector3(0.0f, 0.0f, 0.0f);
 
-		newPosition += *m_amountMove;
-		newRotation += *m_amountRotate;
+		position += *m_amountMove;
+		rotation += *m_amountRotate;
 
-		if (!m_noclipEnabled && polar.m_x <= planetRadius)
-		{
-		//	m_velocity->m_y = 0.0f;
-			m_jumping = false;
-		//	newPosition.m_y = groundHeight;
-		}
-
-		GetGameObject()->GetTransform()->SetPosition(newPosition);
-		GetGameObject()->GetTransform()->SetRotation(newRotation);
+		GetGameObject()->GetTransform()->SetPosition(position);
+		GetGameObject()->GetTransform()->SetRotation(rotation);
 	}
 }
