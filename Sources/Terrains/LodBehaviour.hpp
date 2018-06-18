@@ -14,18 +14,17 @@ namespace test
 	private:
 		float m_sideLength;
 		float m_radius;
+		float m_squareSize;
 		Transform m_transform;
-		std::vector<std::shared_ptr<Model>> m_modelLods;
-		unsigned int m_currentLod;
 	public:
-		LodBehaviour(const float &sideLength = 200.0f, const float &radius = 0.0f, const Transform &transform = Transform());
+		LodBehaviour(const float &sideLength = 200.0f, const float &radius = 0.0f, const float &squareSize = 4.0f, const Transform &transform = Transform());
 
 		~LodBehaviour();
 
 		void Update() override;
 	private:
-		void CreateLod(const unsigned int &lod, const float &sideLength);
-
 		static int CalculateVertexCount(const float &sideLength, const float &squareSize);
+
+		static float CalculateTextureScale(const float &squareSize);
 	};
 }

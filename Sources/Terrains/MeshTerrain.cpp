@@ -4,11 +4,9 @@
 
 namespace test
 {
-	const std::vector<float> MeshTerrain::SQUARE_SIZES = {
-		4.0f, 8.0f, 25.0f, 50.0f, 100.0f
-	};
-	const std::vector<float> MeshTerrain::TEXTURE_SCALES = {
-		10.0f, 5.0f, 2.0f, 1.0f, 0.5f
+	const std::array<Colour, 12> BRIGHT_COLOURS = {
+		Colour("#FF0000"), Colour("#FFFF00"), Colour("#33FF33"), Colour("#0000FF"), Colour("#FF007F"),
+		Colour("#FF8000"), Colour("#9933FF"), Colour("#FF00FF"), Colour("#FF1A8C"), Colour("#66FFB2")
 	};
 
 	const std::array<Colour, 4> COLOUR_BIOMES = {
@@ -22,7 +20,8 @@ namespace test
 	MeshTerrain::MeshTerrain(const float &sideLength, const float &squareSize, const int &vertexCount, const float &textureScale, const float &radius, const Transform &transform) :
 		MeshSimple(sideLength, squareSize, vertexCount, textureScale),
 		m_radius(radius),
-		m_worldMatrix(transform.GetWorldMatrix())
+		m_worldMatrix(transform.GetWorldMatrix()),
+		m_randomColour(BRIGHT_COLOURS[(int)Maths::Random(0.0f, 11.0f)])
 	{
 		MeshSimple::GenerateMesh();
 	}
@@ -67,12 +66,13 @@ namespace test
 
 	Vector3 MeshTerrain::GetColour(const Vector3 &position, const Vector3 &normal)
 	{
-		Vector3 polar = position.CartesianToPolar();
+		/*Vector3 polar = position.CartesianToPolar();
 		float value = (polar.m_x - m_radius + COLOUR_AMPLITUDE) / (COLOUR_AMPLITUDE * 2.0f);
 		value = Maths::Clamp((value - COLOUR_HALF_SPREAD) * (1.0f / COLOUR_SPREAD), 0.0f, 0.9999f);
 		int firstBiome = static_cast<int>(std::floor(value / COLOUR_PART));
 		float blend = (value - (firstBiome * COLOUR_PART)) / COLOUR_PART;
 		Colour colour = COLOUR_BIOMES.at(firstBiome).Interpolate(COLOUR_BIOMES.at(firstBiome + 1), blend);
-		return colour;
+		return colour;*/
+		return m_randomColour;
 	}
 }

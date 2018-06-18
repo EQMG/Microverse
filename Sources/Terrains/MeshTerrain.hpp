@@ -14,10 +14,8 @@ namespace test
 	private:
 		float m_radius;
 		Matrix4 m_worldMatrix;
+		Colour m_randomColour;
 	public:
-		static const std::vector<float> SQUARE_SIZES;
-		static const std::vector<float> TEXTURE_SCALES;
-
 		MeshTerrain(const float &sideLength, const float &squareSize, const int &vertexCount, const float &textureScale, const float &radius, const Transform &transform);
 
 		~MeshTerrain();

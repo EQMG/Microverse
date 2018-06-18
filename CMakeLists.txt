@@ -4,6 +4,13 @@ project (Microverse)
 # Options
 option(MICROVERSE_INSTALL "Generate installation target" ON)
 
+# Preprocessor
+if("${CMAKE_BUILD_TYPE}" STREQUAL "Debug")
+	add_definitions(-DFL_VERBOSE)
+elseif("${CMAKE_BUILD_TYPE}" STREQUAL "RelWithDebInfo")
+	add_definitions(-DFL_VERBOSE)
+endif()
+
 # Compiler Options
 message(STATUS "System: ${CMAKE_SYSTEM}")
 message(STATUS "Build Type: ${CMAKE_BUILD_TYPE}")

@@ -172,7 +172,7 @@ namespace test
 		GameObject *terrainChunk = new GameObject(Transform());
 		terrainChunk->SetName("Terrain");
 		terrainChunk->AddComponent<Mesh>();
-		terrainChunk->AddComponent<LodBehaviour>(2.0f * radius, radius, transform);
+		terrainChunk->AddComponent<LodBehaviour>(2.0f * radius, radius, 100.0f, transform);
 		terrainChunk->AddComponent<MaterialTerrain>();
 		terrainChunk->AddComponent<MeshRender>();
 		//terrainChunk->AddComponent<ShadowRender>();

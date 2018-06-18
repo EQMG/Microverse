@@ -7,7 +7,6 @@
 #include <Scenes/Scenes.hpp>
 #include <Terrains/LodBehaviour.hpp>
 #include <Terrains/MaterialTerrain.hpp>
-#include <Voxels/MaterialVoxel.hpp>
 #include <Waters/MaterialWater.hpp>
 #include <Worlds/Worlds.hpp>
 #include "Configs/ConfigManager.hpp"
@@ -43,7 +42,6 @@ int main(int argc, char **argv)
 	Scenes::Get()->RegisterComponent<FpsPlayer>("FpsPlayer");
 	Scenes::Get()->RegisterComponent<LodBehaviour>("LodBehaviour");
 	Scenes::Get()->RegisterComponent<MaterialTerrain>("MaterialTerrain");
-	Scenes::Get()->RegisterComponent<MaterialVoxel>("MaterialVoxel");
 	Scenes::Get()->RegisterComponent<MaterialWater>("MaterialWater");
 
 	// Initializes modules.
