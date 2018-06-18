@@ -17,7 +17,7 @@ namespace test
 	};
 	const float COLOUR_SPREAD = 0.76f;
 	const float COLOUR_HALF_SPREAD = COLOUR_SPREAD / 2.0f;
-	const float COLOUR_AMPLITUDE = 20.0f;
+	const float COLOUR_AMPLITUDE = 16.0f;
 	const float COLOUR_PART = 1.0f / (COLOUR_BIOMES.size() - 1);
 
 	MeshTerrain::MeshTerrain(const float &sideLength, const float &squareSize, const int &vertexCount, const float &textureScale, const float &radius, const Transform &transform) :
@@ -36,7 +36,7 @@ namespace test
 	{
 		if (m_radius == 0.0f)
 		{
-			return Vector3(x, 0.0f, z);
+			return m_transform.GetWorldMatrix().Multiply(Vector3(x, 0.0f, z));
 		}
 
 		Vector4 cartesian = Vector4(x, 0.0f, z, 1.0f);

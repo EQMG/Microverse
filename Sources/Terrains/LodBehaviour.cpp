@@ -30,9 +30,7 @@ namespace test
 		Vector3 chunkPosition = m_transform.GetPosition().ProjectCubeToSphere(m_radius) + GetGameObject()->GetTransform()->GetPosition();
 		float distance = std::fabs(chunkPosition.Distance(cameraPosition));
 
-		// lnreg{ (90.5, 0), (181, 1), (362, 2) } = int(-6.500 + 1.443 * log(x) / log(2.718)) + 1
-		// float lodf = floor(-6.5f + 1.443f * log(distance) / log(2.718f)) + 1.0f;
-		float lod = std::floor(0.0090595f * distance - 1.22865f) + 1.0f;
+		float lod = std::floor(0.75f * distance / MeshTerrain::SIDE_LENGTH);
 		lod = Maths::Clamp(lod, 0.0f, static_cast<float>(MeshTerrain::SQUARE_SIZES.size() - 1));
 		unsigned int lodi = static_cast<unsigned int>(lod);
 

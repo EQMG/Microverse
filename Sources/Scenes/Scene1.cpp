@@ -171,7 +171,7 @@ namespace test
 
 	GameObject *Scene1::CreateChunk(const float &radius, const Transform &transform)
 	{
-		new GameObject("Objects/PlanetCentre/PlanetCentre.json", Transform(transform.GetPosition().ProjectCubeToSphere(radius), transform.GetRotation(), 5.0f));
+	//	new GameObject("Objects/PlanetCentre/PlanetCentre.json", Transform(transform.GetPosition().ProjectCubeToSphere(radius), transform.GetRotation(), 5.0f));
 
 		GameObject *terrainChunk = new GameObject(Transform());
 		terrainChunk->SetName("Terrain");

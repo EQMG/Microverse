@@ -27,14 +27,14 @@ namespace test
 		m_moonPosition(Vector3()),
 		m_sunColour(Colour()),
 		m_moonColour(Colour()),
-		m_fog(Fog(Colour::WHITE, 0.001f, 2.0f, -0.1f, 0.3f)),
+		m_fog(Fog(Colour::WHITE, 0.0f, 1.0f, -0.1f, 0.3f)),
 		m_skyColour(Colour("#3399ff"))
 	{
 		m_noiseTerrain.SetNoiseType(NoiseType::TYPE_PERLINFRACTAL);
 		m_noiseTerrain.SetFrequency(0.003f);
 		m_noiseTerrain.SetInterp(NoiseInterp::INTERP_QUINTIC);
 		m_noiseTerrain.SetFractalType(NoiseFractal::FRACTAL_FBM);
-		m_noiseTerrain.SetFractalOctaves(5);
+		m_noiseTerrain.SetFractalOctaves(4);
 		m_noiseTerrain.SetFractalLacunarity(2.0f);
 		m_noiseTerrain.SetFractalGain(0.5f);
 
@@ -72,11 +72,11 @@ namespace test
 
 		m_moonColour = MOON_COLOUR_NIGHT.Interpolate(MOON_COLOUR_DAY, GetShadowFactor());
 
-		m_fog.SetColour(fogColour);
-		m_fog.SetDensity(0.002f + ((1.0f - GetShadowFactor()) * 0.002f));
-		m_fog.SetGradient(2.0f - ((1.0f - GetShadowFactor()) * 0.380f));
-		m_fog.SetLowerLimit(0.0f);
-		m_fog.SetUpperLimit(0.15f - ((1.0f - GetShadowFactor()) * 0.03f));
+	//	m_fog.SetColour(fogColour);
+	//	m_fog.SetDensity(0.002f + ((1.0f - GetShadowFactor()) * 0.002f));
+	//	m_fog.SetGradient(2.0f - ((1.0f - GetShadowFactor()) * 0.380f));
+	//	m_fog.SetLowerLimit(0.0f);
+	//	m_fog.SetUpperLimit(0.15f - ((1.0f - GetShadowFactor()) * 0.03f));
 
 		m_skyColour = SKYBOX_COLOUR_DAY;
 
@@ -121,6 +121,6 @@ namespace test
 			(radius / 10.0f) * Maths::NormalizeAngle(Maths::Degrees(theta)),
 			(radius / 10.0f) * Maths::NormalizeAngle(Maths::Degrees(phi))
 		);
-		return radius + (28.0f * height);
+		return radius + (25.0f * height);
 	}
 }
