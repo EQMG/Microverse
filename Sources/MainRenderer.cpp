@@ -35,95 +35,43 @@ namespace test
 		};
 
 	MainRenderer::MainRenderer() :
-		IManagerRender({RENDERPASS_0_CREATE, RENDERPASS_1_CREATE}),
-		m_infinity(Vector4(0.0f, 1.0f, 0.0f, +INFINITY)),
-		m_rendererShadows(RendererShadows({0, 0})),
-		m_rendererMeshes(RendererMeshes({1, 0})),
-		//	m_rendererParticles(RendererParticles({1, 0})),
-		m_rendererDeferred(RendererDeferred({1, 1})),
-		m_filterFxaa(FilterFxaa({1, 2})),
-		m_filterLensflare(FilterLensflare({1, 2})),
-		m_filterTiltshift(FilterTiltshift({1, 2})),
-		m_filterDamage(FilterDamage({1, 2})),
-		m_filterGrain(FilterGrain({1, 2})),
-		m_rendererGuis(RendererGuis({1, 2})),
-		m_rendererFonts(RendererFonts({1, 2}))
+		IManagerRender({RENDERPASS_0_CREATE, RENDERPASS_1_CREATE})
 	{
-//		m_filterLensflare.SetSunPosition(*Worlds::Get()->GetSunPosition());
-//		m_filterLensflare.SetSunHeight(Worlds::Get()->GetSunHeight());
+		AddRenderer<RendererShadows>(GraphicsStage(0, 0));
+		AddRenderer<RendererMeshes>(GraphicsStage(1, 0));
+	//	AddRenderer<RendererParticles>(GraphicsStage(1, 0));
+		AddRenderer<RendererDeferred>(GraphicsStage(1, 1));
+		AddRenderer<FilterFxaa>(GraphicsStage(1, 2));
+	//	AddRenderer<FilterLensflare>(GraphicsStage(1, 2));
+	//	AddRenderer<FilterTiltshift>(GraphicsStage(1, 2));
+	//	AddRenderer<FilterDamage>(GraphicsStage(1, 2));
+	//	AddRenderer<FilterGrain>(GraphicsStage(1, 2));
+		AddRenderer<RendererGuis>(GraphicsStage(1, 2));
+		AddRenderer<RendererFonts>(GraphicsStage(1, 2));
 
-//		m_filterDamage.SetColour(Colour::RED);
-//		m_filterDamage.SetRadiusDriver(new DriverConstant(0.55f));
-//		m_filterDamage.SetSoftnessDriver(new DriverSinwave(0.25f, 0.35f, 2.0f));
+		GetRenderer<RendererShadows>()->SetEnabled(false);
+
+#ifdef FL_BUILD_MACOS
+		GetRenderer<FilterFxaa>()->SetEnabled(false);
+#endif
 	}
 
 	MainRenderer::~MainRenderer()
 	{
 	}
 
-	void MainRenderer::Render()
-	{
-		RenderPass0();
-		RenderPass1();
-	}
-
-	void MainRenderer::RenderPass0()
+	void MainRenderer::Update()
 	{
 		RENDERPASS_0_CREATE->SetWidth(Shadows::Get()->GetShadowSize());
 		RENDERPASS_0_CREATE->SetHeight(Shadows::Get()->GetShadowSize());
 
-		auto commandBuffer = Renderer::Get()->GetCommandBuffer();
-		auto camera = Scenes::Get()->GetCamera();
+		/*auto filterDamage = GetRenderer<FilterDamage>();
 
-		// Starts Rendering.
-		auto startResult = Renderer::Get()->StartRenderpass(*commandBuffer, 0);
-
-		if (!startResult)
+		if (filterDamage != nullptr)
 		{
-			return;
-		}
-
-		// Subpass 0.
-		m_rendererShadows.Render(*commandBuffer, m_infinity, *camera);
-
-		// Ends Rendering.
-		Renderer::Get()->EndRenderpass(*commandBuffer, 0);
-	}
-
-	void MainRenderer::RenderPass1()
-	{
-		auto commandBuffer = Renderer::Get()->GetCommandBuffer();
-		auto camera = Scenes::Get()->GetCamera();
-
-		// Starts Rendering.
-		auto startResult = Renderer::Get()->StartRenderpass(*commandBuffer, 1);
-
-		if (!startResult)
-		{
-			return;
-		}
-
-		// Subpass 0.
-		m_rendererMeshes.Render(*commandBuffer, m_infinity, *camera);
-		//	m_rendererParticles.Render(*commandBuffer, m_infinity, *camera);
-		Renderer::Get()->NextSubpass(*commandBuffer);
-
-		// Subpass 1.
-		m_rendererDeferred.Render(*commandBuffer, m_infinity, *camera);
-		Renderer::Get()->NextSubpass(*commandBuffer);
-
-		// Subpass 2.
-#ifndef FL_BUILD_MACOS
-		m_filterFxaa.Render(*commandBuffer, m_infinity, *camera);
-		m_filterDamage.Render(*commandBuffer, m_infinity, *camera);
-//		m_filterLensflare.Render(*commandBuffer, m_infinity, *camera);
-//		m_filterTiltshift.Render(*commandBuffer, m_infinity, *camera);
-//		m_filterGrain.Render(*commandBuffer, m_infinity, *camera);
-#endif
-		m_rendererGuis.Render(*commandBuffer, m_infinity, *camera);
-		m_rendererFonts.Render(*commandBuffer, m_infinity, *camera);
-
-		// Ends Rendering.
-		Renderer::Get()->EndRenderpass(*commandBuffer, 1);
+			filterDamage->SetColour(Colour::RED);
+			filterDamage->SetRadiusDriver(new DriverConstant(0.55f));
+			filterDamage->SetSoftnessDriver(new DriverSinwave(0.25f, 0.35f, 2.0f));
+		}*/
 	}
 }

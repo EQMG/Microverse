@@ -41,6 +41,7 @@ namespace test
 				printf("Terrain built in %fms\n", debugEnd - debugStart);
 			}
 #endif
+			mesh->SetEnabled(false);
 		}
 	}
 

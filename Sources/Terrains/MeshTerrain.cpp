@@ -4,9 +4,11 @@
 
 namespace test
 {
-	const std::array<Colour, 12> BRIGHT_COLOURS = {
-		Colour("#FF0000"), Colour("#FFFF00"), Colour("#33FF33"), Colour("#0000FF"), Colour("#FF007F"),
-		Colour("#FF8000"), Colour("#9933FF"), Colour("#FF00FF"), Colour("#FF1A8C"), Colour("#66FFB2")
+	const std::array<Colour, 20> BRIGHT_COLOURS = {
+		Colour("#0048BA"), Colour("#B0BF1A"), Colour("#7CB9E8"), Colour("#C9FFE5"), Colour("#B284BE"),
+		Colour("#5D8AA8"), Colour("#AF002A"), Colour("#C46210"), Colour("#E52B50"), Colour("#F19CBB"),
+		Colour("#9F2B68"), Colour("#3B7A57"), Colour("#FFBF00"), Colour("#9966CC"), Colour("#008000"),
+		Colour("#8F9779"), Colour("#FC419A"), Colour("#F28E1C"), Colour("#064E40"), Colour("#D891EF")
 	};
 
 	const std::array<Colour, 4> COLOUR_BIOMES = {
@@ -21,7 +23,7 @@ namespace test
 		MeshSimple(sideLength, squareSize, vertexCount, textureScale),
 		m_radius(radius),
 		m_worldMatrix(transform.GetWorldMatrix()),
-		m_randomColour(BRIGHT_COLOURS[(int)Maths::Random(0.0f, 11.0f)])
+		m_randomColour(BRIGHT_COLOURS[(int)Maths::Random(0.0f, 20.0f)])
 	{
 		MeshSimple::GenerateMesh();
 	}
@@ -32,10 +34,10 @@ namespace test
 
 	Vector3 MeshTerrain::GetPosition(const float &x, const float &z)
 	{
-		if (m_radius == 0.0f)
-		{
+		/*if (m_radius == 0.0f)
+		{*/
 			return m_worldMatrix.Multiply(Vector3(x, 0.0f, z));
-		}
+		/*}
 
 		Vector4 cartesian = Vector4(x, 0.0f, z, 1.0f);
 		cartesian = m_worldMatrix.Multiply(cartesian);
@@ -43,7 +45,7 @@ namespace test
 
 		Vector3 polar = Vector3(cartesian).CartesianToPolar();
 		polar.m_x = Worlds::Get()->GetWorld()->GetTerrainRadius(m_radius, polar.m_y, polar.m_z);
-		return polar.PolarToCartesian();
+		return polar.PolarToCartesian();*/
 	}
 
 	Vector3 MeshTerrain::GetNormal(const Vector3 &position)
