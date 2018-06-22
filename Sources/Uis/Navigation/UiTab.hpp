@@ -19,7 +19,7 @@ namespace test
 		Text *m_text;
 		float m_width;
 
-		Sound *m_soundClick;
+		Sound m_soundClick;
 	public:
 		UiTab(UiObject *parent, UiObject *content, const UiBound &rectangle, const std::string &name, const Colour &colour);
 

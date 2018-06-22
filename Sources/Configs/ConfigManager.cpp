@@ -9,8 +9,8 @@
 namespace test
 {
 	ConfigManager::ConfigManager() :
-		m_configAudio(Config(new FileJson(FileSystem::GetWorkingDirectory() + "/Configs/Audio.json"))),
-		m_configGraphics(Config(new FileJson(FileSystem::GetWorkingDirectory() + "/Configs/Graphics.json")))
+		m_configAudio(Config(std::make_shared<FileJson>(FileSystem::GetWorkingDirectory() + "/Configs/Audio.json"))),
+		m_configGraphics(Config(std::make_shared<FileJson>(FileSystem::GetWorkingDirectory() + "/Configs/Graphics.json")))
 	{
 		FileSystem::CreateFolder("Configs");
 
@@ -24,10 +24,10 @@ namespace test
 		m_configGraphics.Link<bool>("Is Antialiasing", true, CONFIG_GET(Display::Get()->IsAntialiasing()), CONFIG_SET(bool, Display::Get()->SetAntialiasing(v)));
 		m_configGraphics.Link<bool>("Is Fullscreen", false, CONFIG_GET(Display::Get()->IsFullscreen()), CONFIG_SET(bool, Display::Get()->SetFullscreen(v)));
 
-		Events::Get()->AddEvent(new EventTime(2.5f, false, [&]() -> void
+		Events::Get()->AddEvent<EventTime>(2.5f, false, [&]() -> void
 		{
 			Save();
-		}));
+		});
 	}
 
 	ConfigManager::~ConfigManager()

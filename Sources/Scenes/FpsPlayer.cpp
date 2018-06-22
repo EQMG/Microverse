@@ -135,8 +135,8 @@ namespace test
 		*m_velocity = m_velocity->SmoothDamp(targetVelocity, delta * (m_noclipEnabled ? DAMP_NOCLIP : DAMP_NORMAL));
 
 		auto cameraRotation = Scenes::Get()->GetCamera()->GetRotation();
-		Vector3 position = GetGameObject()->GetTransform()->GetPosition();
-		Vector3 rotation = GetGameObject()->GetTransform()->GetRotation();
+		Vector3 position = GetGameObject()->GetTransform().GetPosition();
+		Vector3 rotation = GetGameObject()->GetTransform().GetRotation();
 
 		// Planet collision.
 		if (!m_noclipEnabled)
@@ -168,7 +168,7 @@ namespace test
 		position += *m_amountMove;
 		rotation += *m_amountRotate;
 
-		GetGameObject()->GetTransform()->SetPosition(position);
-		GetGameObject()->GetTransform()->SetRotation(rotation);
+		GetGameObject()->GetTransform().SetPosition(position);
+		GetGameObject()->GetTransform().SetRotation(rotation);
 	}
 }

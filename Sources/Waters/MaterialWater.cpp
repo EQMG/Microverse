@@ -21,17 +21,17 @@ namespace test
 		m_colour.m_a = 1.0f; // Waters::Get()->GetEnableReflections() ? Waters::Get()->GetColourIntensity() : 1.0f
 	}
 
-	void MaterialWater::Load(LoadedValue *value)
+	void MaterialWater::Load(std::shared_ptr<LoadedValue> value)
 	{
 	}
 
-	void MaterialWater::Write(LoadedValue *destination)
+	void MaterialWater::Write(std::shared_ptr<LoadedValue> destination)
 	{
 	}
 
 	void MaterialWater::PushUniforms(UniformHandler &uniformObject)
 	{
-		uniformObject.Push("transform", GetGameObject()->GetTransform()->GetWorldMatrix());
+		uniformObject.Push("transform", GetGameObject()->GetTransform().GetWorldMatrix());
 		uniformObject.Push("diffuseColour", m_colour);
 	}
 

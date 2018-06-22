@@ -74,8 +74,8 @@ namespace test
 
 		if (player != nullptr)
 		{
-			auto playerRotation = player->GetGameObject()->GetTransform()->GetRotation();
-			auto playerPosition = player->GetGameObject()->GetTransform()->GetPosition();
+			auto playerRotation = player->GetGameObject()->GetTransform().GetRotation();
+			auto playerPosition = player->GetGameObject()->GetTransform().GetPosition();
 
 			m_velocity = (playerPosition - m_targetPosition) / delta;
 			m_targetPosition = playerPosition;

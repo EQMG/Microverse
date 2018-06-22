@@ -34,7 +34,7 @@ namespace test
 		{
 			Vector3 sunPosition = World::Get()->GetLightDirection() * Vector3(-6048.0f, -6048.0f, -6048.0f);
 			//	sunPosition += Scenes::Get()->GetCamera()->GetPosition();
-			transform->SetPosition(sunPosition);
+			transform.SetPosition(sunPosition);
 
 			if (componentLight != nullptr)
 			{
@@ -47,8 +47,8 @@ namespace test
 
 			if (filterLensflare != nullptr)
 			{
-				filterLensflare->SetSunPosition(transform->GetPosition());
-				filterLensflare->SetSunHeight(transform->GetPosition().m_y);
+				filterLensflare->SetSunPosition(transform.GetPosition());
+				filterLensflare->SetSunHeight(transform.GetPosition().m_y);
 			}
 		}
 			break;
@@ -56,7 +56,7 @@ namespace test
 		{
 			Vector3 moonPosition = World::Get()->GetLightDirection() * Vector3(6048.0f, 6048.0f, 6048.0f);
 			//	moonPosition += Scenes::Get()->GetCamera()->GetPosition();
-			transform->SetPosition(moonPosition);
+			transform.SetPosition(moonPosition);
 
 			if (componentLight != nullptr)
 			{
@@ -70,12 +70,12 @@ namespace test
 		}
 	}
 
-	void CelestialBody::Load(LoadedValue *value)
+	void CelestialBody::Load(std::shared_ptr<LoadedValue> value)
 	{
 		m_type = static_cast<CelestialType>(value->GetChild("Type")->Get<int>());
 	}
 
-	void CelestialBody::Write(LoadedValue *destination)
+	void CelestialBody::Write(std::shared_ptr<LoadedValue> destination)
 	{
 		destination->GetChild("Type", true)->Set(static_cast<int>(m_type));
 	}

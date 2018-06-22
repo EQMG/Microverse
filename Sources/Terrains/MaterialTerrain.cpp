@@ -17,17 +17,17 @@ namespace test
 	{
 	}
 
-	void MaterialTerrain::Load(LoadedValue *value)
+	void MaterialTerrain::Load(std::shared_ptr<LoadedValue> value)
 	{
 	}
 
-	void MaterialTerrain::Write(LoadedValue *destination)
+	void MaterialTerrain::Write(std::shared_ptr<LoadedValue> destination)
 	{
 	}
 
 	void MaterialTerrain::PushUniforms(UniformHandler &uniformObject)
 	{
-		uniformObject.Push("transform", GetGameObject()->GetTransform()->GetWorldMatrix());
+		uniformObject.Push("transform", GetGameObject()->GetTransform().GetWorldMatrix());
 	}
 
 	void MaterialTerrain::PushDescriptors(DescriptorsHandler &descriptorSet)

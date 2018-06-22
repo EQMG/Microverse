@@ -30,7 +30,7 @@ namespace test
 		if (m_enableFog)
 		{
 			Vector3 skyboxRotation = World::Get()->GetSkyboxRotation();
-			GetGameObject()->GetTransform()->SetRotation(skyboxRotation);
+			GetGameObject()->GetTransform().SetRotation(skyboxRotation);
 			materialSkybox->SetSkyColour(SKYBOX_COLOUR_DAY);
 			materialSkybox->SetBlend(World::Get()->GetStarIntensity());
 			materialSkybox->SetFogColour(World::Get()->GetFog().GetColour());
@@ -38,19 +38,19 @@ namespace test
 			return;
 		}
 
-		GetGameObject()->GetTransform()->SetRotation(Vector3::ZERO);
+		GetGameObject()->GetTransform().SetRotation(Vector3::ZERO);
 		materialSkybox->SetSkyColour(SKYBOX_COLOUR_DAY);
 		materialSkybox->SetBlend(1.0f);
 		materialSkybox->SetFogColour(Colour::BLACK);
 		materialSkybox->SetFogLimits(Vector2(-1000000.0f, -1000000.0f));
 	}
 
-	void SkyboxCycle::Load(LoadedValue *value)
+	void SkyboxCycle::Load(std::shared_ptr<LoadedValue> value)
 	{
 		m_enableFog = value->GetChild("Enable Fog")->Get<bool>();
 	}
 
-	void SkyboxCycle::Write(LoadedValue *destination)
+	void SkyboxCycle::Write(std::shared_ptr<LoadedValue> destination)
 	{
 		destination->GetChild("Enable Fog", true)->Set((int) m_enableFog);
 	}
