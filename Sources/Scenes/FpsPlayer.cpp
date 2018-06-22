@@ -8,7 +8,7 @@
 #include <Inputs/ButtonJoystick.hpp>
 #include <Uis/Uis.hpp>
 #include <Scenes/Scenes.hpp>
-#include <Worlds/Worlds.hpp>
+#include <World/World.hpp>
 
 namespace test
 {
@@ -143,7 +143,7 @@ namespace test
 		{
 			Vector3 cartesian = position - Vector3::ZERO;
 			Vector3 polar = cartesian.CartesianToPolar();
-			float planetRadius = Worlds::Get()->GetWorld()->GetTerrainRadius(500.0f, polar.m_y, polar.m_z) + 1.74f;
+			float planetRadius = World::Get()->GetTerrainRadius(500.0f, polar.m_y, polar.m_z) + 1.74f;
 			polar.m_x = std::max(polar.m_x, planetRadius);
 			cartesian = polar.PolarToCartesian();
 			position = cartesian;

@@ -1,9 +1,10 @@
 set(MICROVERSE_HEADERS_
+        "Skybox/CelestialBody.hpp"
+        "Skybox/SkyboxCycle.hpp"
         "Configs/ConfigManager.hpp"
         "Post/Filters/FilterDamage.hpp"
         "MainRenderer.hpp"
         "MainUpdater.hpp"
-        "MainWorld.hpp"
         "Scenes/FpsCamera.hpp"
         "Scenes/FpsPlayer.hpp"
         "Scenes/Scene1.hpp"
@@ -17,15 +18,17 @@ set(MICROVERSE_HEADERS_
         "Terrains/MeshTerrain.hpp"
         "Waters/MaterialWater.hpp"
         "Waters/MeshWater.hpp"
+        "World/World.hpp"
 )
 
 set(MICROVERSE_SOURCES_
+        "Skybox/CelestialBody.cpp"
+        "Skybox/SkyboxCycle.cpp"
         "Configs/ConfigManager.cpp"
         "Post/Filters/FilterDamage.cpp"
         "Main.cpp"
         "MainRenderer.cpp"
         "MainUpdater.cpp"
-        "MainWorld.cpp"
         "Scenes/FpsCamera.cpp"
         "Scenes/FpsPlayer.cpp"
         "Scenes/Scene1.cpp"
@@ -39,6 +42,7 @@ set(MICROVERSE_SOURCES_
         "Terrains/MeshTerrain.cpp"
         "Waters/MaterialWater.cpp"
         "Waters/MeshWater.cpp"
+        "World/World.cpp"
 )
 
 source_group("Header Files" FILES ${MICROVERSE_HEADERS_})

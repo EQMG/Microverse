@@ -14,6 +14,7 @@
 #include <Renderer/Screenshot/Screenshot.hpp>
 #include <Shadows/ShadowRender.hpp>
 #include <Skyboxes/MaterialSkybox.hpp>
+#include "Skybox/SkyboxCycle.hpp"
 #include "Terrains/LodBehaviour.hpp"
 #include "Terrains/MeshTerrain.hpp"
 #include "Terrains/MaterialTerrain.hpp"
@@ -81,7 +82,8 @@ namespace test
 		GameObject *skyboxObject = new GameObject(Transform(Vector3(), Vector3(), 2048.0f));
 		skyboxObject->SetName("SkyboxStars");
 		skyboxObject->AddComponent<Mesh>(ShapeSphere::Resource(6, 6, 1.0f));
-		skyboxObject->AddComponent<MaterialSkybox>(Cubemap::Resource("Objects/SkyboxStars", ".png"), false);
+		skyboxObject->AddComponent<MaterialSkybox>(Cubemap::Resource("Objects/SkyboxStars", ".png"));
+		skyboxObject->AddComponent<SkyboxCycle>(false);
 		skyboxObject->AddComponent<MeshRender>();
 
 		// Entities.

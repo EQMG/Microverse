@@ -1,6 +1,6 @@
 #include "MeshTerrain.hpp"
 
-#include <Worlds/Worlds.hpp>
+#include <World/World.hpp>
 
 namespace test
 {
@@ -34,18 +34,18 @@ namespace test
 
 	Vector3 MeshTerrain::GetPosition(const float &x, const float &z)
 	{
-		/*if (m_radius == 0.0f)
-		{*/
+	//	if (m_radius == 0.0f)
+	//	{
 			return m_worldMatrix.Multiply(Vector3(x, 0.0f, z));
-		/*}
+	//	}
 
-		Vector4 cartesian = Vector4(x, 0.0f, z, 1.0f);
-		cartesian = m_worldMatrix.Multiply(cartesian);
-		cartesian = Vector3(cartesian).ProjectCubeToSphere(m_radius);
+	//	Vector4 cartesian = Vector4(x, 0.0f, z, 1.0f);
+	//	cartesian = m_worldMatrix.Multiply(cartesian);
+	//	cartesian = Vector3(cartesian).ProjectCubeToSphere(m_radius);
 
-		Vector3 polar = Vector3(cartesian).CartesianToPolar();
-		polar.m_x = Worlds::Get()->GetWorld()->GetTerrainRadius(m_radius, polar.m_y, polar.m_z);
-		return polar.PolarToCartesian();*/
+	//	Vector3 polar = Vector3(cartesian).CartesianToPolar();
+	//	polar.m_x = World::Get()->GetTerrainRadius(m_radius, polar.m_y, polar.m_z);
+	//	return polar.PolarToCartesian();
 	}
 
 	Vector3 MeshTerrain::GetNormal(const Vector3 &position)
