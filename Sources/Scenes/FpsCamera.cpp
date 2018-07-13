@@ -41,9 +41,9 @@ namespace test
 		m_targetElevation(m_angleOfElevation),
 		m_targetRotationAngle(m_angleAroundPlayer),
 		m_sensitivity(0.9f),
-		m_reangleButton(MouseButton::MOUSE_BUTTON_LEFT),
-		m_joystickVertical(new AxisJoystick(JoystickPort::JOYSTICK_1, {3}, true)),
-		m_joystickHorizontal(new AxisJoystick(JoystickPort::JOYSTICK_1, {2})),
+		m_reangleButton(WSI_MOUSE_BUTTON_LEFT),
+		m_joystickVertical(new AxisJoystick(WSI_JOYSTICK_1, {3}, true)),
+		m_joystickHorizontal(new AxisJoystick(WSI_JOYSTICK_1, {2})),
 		m_paused(false)
 	{
 	}
@@ -79,7 +79,7 @@ namespace test
 
 			m_velocity = (playerPosition - m_targetPosition) / delta;
 			m_targetPosition = playerPosition;
-			m_targetRotation = playerRotation;
+			m_targetRotation = playerRotation.ToEuler();
 		}
 
 		UpdateHorizontalAngle(delta);

@@ -29,32 +29,32 @@ namespace test
 		m_noclipEnabled(true),
 		m_inputForward(new AxisCompound({
 			new AxisButton(
-				new ButtonKeyboard({Key::KEY_S, Key::KEY_DOWN}),
-				new ButtonKeyboard({Key::KEY_W, Key::KEY_UP})
+				new ButtonKeyboard({WSI_KEY_S, WSI_KEY_DOWN}),
+				new ButtonKeyboard({WSI_KEY_W, WSI_KEY_UP})
 			),
-			new AxisJoystick(JoystickPort::JOYSTICK_1, {1}, true)
+			new AxisJoystick(WSI_JOYSTICK_1, {1}, true)
 		})),
 		m_inputStrafe(new AxisCompound({
 			new AxisButton(
-				new ButtonKeyboard({Key::KEY_D, Key::KEY_RIGHT}),
-				new ButtonKeyboard({Key::KEY_A, Key::KEY_LEFT})
+				new ButtonKeyboard({WSI_KEY_D, WSI_KEY_RIGHT}),
+				new ButtonKeyboard({WSI_KEY_A, WSI_KEY_LEFT})
 			),
-			new AxisJoystick(JoystickPort::JOYSTICK_1, {0}, true)
+			new AxisJoystick(WSI_JOYSTICK_1, {0}, true)
 		})),
 		m_inputSprint(new ButtonCompound({
-			new ButtonKeyboard({Key::KEY_LEFT_SHIFT, Key::KEY_RIGHT_SHIFT}),
-			new ButtonJoystick(JoystickPort::JOYSTICK_1, {1})
+			new ButtonKeyboard({WSI_KEY_LEFT_SHIFT, WSI_KEY_RIGHT_SHIFT}),
+			new ButtonJoystick(WSI_JOYSTICK_1, {1})
 		})),
 		m_inputJump(new ButtonCompound({
-			new ButtonKeyboard({Key::KEY_SPACE}),
-			new ButtonJoystick(JoystickPort::JOYSTICK_1, {1})
+			new ButtonKeyboard({WSI_KEY_SPACE}),
+			new ButtonJoystick(WSI_JOYSTICK_1, {1})
 		})),
 		m_inputCrouch(new ButtonCompound({
-			new ButtonKeyboard({Key::KEY_LEFT_CONTROL, Key::KEY_RIGHT_CONTROL}),
-			new ButtonJoystick(JoystickPort::JOYSTICK_1, {1})
+			new ButtonKeyboard({WSI_KEY_LEFT_CONTROL, WSI_KEY_RIGHT_CONTROL}),
+			new ButtonJoystick(WSI_JOYSTICK_1, {1})
 		})),
 		m_toggleNoclip(new ButtonCompound({
-			new ButtonKeyboard({Key::KEY_N}),
+			new ButtonKeyboard({WSI_KEY_N}),
 		})),
 		m_amountMove(new Vector3()),
 		m_amountRotate(new Vector3())
@@ -136,7 +136,7 @@ namespace test
 
 		auto cameraRotation = Scenes::Get()->GetCamera()->GetRotation();
 		Vector3 position = GetGameObject()->GetTransform().GetPosition();
-		Vector3 rotation = GetGameObject()->GetTransform().GetRotation();
+		Vector3 rotation = GetGameObject()->GetTransform().GetRotation().ToEuler();
 
 		// Planet collision.
 		if (!m_noclipEnabled)
