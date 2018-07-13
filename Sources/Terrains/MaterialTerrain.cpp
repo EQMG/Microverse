@@ -17,11 +17,11 @@ namespace test
 	{
 	}
 
-	void MaterialTerrain::Load(std::shared_ptr<LoadedValue> value)
+	void MaterialTerrain::Load(LoadedValue *value)
 	{
 	}
 
-	void MaterialTerrain::Write(std::shared_ptr<LoadedValue> destination)
+	void MaterialTerrain::Write(LoadedValue *destination)
 	{
 	}
 

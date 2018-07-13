@@ -21,11 +21,11 @@ namespace test
 		m_colour.m_a = 1.0f; // Waters::Get()->GetEnableReflections() ? Waters::Get()->GetColourIntensity() : 1.0f
 	}
 
-	void MaterialWater::Load(std::shared_ptr<LoadedValue> value)
+	void MaterialWater::Load(LoadedValue *value)
 	{
 	}
 
-	void MaterialWater::Write(std::shared_ptr<LoadedValue> destination)
+	void MaterialWater::Write(LoadedValue *destination)
 	{
 	}
 
