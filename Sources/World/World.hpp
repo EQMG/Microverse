@@ -49,6 +49,8 @@ namespace test
 
 		void Update() override;
 
+		std::string GetName() const override { return "World"; };
+
 		float GetTerrainRadius(const float &radius, const float &theta, const float &phi) const;
 
 		float GetDayFactor() const;

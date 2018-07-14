@@ -149,7 +149,7 @@ namespace test
 	GameObject *Scene1::CreatePlanet(const float &radius, const Vector3 &position)
 	{
 		//	GameObject *planet = new GameObject("Objects/PlanetCentre/PlanetCentre.json", Transform(position, Vector3(), 5.0f));
-		GameObject *planet = new GameObject(Transform(position, Vector3()));
+		GameObject *planet = new GameObject(Transform(position));
 
 		GameObject *chunkTop = CreateChunk(radius, Transform(Vector3(0.0f, radius, 0.0f), Vector3(0.0f, 0.0f, 0.0f)));
 		chunkTop->SetParent(planet);
