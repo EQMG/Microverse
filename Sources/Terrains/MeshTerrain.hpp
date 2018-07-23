@@ -3,6 +3,8 @@
 #include <Models/Shapes/MeshSimple.hpp>
 #include <Maths/Maths.hpp>
 #include <Maths/Colour.hpp>
+#include <Maths/Matrix4.hpp>
+#include <Maths/Transform.hpp>
 
 using namespace fl;
 

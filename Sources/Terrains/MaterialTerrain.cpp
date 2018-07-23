@@ -1,5 +1,8 @@
 #include "MaterialTerrain.hpp"
 
+#include <Objects/GameObject.hpp>
+#include <Models/VertexModel.hpp>
+
 namespace test
 {
 	MaterialTerrain::MaterialTerrain() :
@@ -10,6 +13,10 @@ namespace test
 	}
 
 	MaterialTerrain::~MaterialTerrain()
+	{
+	}
+
+	void MaterialTerrain::Start()
 	{
 	}
 

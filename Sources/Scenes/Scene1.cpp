@@ -10,7 +10,7 @@
 #include <Maths/Visual/DriverSlide.hpp>
 #include <Meshes/Mesh.hpp>
 #include <Meshes/MeshRender.hpp>
-#include <Models/Shapes/ShapeSphere.hpp>
+#include <Models/Shapes/ModelSphere.hpp>
 #include <Renderer/Screenshot/Screenshot.hpp>
 #include <Shadows/ShadowRender.hpp>
 #include <Skyboxes/MaterialSkybox.hpp>
@@ -81,7 +81,7 @@ namespace test
 		// GameObject *skyboxObject = new GameObject("Objects/SkyboxClouds/SkyboxStars.json", Transform(Vector3(), Vector3(), 2048.0f));
 		GameObject *skyboxObject = new GameObject(Transform(Vector3(), Vector3(), 2048.0f));
 		skyboxObject->SetName("SkyboxStars");
-		skyboxObject->AddComponent<Mesh>(ShapeSphere::Resource(6, 6, 1.0f));
+		skyboxObject->AddComponent<Mesh>(ModelSphere::Resource(6, 6, 1.0f));
 		skyboxObject->AddComponent<MaterialSkybox>(Cubemap::Resource("Objects/SkyboxStars", ".png"));
 		skyboxObject->AddComponent<SkyboxCycle>(false);
 		skyboxObject->AddComponent<MeshRender>();

@@ -22,6 +22,8 @@ namespace test
 
 		~MaterialWater();
 
+		void Start() override;
+
 		void Update() override;
 
 		void Load(LoadedValue *value) override;
