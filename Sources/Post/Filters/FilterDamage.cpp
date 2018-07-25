@@ -2,7 +2,7 @@
 
 #include <Maths/Visual/DriverConstant.hpp>
 
-namespace fl
+namespace acid
 {
 	FilterDamage::FilterDamage(const GraphicsStage &graphicsStage) :
 		IPostFilter(graphicsStage, {"Shaders/Filters/Default.vert", "Shaders/Filters/Damage.frag"}, {}),

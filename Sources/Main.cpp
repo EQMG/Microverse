@@ -18,7 +18,7 @@
 #include "Scenes/Scene1.hpp"
 
 using namespace test;
-using namespace fl;
+using namespace acid;
 
 //#if (FL_BUILD_RELEASE && FL_BUILD_WINDOWS)
 //int CALLBACK WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR pCmdLine, int nCmdShow)

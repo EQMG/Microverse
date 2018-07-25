@@ -3,13 +3,13 @@ include(CMakeSources.cmake)
 
 set(MICROVERSE_INCLUDES "${PROJECT_SOURCE_DIR}/Sources/")
 
-#if(FLOUNDER_CONFIG_RELEASE AND WIN32)
+#if(ACID_CONFIG_RELEASE AND WIN32)
 #	add_executable(Microverse WIN32 ${MICROVERSE_SOURCES})
 #else()
 add_executable(Microverse ${MICROVERSE_SOURCES})
 #endif()
 
-add_dependencies(Microverse Flounder)
+add_dependencies(Microverse Acid)
 
 target_include_directories(Microverse PUBLIC ${LIBRARIES_INCLUDES} ${MICROVERSE_INCLUDES})
 target_link_libraries(Microverse PRIVATE ${LIBRARIES_LINKS})

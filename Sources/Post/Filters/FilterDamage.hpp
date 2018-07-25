@@ -4,7 +4,7 @@
 #include <Post/IPostFilter.hpp>
 #include <Maths/Visual/IDriver.hpp>
 
-namespace fl
+namespace acid
 {
 	class FL_EXPORT FilterDamage :
 		public IPostFilter

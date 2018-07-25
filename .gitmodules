@@ -1,3 +1,3 @@
-[submodule "Libraries/Flounder"]
-	path = Libraries/Flounder
-	url = https://github.com/Equilibrium-Games/Flounder
+[submodule "Libraries/Acid"]
+	path = Libraries/Acid
+	url = https://github.com/Equilibrium-Games/Acid

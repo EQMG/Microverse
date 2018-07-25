@@ -54,7 +54,7 @@ set(CMAKE_INSTALL_BINDIR ${CMAKE_RUNTIME_OUTPUT_DIRECTORY})
 set(CMAKE_INSTALL_INCLUDEDIR ${PROJECT_SOURCE_DIR}/Build/${CMAKE_BUILD_TYPE}/include)
 	
 # Dependencies
-include(Libraries/FindFlounder.cmake)
+include(Libraries/FindAcid.cmake)
 
 string(STRIP "${LIBRARIES_INCLUDES}" LIBRARIES_INCLUDES)
 string(STRIP "${LIBRARIES_LINKS}" LIBRARIES_LINKS)
