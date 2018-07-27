@@ -70,7 +70,7 @@ namespace test
 
 	float World::GetTerrainRadius(const float &radius, const float &theta, const float &phi) const
 	{
-		float height = m_noiseTerrain.GetValue(radius * Maths::NormalizeRadians(theta), radius * Maths::NormalizeRadians(phi));
+		float height = m_noiseTerrain.GetValue(radius * Maths::WrapRadians(theta), radius * Maths::WrapRadians(phi));
 		return radius + (25.0f * height);
 	}
 

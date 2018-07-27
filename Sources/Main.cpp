@@ -50,7 +50,7 @@ int main(int argc, char **argv)
 
 	// Initializes modules.
 	Display::Get()->SetTitle("Microverse");
-	Display::Get()->SetIcon("Logos/Tail.png");
+	Display::Get()->SetIcon("Logos/Microverse.png");
 	Mouse::Get()->SetCustomMouse("Guis/Cursor.png");
 	Renderer::Get()->SetManager(std::make_shared<MainRenderer>());
 	Scenes::Get()->SetScene(std::make_shared<Scene1>());
