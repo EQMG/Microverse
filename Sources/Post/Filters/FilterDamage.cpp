@@ -8,9 +8,9 @@ namespace acid
 		IPostFilter(graphicsStage, {"Shaders/Filters/Default.vert", "Shaders/Filters/Damage.frag"}, {}),
 		m_uniformScene(UniformHandler()),
 		m_colour(Colour(0.0f, 0.0f, 0.0f, 0.0f)),
-		m_radiusDriver(new DriverConstant(0.0f)),
+		m_radiusDriver(std::make_shared<DriverConstant>(0.0f)),
 		m_radius(0.0f),
-		m_softnessDriver(new DriverConstant(0.0f)),
+		m_softnessDriver(std::make_shared<DriverConstant>(0.0f)),
 		m_softness(0.0f)
 	{
 	}
@@ -51,17 +51,5 @@ namespace acid
 
 		m_descriptorSet.BindDescriptor(commandBuffer);
 		m_model->CmdRender(commandBuffer);
-	}
-
-	void FilterDamage::SetRadiusDriver(IDriver *radiusDriver)
-	{
-		delete m_radiusDriver;
-		m_radiusDriver = radiusDriver;
-	}
-
-	void FilterDamage::SetSoftnessDriver(IDriver *softnessDriver)
-	{
-		delete m_softnessDriver;
-		m_softnessDriver = softnessDriver;
 	}
 }

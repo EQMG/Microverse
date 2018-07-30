@@ -27,7 +27,7 @@ namespace test
 	static const float UI_SLIDE_TIME = 0.2f;
 
 	Scene1::Scene1() :
-		IScene(std::make_shared<FpsCamera>()),
+		IScene(new FpsCamera()),
 		m_buttonFullscreen(new ButtonKeyboard({KEY_F11})),
 		m_buttonCaptureMouse(new ButtonKeyboard({KEY_M})),
 		m_buttonScreenshot(new ButtonKeyboard({KEY_F12})),

@@ -22,6 +22,7 @@ set(MICROVERSE_HEADERS_
 )
 
 set(MICROVERSE_SOURCES_
+        "Microverse.rc"
         "Skybox/CelestialBody.cpp"
         "Skybox/SkyboxCycle.cpp"
         "Configs/ConfigManager.cpp"

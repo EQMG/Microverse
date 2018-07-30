@@ -6,7 +6,7 @@
 
 namespace acid
 {
-	class FL_EXPORT FilterDamage :
+	class FilterDamage :
 		public IPostFilter
 	{
 	private:
@@ -14,10 +14,10 @@ namespace acid
 
 		Colour m_colour;
 
-		IDriver *m_radiusDriver;
+		std::shared_ptr<IDriver> m_radiusDriver;
 		float m_radius;
 
-		IDriver *m_softnessDriver;
+		std::shared_ptr<IDriver> m_softnessDriver;
 		float m_softness;
 	public:
 		FilterDamage(const GraphicsStage &graphicsStage);
@@ -30,11 +30,11 @@ namespace acid
 
 		void SetColour(const Colour &colour) { m_colour = colour; }
 
-		void SetRadiusDriver(IDriver *radiusDriver);
+		void SetRadiusDriver(std::shared_ptr<IDriver> radiusDriver) { m_radiusDriver = radiusDriver; }
 
 		float GetRadius() const { return m_radius; }
 
-		void SetSoftnessDriver(IDriver *softnessDriver);
+		void SetSoftnessDriver(std::shared_ptr<IDriver> softnessDriver) { m_softnessDriver = softnessDriver; }
 
 		float GetSoftness() const { return m_softness; }
 	};
