@@ -4,6 +4,17 @@
 #include <Renderer/Renderer.hpp>
 #include <Maths/Visual/DriverConstant.hpp>
 #include <Maths/Visual/DriverSinwave.hpp>
+#include <Meshes/RendererMeshes.hpp>
+#include <Fonts/RendererFonts.hpp>
+#include <Guis/RendererGuis.hpp>
+#include <Particles/RendererParticles.hpp>
+#include <Post/Deferred/RendererDeferred.hpp>
+#include <Post/Filters/FilterFxaa.hpp>
+#include <Post/Filters/FilterGrain.hpp>
+#include <Post/Filters/FilterLensflare.hpp>
+#include <Post/Filters/FilterTiltshift.hpp>
+#include <Shadows/RendererShadows.hpp>
+#include "Post/Filters/FilterDamage.hpp"
 
 namespace test
 {
@@ -51,7 +62,7 @@ namespace test
 
 		GetRenderer<RendererShadows>()->SetEnabled(false);
 
-#ifdef FL_BUILD_MACOS
+#ifdef ACID_BUILD_MACOS
 		GetRenderer<FilterFxaa>()->SetEnabled(false);
 #endif
 	}
@@ -70,8 +81,8 @@ namespace test
 		if (filterDamage != nullptr)
 		{
 			filterDamage->SetColour(Colour::RED);
-			filterDamage->SetRadiusDriver(new DriverConstant(0.55f));
-			filterDamage->SetSoftnessDriver(new DriverSinwave(0.25f, 0.35f, 2.0f));
+			filterDamage->SetRadiusDriver<DriverConstant>(0.55f);
+			filterDamage->SetSoftnessDriver<DriverSinwave>(0.25f, 0.35f, 2.0f);
 		}*/
 	}
 }

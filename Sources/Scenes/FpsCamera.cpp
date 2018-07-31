@@ -34,7 +34,7 @@ namespace test
 		m_projectionMatrix(Matrix4()),
 		m_viewFrustum(Frustum()),
 		m_viewRay(Ray(false, Vector2(0.5f, 0.5f))),
-		m_angleOfElevation(25.0f),
+		m_angleOfElevation(45.0f),
 		m_angleAroundPlayer(0.0f),
 		m_targetPosition(Vector3()),
 		m_targetRotation(Vector3()),
@@ -79,7 +79,7 @@ namespace test
 
 			m_velocity = (playerPosition - m_targetPosition) / delta;
 			m_targetPosition = playerPosition;
-			m_targetRotation = playerRotation.ToEuler();
+			m_targetRotation = playerRotation;
 		}
 
 		UpdateHorizontalAngle(delta);

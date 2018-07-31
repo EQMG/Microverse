@@ -5,10 +5,11 @@
 
 namespace test
 {
-	MaterialTerrain::MaterialTerrain() :
+	MaterialTerrain::MaterialTerrain(const Colour &baseColor) :
 		IMaterial(),
+		m_baseColor(baseColor),
 		m_material(PipelineMaterial::Resource({1, 0}, PipelineCreate({"Shaders/Terrains/Terrain.vert", "Shaders/Terrains/Terrain.frag"},
-			VertexModel::GetVertexInput(), PIPELINE_MODE_MRT, PIPELINE_POLYGON_MODE_LINE, PIPELINE_CULL_MODE_NONE), {}))
+			VertexModel::GetVertexInput(), PIPELINE_MODE_MRT, PIPELINE_POLYGON_MODE_FILL, PIPELINE_CULL_MODE_BACK), {}))
 	{
 	}
 
@@ -35,6 +36,7 @@ namespace test
 	void MaterialTerrain::PushUniforms(UniformHandler &uniformObject)
 	{
 		uniformObject.Push("transform", GetGameObject()->GetTransform().GetWorldMatrix());
+		uniformObject.Push("baseColor", m_baseColor);
 	}
 
 	void MaterialTerrain::PushDescriptors(DescriptorsHandler &descriptorSet)

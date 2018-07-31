@@ -10,6 +10,7 @@ layout(set = 0, binding = 0) uniform UboScene
 layout(set = 0, binding = 1) uniform UboObject
 {
 	mat4 transform;
+	vec4 baseColor;
 } object;
 
 layout(set = 0, location = 0) in vec3 vertexPosition;

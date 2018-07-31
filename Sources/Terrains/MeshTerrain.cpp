@@ -4,13 +4,6 @@
 
 namespace test
 {
-	const std::array<Colour, 20> BRIGHT_COLOURS = {
-		Colour("#0048BA"), Colour("#B0BF1A"), Colour("#7CB9E8"), Colour("#C9FFE5"), Colour("#B284BE"),
-		Colour("#5D8AA8"), Colour("#AF002A"), Colour("#C46210"), Colour("#E52B50"), Colour("#F19CBB"),
-		Colour("#9F2B68"), Colour("#3B7A57"), Colour("#FFBF00"), Colour("#9966CC"), Colour("#008000"),
-		Colour("#8F9779"), Colour("#FC419A"), Colour("#F28E1C"), Colour("#064E40"), Colour("#D891EF")
-	};
-
 	const std::array<Colour, 4> COLOUR_BIOMES = {
 		Colour("#6e3529"), Colour("#934838"), Colour("#9e402c"), Colour("#656565")
 	};
@@ -22,8 +15,7 @@ namespace test
 	MeshTerrain::MeshTerrain(const float &sideLength, const float &squareSize, const int &vertexCount, const float &textureScale, const float &radius, const Transform &transform) :
 		MeshSimple(sideLength, squareSize, vertexCount, textureScale),
 		m_radius(radius),
-		m_worldMatrix(transform.GetWorldMatrix()),
-		m_randomColour(BRIGHT_COLOURS[(int)Maths::Random(0.0f, 20.0f)])
+		m_worldMatrix(transform.GetWorldMatrix())
 	{
 		MeshSimple::GenerateMesh();
 	}
@@ -75,6 +67,6 @@ namespace test
 		float blend = (value - (firstBiome * COLOUR_PART)) / COLOUR_PART;
 		Colour colour = COLOUR_BIOMES.at(firstBiome).Interpolate(COLOUR_BIOMES.at(firstBiome + 1), blend);
 		return colour;*/
-		return m_randomColour;
+		return Colour::WHITE;
 	}
 }

@@ -73,7 +73,7 @@ namespace test
 
 		// Player.
 		// GameObject *playerObject = new GameObject("Objects/Player/Player.json", Transform(Vector3(), Vector3(0.0f, 180.0f, 0.0f)));
-		GameObject *playerObject = new GameObject(Transform(Vector3(0.0f, 256.0f, 512.0f), Vector3(0.0f, 180.0f, 0.0f), 1.0f));
+		GameObject *playerObject = new GameObject(Transform(Vector3(0.0f, 0.0f, 3000.0f), Vector3(0.0f, 180.0f, 0.0f), 1.0f));
 		playerObject->SetName("Player");
 		playerObject->AddComponent<FpsPlayer>();
 
@@ -91,7 +91,7 @@ namespace test
 		sun->AddComponent<Light>(Colour("#FFFFFF"), -1.0f);
 
 		// Terrains.
-		GameObject *planet1 = CreatePlanet(500.0f, Vector3());
+		GameObject *planet1 = CreatePlanet(1000.0f, Vector3());
 
 		// Waters.
 		/*GameObject *water = new GameObject(Transform());
@@ -152,16 +152,22 @@ namespace test
 		GameObject *planet = new GameObject(Transform(position));
 
 		GameObject *chunkTop = CreateChunk(radius, Transform(Vector3(0.0f, radius, 0.0f), Vector3(0.0f, 0.0f, 0.0f)));
+		chunkTop->SetName("Planet_Top");
 		chunkTop->SetParent(planet);
 		GameObject *chunkBottom = CreateChunk(radius, Transform(Vector3(0.0f, -radius, 0.0f), Vector3(180.0f, 0.0f, 0.0f)));
+		chunkBottom->SetName("Planet_Bottom");
 		chunkBottom->SetParent(planet);
 		GameObject *chunkBack = CreateChunk(radius, Transform(Vector3(0.0f, 0.0f, radius), Vector3(90.0f, 0.0f, 0.0f)));
+		chunkBack->SetName("Planet_Back");
 		chunkBack->SetParent(planet);
 		GameObject *chunkFront = CreateChunk(radius, Transform(Vector3(0.0f, 0.0f, -radius), Vector3(270.0f, 0.0f, 0.0f)));
+		chunkFront->SetName("Planet_Front");
 		chunkFront->SetParent(planet);
 		GameObject *chunkRight = CreateChunk(radius, Transform(Vector3(radius, 0.0f, 0.0f), Vector3(0.0f, 0.0f, 270.0f)));
+		chunkRight->SetName("Planet_Right");
 		chunkRight->SetParent(planet);
 		GameObject *chunkLeft = CreateChunk(radius, Transform(Vector3(-radius, 0.0f, 0.0f), Vector3(0.0f, 0.0f, 90.0f)));
+		chunkLeft->SetName("Planet_Left");
 		chunkLeft->SetParent(planet);
 
 		return planet;
@@ -172,9 +178,8 @@ namespace test
 	//	new GameObject("Objects/PlanetCentre/PlanetCentre.json", Transform(transform.GetPosition().ProjectCubeToSphere(radius), transform.GetRotation(), 5.0f));
 
 		GameObject *terrainChunk = new GameObject(Transform());
-		terrainChunk->SetName("Terrain");
 		terrainChunk->AddComponent<Mesh>();
-		terrainChunk->AddComponent<LodBehaviour>(2.0f * radius, radius, 100.0f, transform);
+		terrainChunk->AddComponent<LodBehaviour>(0, 2.0f * radius, radius, 0.4f * radius, transform);
 		terrainChunk->AddComponent<MaterialTerrain>();
 		terrainChunk->AddComponent<MeshRender>();
 		//terrainChunk->AddComponent<ShadowRender>();

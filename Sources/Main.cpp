@@ -20,7 +20,7 @@
 using namespace test;
 using namespace acid;
 
-//#if (FL_BUILD_RELEASE && FL_BUILD_WINDOWS)
+//#if (ACID_BUILD_RELEASE && ACID_BUILD_WINDOWS)
 //int CALLBACK WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR pCmdLine, int nCmdShow)
 //#else
 int main(int argc, char **argv)
@@ -34,7 +34,7 @@ int main(int argc, char **argv)
 	auto engine = new Engine();
 	engine->SetUpdater(new MainUpdater());
 
-	auto configManager = std::make_shared<ConfigManager>();
+	auto configManager = new ConfigManager();
 	printf("Working Directory: %s\n", FileSystem::GetWorkingDirectory().c_str());
 
 	// Registers modules.
@@ -57,6 +57,7 @@ int main(int argc, char **argv)
 
 	// Runs the game loop.
 	auto exitCode = engine->Run();
+	delete configManager;
 	delete engine;
 
 	// Pauses the console.

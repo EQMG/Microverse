@@ -1,5 +1,6 @@
 #pragma once
 
+#include <Maths/Colour.hpp>
 #include <Materials/IMaterial.hpp>
 
 using namespace acid;
@@ -13,9 +14,11 @@ namespace test
 		public IMaterial
 	{
 	private:
+		Colour m_baseColor;
+
 		std::shared_ptr<PipelineMaterial> m_material;
 	public:
-		MaterialTerrain();
+		MaterialTerrain(const Colour &baseColor = Colour::BLUE);
 
 		~MaterialTerrain();
 
@@ -32,6 +35,10 @@ namespace test
 		void PushDescriptors(DescriptorsHandler &descriptorSet) override;
 
 		std::string GetName() const override { return "MaterialTerrain"; };
+
+		Colour GetBaseColor() const { return m_baseColor; }
+
+		void SetBaseColor(const Colour &baseColor) { m_baseColor = baseColor; }
 
 		std::shared_ptr<PipelineMaterial> GetMaterial() const override { return m_material; }
 	};

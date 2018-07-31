@@ -2,7 +2,30 @@ cmake_minimum_required (VERSION 3.1)
 project (Microverse)
 
 # Options
+option(BUILD_SHARED_LIBS "Build Shared Libraries" ON)
 option(MICROVERSE_INSTALL "Generate installation target" ON)
+
+# Preprocessor
+if("${CMAKE_BUILD_TYPE}" STREQUAL "Debug")
+	add_definitions(-DACID_VERBOSE)
+	add_definitions(-DACID_BUILD_DEBUG)
+elseif("${CMAKE_BUILD_TYPE}" STREQUAL "Release")
+	add_definitions(-DACID_BUILD_RELEASE)
+elseif("${CMAKE_BUILD_TYPE}" STREQUAL "RelWithDebInfo")
+	add_definitions(-DACID_VERBOSE)
+	add_definitions(-DACID_BUILD_RELEASE)
+endif()
+
+if(WIN32)
+	add_definitions(-DACID_WSI_WIN32)
+	add_definitions(-DACID_BUILD_WINDOWS)
+elseif(UNIX AND NOT APPLE)
+	add_definitions(-DACID_WSI_XCB)
+	add_definitions(-DACID_BUILD_LINUX)
+elseif(UNIX AND APPLE)
+	add_definitions(-DACID_WSI_COCO)
+	add_definitions(-DACID_BUILD_MACOS)
+endif()
 
 # Compiler Options
 set(CMAKE_CXX_STANDARD 17)

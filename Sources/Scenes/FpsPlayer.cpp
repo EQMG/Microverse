@@ -12,8 +12,8 @@
 
 namespace test
 {
-	static const float WALK_SPEED = 3.1f;
-	static const float RUN_SPEED = 5.7f;
+	static const float WALK_SPEED = 10.0f; // 3.1f
+	static const float RUN_SPEED = 25.0f; // 5.7f
 	static const float CROUCH_SPEED = 1.2f;
 	static const float JUMP_SPEED = 6.5f;
 	static const float CROUCH_JUMP_SPEED = 3.0f;
@@ -136,7 +136,7 @@ namespace test
 
 		auto cameraRotation = Scenes::Get()->GetCamera()->GetRotation();
 		Vector3 position = GetGameObject()->GetTransform().GetPosition();
-		Vector3 rotation = GetGameObject()->GetTransform().GetRotation().ToEuler();
+		Vector3 rotation = GetGameObject()->GetTransform().GetRotation();
 
 		// Planet collision.
 		if (!m_noclipEnabled)
@@ -170,5 +170,7 @@ namespace test
 
 		GetGameObject()->GetTransform().SetPosition(position);
 		GetGameObject()->GetTransform().SetRotation(rotation);
+
+		// GetGameObject()->GetTransform().SetPosition(Vector3(0.0f, 1000.0f * std::cos(Engine::Get()->GetTime() / 10.0f), 4000.0f * std::sin(Engine::Get()->GetTime() / 8.0f)));
 	}
 }
