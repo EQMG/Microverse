@@ -13,7 +13,6 @@ namespace test
 	{
 	private:
 		Text *m_textInfo;
-		Text *m_textTime;
 		Text *m_textFps;
 		Text *m_textUps;
 		Text *m_textPosition;

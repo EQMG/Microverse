@@ -1,6 +1,4 @@
 set(MICROVERSE_HEADERS_
-        "Skybox/CelestialBody.hpp"
-        "Skybox/SkyboxCycle.hpp"
         "Configs/ConfigManager.hpp"
         "Post/Filters/FilterDamage.hpp"
         "MainRenderer.hpp"
@@ -23,8 +21,6 @@ set(MICROVERSE_HEADERS_
 
 set(MICROVERSE_SOURCES_
         "Microverse.rc"
-        "Skybox/CelestialBody.cpp"
-        "Skybox/SkyboxCycle.cpp"
         "Configs/ConfigManager.cpp"
         "Post/Filters/FilterDamage.cpp"
         "Main.cpp"

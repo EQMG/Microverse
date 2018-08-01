@@ -8,8 +8,6 @@
 #include <Terrains/LodBehaviour.hpp>
 #include <Terrains/MaterialTerrain.hpp>
 #include <Waters/MaterialWater.hpp>
-#include "Skybox/CelestialBody.hpp"
-#include "Skybox/SkyboxCycle.hpp"
 #include "World/World.hpp"
 #include "Configs/ConfigManager.hpp"
 #include "MainUpdater.hpp"
@@ -42,8 +40,6 @@ int main(int argc, char **argv)
 
 	// Registers components.
 	Scenes::Get()->RegisterComponent<FpsPlayer>("FpsPlayer");
-	Scenes::Get()->RegisterComponent<CelestialBody>("CelestialBody");
-	Scenes::Get()->RegisterComponent<SkyboxCycle>("SkyboxCycle");
 	Scenes::Get()->RegisterComponent<LodBehaviour>("LodBehaviour");
 	Scenes::Get()->RegisterComponent<MaterialTerrain>("MaterialTerrain");
 	Scenes::Get()->RegisterComponent<MaterialWater>("MaterialWater");

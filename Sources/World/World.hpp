@@ -20,12 +20,8 @@ namespace test
 	private:
 		Noise m_noiseTerrain;
 
-		DriverLinear m_driverDay;
-		float m_factorDay;
-
 		Fog m_fog;
 
-		Vector3 m_skyboxRotation;
 		Vector3 m_lightDirection;
 	public:
 		/// <summary>
@@ -53,17 +49,7 @@ namespace test
 
 		float GetTerrainRadius(const float &radius, const float &theta, const float &phi) const;
 
-		float GetDayFactor() const;
-
-		float GetSunriseFactor() const;
-
-		float GetShadowFactor() const;
-
-		float GetStarIntensity() const;
-
 		Fog GetFog() const { return m_fog; }
-
-		Vector3 GetSkyboxRotation() const { return m_skyboxRotation; }
 
 		Vector3 GetLightDirection() const { return m_lightDirection; }
 	};

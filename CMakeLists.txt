@@ -18,12 +18,9 @@ endif()
 
 if(WIN32)
 	add_definitions(-DACID_WSI_WIN32)
-	add_definitions(-DACID_BUILD_WINDOWS)
 elseif(UNIX AND NOT APPLE)
-	add_definitions(-DACID_WSI_XCB)
 	add_definitions(-DACID_BUILD_LINUX)
 elseif(UNIX AND APPLE)
-	add_definitions(-DACID_WSI_COCO)
 	add_definitions(-DACID_BUILD_MACOS)
 endif()
 
