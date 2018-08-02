@@ -12,7 +12,7 @@ namespace test
 		m_textInfo(CreateStatus("Build: d0.0.1", 0.002f, 0.002f, JUSTIFY_LEFT)),
 		m_textFps(CreateStatus("FPS: 0", 0.002f, 0.022f, JUSTIFY_LEFT)),
 		m_textUps(CreateStatus("UPS: 0", 0.002f, 0.042f, JUSTIFY_LEFT)),
-		m_textPosition(CreateStatus("POSITION: 0.0, 0.0, 0.0", 0.002f, 0.082f, JUSTIFY_LEFT)),
+		m_textPosition(CreateStatus("POSITION: 0.0, 0.0, 0.0", 0.002f, 0.062f, JUSTIFY_LEFT)),
 		m_timerUpdate(Timer(0.333f))
 	{
 		//	m_textPosition->SetVisible(false);

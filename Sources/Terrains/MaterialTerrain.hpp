@@ -18,7 +18,7 @@ namespace test
 
 		std::shared_ptr<PipelineMaterial> m_material;
 	public:
-		MaterialTerrain(const Colour &baseColor = Colour::BLUE);
+		MaterialTerrain(const Colour &baseColor = Colour::WHITE);
 
 		~MaterialTerrain();
 

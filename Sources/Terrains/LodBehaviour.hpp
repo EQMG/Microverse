@@ -22,6 +22,8 @@ namespace test
 		std::array<GameObject *, 4> m_children;
 		bool m_subdivided;
 	public:
+		static const unsigned int HIGHEST_LOD;
+
 		LodBehaviour(const unsigned int &lod = 0, const float &sideLength = 200.0f, const float &radius = 0.0f, const float &squareSize = 4.0f, const Transform &transform = Transform());
 
 		~LodBehaviour();
@@ -29,6 +31,8 @@ namespace test
 		void Start() override;
 
 		void Update() override;
+
+		static float GetSideRadiusRatio(const float &radius);
 
 		static unsigned int GetCameraLod(LodBehaviour *behaviour);
 

@@ -1,6 +1,5 @@
 #include "LodBehaviour.hpp"
 
-#include <algorithm>
 #include <Scenes/Scenes.hpp>
 #include <Maths/Maths.hpp>
 #include <Meshes/Mesh.hpp>
@@ -10,7 +9,7 @@
 
 namespace test
 {
-	static const unsigned int MAX_LOD = 3;
+	const unsigned int LodBehaviour::HIGHEST_LOD = 3;
 
 	LodBehaviour::LodBehaviour(const unsigned int &lod, const float &sideLength, const float &radius, const float &squareSize, const Transform &transform) :
 		IBehaviour(),
@@ -63,21 +62,7 @@ namespace test
 
 		unsigned int targetLod = GetCameraLod(this);
 
-		auto materialTerrain = GetGameObject()->GetComponent<MaterialTerrain>();
-
-		if (materialTerrain != nullptr)
-		{
-			if (targetLod == 0)
-				materialTerrain->SetBaseColor(Colour::BLUE);
-			else if (targetLod == 1)
-				materialTerrain->SetBaseColor(Colour::GREEN);
-			else if (targetLod == 2)
-				materialTerrain->SetBaseColor(Colour::YELLOW);
-			else if (targetLod == 3)
-				materialTerrain->SetBaseColor(Colour::RED);
-		}
-
-		if (targetLod > m_lod && m_lod < MAX_LOD && !m_subdivided)
+		if (targetLod > m_lod && m_lod < HIGHEST_LOD && !m_subdivided)
 		{
 			Subdivide();
 		}
@@ -85,6 +70,27 @@ namespace test
 		{
 			Merge();
 		}
+
+		/*auto materialTerrain = GetGameObject()->GetComponent<MaterialTerrain>();
+
+		if (materialTerrain != nullptr)
+		{
+			if (m_lod == 0)
+				materialTerrain->SetBaseColor(Colour::BLUE);
+			else if (m_lod == 1)
+				materialTerrain->SetBaseColor(Colour::GREEN);
+			else if (m_lod == 2)
+				materialTerrain->SetBaseColor(Colour::YELLOW);
+			else if (m_lod == 3)
+				materialTerrain->SetBaseColor(Colour::RED);
+		}*/
+	}
+
+	float LodBehaviour::GetSideRadiusRatio(const float &radius)
+	{
+		float ratio = 0.0002f * radius;
+		ratio = std::round((ratio * 10.0f) / 2.0f) / 5.0f;
+		return std::min(ratio, 0.1f);
 	}
 
 	unsigned int LodBehaviour::GetCameraLod(LodBehaviour *behaviour)
@@ -92,7 +98,7 @@ namespace test
 		Vector3 cameraPosition = Scenes::Get()->GetCamera()->GetPosition();
 		Vector3 chunkPosition = behaviour->m_transform.GetPosition().ProjectCubeToSphere(behaviour->m_radius) + behaviour->GetGameObject()->GetTransform().GetPosition();
 		float distance = std::fabs(chunkPosition.Distance(cameraPosition));
-		float lod = std::floor((-4.0f / 2800.0f) * distance + 4.0f);
+		float lod = std::floor((-1.618f / behaviour->m_radius) * distance + (HIGHEST_LOD + 1));
 		return static_cast<unsigned int>(std::max(lod, 0.0f));
 	}
 

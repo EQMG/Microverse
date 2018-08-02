@@ -49,6 +49,8 @@ namespace test
 
 		float GetTerrainRadius(const float &radius, const float &theta, const float &phi) const;
 
+		Noise GetTerrainNoise() const { return m_noiseTerrain; }
+
 		Fog GetFog() const { return m_fog; }
 
 		Vector3 GetLightDirection() const { return m_lightDirection; }

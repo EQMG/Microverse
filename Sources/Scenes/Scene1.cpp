@@ -14,6 +14,11 @@
 #include <Renderer/Screenshot/Screenshot.hpp>
 #include <Shadows/ShadowRender.hpp>
 #include <Skyboxes/MaterialSkybox.hpp>
+#include <Textures/stb_image_write.h>
+#include <Helpers/FileSystem.hpp>
+#include <Scenes/Scenes.hpp>
+#include <Physics/ColliderSphere.hpp>
+#include "World/World.hpp"
 #include "Terrains/LodBehaviour.hpp"
 #include "Terrains/MeshTerrain.hpp"
 #include "Terrains/MaterialTerrain.hpp"
@@ -27,6 +32,7 @@ namespace test
 
 	Scene1::Scene1() :
 		IScene(new FpsCamera()),
+		m_buttonSpawnSphere(new ButtonMouse({MOUSE_BUTTON_1})),
 		m_buttonFullscreen(new ButtonKeyboard({KEY_F11})),
 		m_buttonCaptureMouse(new ButtonKeyboard({KEY_M})),
 		m_buttonScreenshot(new ButtonKeyboard({KEY_F12})),
@@ -49,6 +55,7 @@ namespace test
 
 	Scene1::~Scene1()
 	{
+		delete m_buttonSpawnSphere;
 		delete m_buttonFullscreen;
 		delete m_buttonCaptureMouse;
 		delete m_buttonScreenshot;
@@ -72,9 +79,12 @@ namespace test
 
 		// Player.
 		// GameObject *playerObject = new GameObject("Objects/Player/Player.json", Transform(Vector3(), Vector3(0.0f, 180.0f, 0.0f)));
-		GameObject *playerObject = new GameObject(Transform(Vector3(0.0f, 0.0f, 3000.0f), Vector3(0.0f, 180.0f, 0.0f), 1.0f));
+		GameObject *playerObject = new GameObject(Transform(Vector3(0.0f, 0.0f, 2000.0f), Vector3(0.0f, 180.0f, 0.0f), 1.0f));
 		playerObject->SetName("Player");
 		playerObject->AddComponent<FpsPlayer>();
+
+		// Skybox.
+		GameObject *skyboxObject1 = new GameObject("Objects/SkyboxChapel/SkyboxChapel.json", Transform(Vector3(), Vector3(), 2000.0f));
 
 		// Skybox.
 		// GameObject *skyboxObject = new GameObject("Objects/SkyboxClouds/SkyboxStars.json", Transform(Vector3(), Vector3(), 2048.0f));
@@ -84,12 +94,20 @@ namespace test
 		skyboxObject->AddComponent<MaterialSkybox>(Cubemap::Resource("Objects/SkyboxStars", ".png"));
 		skyboxObject->AddComponent<MeshRender>();
 
+		// Animated.
+		GameObject *animatedObject = new GameObject(Transform(Vector3(0.0f, 500.0f, 0.0f), Vector3(), 0.25f));
+		animatedObject->SetName("Animated");
+		animatedObject->AddComponent<MeshAnimated>("Objects/Animated/Model.dae");
+		animatedObject->AddComponent<MaterialDefault>(Colour::WHITE, Texture::Resource("Objects/Animated/Diffuse.png"), 0.7f, 0.6f);
+		animatedObject->AddComponent<MeshRender>();
+	//	animatedObject->AddComponent<ShadowRender>();
+
 		// Entities.
-		GameObject *sun = new GameObject(Transform(Vector3(100.0f, 1000.0f, 8000.0f), Vector3(), 18.0f));
-		sun->AddComponent<Light>(Colour("#FFFFFF"), -1.0f);
+		GameObject *sun = new GameObject(Transform(Vector3(100.0f, 8000.0f, 100.0f), Vector3(), 18.0f));
+		sun->AddComponent<Light>(Colour::WHITE, -1.0f);
 
 		// Terrains.
-		GameObject *planet1 = CreatePlanet(1000.0f, Vector3());
+		GameObject *planet1 = CreatePlanet(500.0f, Vector3());
 
 		// Waters.
 		/*GameObject *water = new GameObject(Transform());
@@ -101,6 +119,19 @@ namespace test
 
 	void Scene1::Update()
 	{
+		if (m_buttonSpawnSphere->WasDown())
+		{
+			Vector3 cameraPosition = Scenes::Get()->GetCamera()->GetPosition();
+			Vector3 cameraRotation = Scenes::Get()->GetCamera()->GetRotation();
+			GameObject *sphere = new GameObject(Transform(cameraPosition, Vector3(), 0.5f));
+			sphere->AddComponent<Mesh>(ModelSphere::Resource(30, 30, 1.0f));
+			sphere->AddComponent<ColliderSphere>();
+			auto rigidbody = sphere->AddComponent<Rigidbody>(0.5f);
+			sphere->AddComponent<MaterialDefault>(Colour::WHITE, nullptr, 0.0f, 1.0f);
+			sphere->AddComponent<MeshRender>();
+			rigidbody->AddForce<Force>((cameraRotation.ToQuaternion() * Vector3::FRONT) * -3.0f, 2.0f);
+		}
+
 		if (m_buttonFullscreen->WasDown())
 		{
 			Display::Get()->SetFullscreen(!Display::Get()->IsFullscreen());
@@ -146,8 +177,57 @@ namespace test
 
 	GameObject *Scene1::CreatePlanet(const float &radius, const Vector3 &position)
 	{
+		/*{
+			Noise noiseTerrain = Noise(69124);
+			noiseTerrain.SetNoiseType(NoiseType::TYPE_PERLINFRACTAL);
+			noiseTerrain.SetFrequency(0.00625f);
+			noiseTerrain.SetInterp(NoiseInterp::INTERP_QUINTIC);
+			noiseTerrain.SetFractalType(NoiseFractal::FRACTAL_FBM);
+			noiseTerrain.SetFractalOctaves(4);
+			noiseTerrain.SetFractalLacunarity(1.8f);
+			noiseTerrain.SetFractalGain(0.6f);
+
+			Noise noiseBiome = Noise(56744);
+			noiseBiome.SetNoiseType(NoiseType::TYPE_SIMPLEXFRACTAL);
+			noiseBiome.SetFrequency(0.001f);
+			noiseBiome.SetInterp(NoiseInterp::INTERP_QUINTIC);
+			noiseBiome.SetFractalType(NoiseFractal::FRACTAL_FBM);
+			noiseBiome.SetFractalOctaves(2);
+			noiseBiome.SetFractalLacunarity(2.0f);
+			noiseBiome.SetFractalGain(0.5f);
+
+			std::string filename = FileSystem::GetWorkingDirectory() + "/Planet1.png";
+			int width = 2500;
+			int height = 2500;
+			unsigned int *data = (unsigned int *) malloc(width * height * 4);
+
+			for (int x = 0; x < width; x++)
+			{
+				for (int y = 0; y < height; y++)
+				{
+					float random = (noiseTerrain.GetNoise(x, y) + 1.0f) / 2.0f;
+					float r = random * ((noiseBiome.GetNoise(x, y) + 1.0f) / 2.0f);
+					float g = random * ((noiseBiome.GetNoise(x * 10.0f, y * 10.0f) + 1.0f) / 2.0f);
+					float b = random * ((noiseBiome.GetNoise(x * 33.0f, y * 33.0f) + 1.0f) / 2.0f);
+
+					unsigned char buffer[4];
+					buffer[0] = std::floor(255 * Maths::Clamp(r, 0.0f, 1.0f));
+					buffer[1] = std::floor(255 * Maths::Clamp(g, 0.0f, 1.0f));
+					buffer[2] = std::floor(255 * Maths::Clamp(b, 0.0f, 1.0f));
+					buffer[3] = 255;
+					memcpy((char*)&data[x * width + y], buffer, 4);
+				}
+			}
+
+			FileSystem::DeleteFile(filename);
+			Texture::WritePixels(filename, data, width, height, 4);
+			free(data);
+		}*/
+
 		//	GameObject *planet = new GameObject("Objects/PlanetCentre/PlanetCentre.json", Transform(position, Vector3(), 5.0f));
 		GameObject *planet = new GameObject(Transform(position));
+		planet->AddComponent<ColliderSphere>(radius);
+		planet->AddComponent<Rigidbody>(0.0f);
 
 		GameObject *chunkTop = CreateChunk(radius, Transform(Vector3(0.0f, radius, 0.0f), Vector3(0.0f, 0.0f, 0.0f)));
 		chunkTop->SetName("Planet_Top");
@@ -177,7 +257,7 @@ namespace test
 
 		GameObject *terrainChunk = new GameObject(Transform());
 		terrainChunk->AddComponent<Mesh>();
-		terrainChunk->AddComponent<LodBehaviour>(0, 2.0f * radius, radius, 0.4f * radius, transform);
+		terrainChunk->AddComponent<LodBehaviour>(0, 2.0f * radius, radius, radius * LodBehaviour::GetSideRadiusRatio(radius), transform);
 		terrainChunk->AddComponent<MaterialTerrain>();
 		terrainChunk->AddComponent<MeshRender>();
 		//terrainChunk->AddComponent<ShadowRender>();
