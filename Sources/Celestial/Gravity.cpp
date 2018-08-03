@@ -1,14 +1,14 @@
-#include "Gravity.hpp"
 #include "Planet.hpp"
 
 #include <Objects/GameObject.hpp>
 #include <Physics/Rigidbody.hpp>
+#include "Gravity.hpp"
+#include "Star.hpp"
 
 namespace test
 {
 	Gravity::Gravity() :
-		IComponent(),
-		m_force(nullptr)
+		IComponent()
 	{
 	}
 
@@ -18,15 +18,6 @@ namespace test
 
 	void Gravity::Start()
 	{
-		auto rigidbody = GetGameObject()->GetComponent<Rigidbody>();
-
-		if (rigidbody == nullptr)
-		{
-			fprintf(stderr, "Gravity must be attached to a object with a rigidbody!");
-			return;
-		}
-
-		m_force = rigidbody->AddForce<Force>(Vector3(), Vector3::ZERO);
 	}
 
 	void Gravity::Update()
@@ -40,10 +31,10 @@ namespace test
 
 		Vector3 position = GetGameObject()->GetTransform().GetPosition();
 		Vector3 planet = Vector3();
-		float planetMass = 157079637590016.0f;
+		float planetMass = 159467253530624.000000f;
 
-		float force = (Planet::G_CONSTANT * rigidbody->GetMass() * planetMass) / planet.DistanceSquared(position);
-		m_force->SetForce(force * (planet - position));
+		float force = (Star::G_CONSTANT * rigidbody->GetMass() * planetMass) / planet.DistanceSquared(position);
+		rigidbody->SetGravity(force * (planet - position).Normalize());
 	}
 
 	void Gravity::Load(LoadedValue *value)

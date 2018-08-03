@@ -7,22 +7,24 @@
 #include <Meshes/MeshRender.hpp>
 #include <Noise/Noise.hpp>
 #include <Helpers/FileSystem.hpp>
-#include "QuadtreeChunk.hpp"
-#include "MaterialChunk.hpp"
+#include "Chunks/QuadtreeChunk.hpp"
+#include "Chunks/MaterialChunk.hpp"
 
 namespace test
 {
+	const float Planet::MEDIAN_RADIUS = 600.0f; // +- 50.0%
 	const float Planet::SQUARE_RADIUS_RATIO = 0.2f; // Or 0.4f;
-	const float Planet::G_CONSTANT = 6.673e-11f;
 
-	Planet::Planet(const float &radius, const float &density) :
-		IComponent(),
+	Planet::Planet(Star *star, const float &radius, const float &density) :
+		ICelestial(),
+		m_star(star),
 		m_radius(radius),
 		m_density(density),
 		m_mass(m_density * (4.0f / 3.0f) * PI * std::pow(m_radius, 3.0f)),
-		m_surfaceGravity(G_CONSTANT * m_mass / std::pow(m_radius, 2.0f))
+		m_surfaceGravity(Star::G_CONSTANT * m_mass / std::pow(m_radius, 2.0f)),
+		m_escapeVelocity(std::sqrt(2.0f * Star::G_CONSTANT * m_mass / m_radius))
 	{
-		fprintf(stdout, "Radius(m)=%f, Density(kg/m^3)=%f, Mass(kg)=%f, Surface Gravity(m/s^2)=%f, Surface Orbit(m/s)=%f\n", m_radius, m_density, m_mass, m_surfaceGravity, std::sqrt(G_CONSTANT * m_mass / m_radius));
+		fprintf(stdout, "Planet: Radius(m)=%f, Density(kg/m^3)=%f, Mass(kg)=%f, Surface Gravity(m/s^2)=%f, Escape Velocity(m/s)=%f\n", m_radius, m_density, m_mass, m_surfaceGravity, m_escapeVelocity);
 	}
 
 	Planet::~Planet()
@@ -35,23 +37,12 @@ namespace test
 		float sideLength = 2.0f * m_radius;
 		float squareSize = SQUARE_RADIUS_RATIO * m_radius;
 
-		GameObject *chunkTop = CreateChunk(Transform(Vector3(0.0f, m_radius, 0.0f), Vector3(0.0f, 0.0f, 0.0f)), 0, sideLength, squareSize);
-		chunkTop->SetName(baseName + "_Top");
-
-		GameObject *chunkBottom = CreateChunk(Transform(Vector3(0.0f, -m_radius, 0.0f), Vector3(180.0f, 0.0f, 0.0f)), 0, sideLength, squareSize);
-		chunkBottom->SetName(baseName + "_Bottom");
-
-		GameObject *chunkBack = CreateChunk(Transform(Vector3(0.0f, 0.0f, m_radius), Vector3(90.0f, 0.0f, 0.0f)), 0, sideLength, squareSize);
-		chunkBack->SetName(baseName + "_Back");
-
-		GameObject *chunkFront = CreateChunk(Transform(Vector3(0.0f, 0.0f, -m_radius), Vector3(270.0f, 0.0f, 0.0f)), 0, sideLength, squareSize);
-		chunkFront->SetName(baseName + "_Front");
-
-		GameObject *chunkRight = CreateChunk(Transform(Vector3(m_radius, 0.0f, 0.0f), Vector3(0.0f, 0.0f, 270.0f)), 0, sideLength, squareSize);
-		chunkRight->SetName(baseName + "_Right");
-
-		GameObject *chunkLeft = CreateChunk(Transform(Vector3(-m_radius, 0.0f, 0.0f), Vector3(0.0f, 0.0f, 90.0f)), 0, sideLength, squareSize);
-		chunkLeft->SetName(baseName + "_Left");
+		CreateChunk(Transform(Vector3(0.0f, m_radius, 0.0f), Vector3(0.0f, 0.0f, 0.0f)), 0, sideLength, squareSize, "Top");
+		CreateChunk(Transform(Vector3(0.0f, -m_radius, 0.0f), Vector3(180.0f, 0.0f, 0.0f)), 0, sideLength, squareSize, "Bottom");
+		CreateChunk(Transform(Vector3(0.0f, 0.0f, m_radius), Vector3(90.0f, 0.0f, 0.0f)), 0, sideLength, squareSize, "Back");
+		CreateChunk(Transform(Vector3(0.0f, 0.0f, -m_radius), Vector3(270.0f, 0.0f, 0.0f)), 0, sideLength, squareSize, "Front");
+		CreateChunk(Transform(Vector3(m_radius, 0.0f, 0.0f), Vector3(0.0f, 0.0f, 270.0f)), 0, sideLength, squareSize, "Right");
+		CreateChunk(Transform(Vector3(-m_radius, 0.0f, 0.0f), Vector3(0.0f, 0.0f, 90.0f)), 0, sideLength, squareSize, "Left");
 	}
 
 	void Planet::Update()

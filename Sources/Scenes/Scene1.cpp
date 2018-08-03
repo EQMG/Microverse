@@ -18,8 +18,9 @@
 #include <Scenes/Scenes.hpp>
 #include <Physics/ColliderSphere.hpp>
 #include <Physics/ColliderConvexHull.hpp>
-#include <Planet/Gravity.hpp>
-#include <Planet/Planet.hpp>
+#include "Celestial/Gravity.hpp"
+#include "Celestial/Planet.hpp"
+#include "Celestial/Star.hpp"
 #include "World/World.hpp"
 #include "Waters/MaterialWater.hpp"
 #include "FpsCamera.hpp"
@@ -71,8 +72,8 @@ namespace test
 
 	void Scene1::Start()
 	{
-		Scenes::Get()->SetGravity(Vector3::ZERO);
-		Scenes::Get()->SetAirDensity(0.0f);
+		GetPhysics()->SetGravity(Vector3::ZERO);
+		GetPhysics()->SetAirDensity(0.0f);
 
 		// Camera.
 		//GameObject *cameraObject = new GameObject(Transform(Vector3(), Vector3(), 1.0f));
@@ -97,7 +98,7 @@ namespace test
 		skyboxObject->AddComponent<MeshRender>();
 
 		// Animated.
-		GameObject *animatedObject = new GameObject(Transform(Vector3(0.0f, 500.0f, 0.0f), Vector3(), 0.25f));
+		GameObject *animatedObject = new GameObject(Transform(Vector3(0.0f, 600.0f, 0.0f), Vector3(), 0.25f));
 		animatedObject->SetName("Animated");
 		animatedObject->AddComponent<MeshAnimated>("Objects/Animated/Model.dae");
 		animatedObject->AddComponent<MaterialDefault>(Colour::WHITE, Texture::Resource("Objects/Animated/Diffuse.png"), 0.7f, 0.6f);
@@ -109,24 +110,20 @@ namespace test
 		sun->AddComponent<Light>(Colour::WHITE, -1.0f);
 
 		// Chunks.
-		GameObject *core1 = new GameObject(Transform(Vector3(), Vector3(), 25.0f));
-		core1->AddComponent<Mesh>(ModelSphere::Resource(30, 30, 1.0f));
-		core1->AddComponent<MaterialDefault>(Colour::FUCHSIA, nullptr, 0.0f, 1.0f);
-		core1->AddComponent<MeshRender>();
+		GameObject *star1 = new GameObject(Transform(Vector3()));
+		star1->SetName("Star1");
+		star1->AddComponent<Star>(2000.0f);
+	//	star1->AddComponent<Mesh>(ModelSphere::Resource(50, 50, 2000.0f));
+	//	star1->AddComponent<MaterialDefault>(star1->GetComponent<Star>()->GetColour(), nullptr, 0.0f, 1.0f);
+	//	star1->AddComponent<MeshRender>();
 
-		GameObject *planet1 = new GameObject(Transform(Vector3()));
+		GameObject *planet1 = new GameObject(Transform());
 		planet1->SetName("Planet1");
-		planet1->AddComponent<Planet>(700.0f);
-		planet1->AddComponent<ColliderSphere>(700.0f);
-		planet1->AddComponent<Rigidbody>(0.0f);
+		planet1->AddComponent<Planet>(star1->GetComponent<Star>(), 600.0f);
 
 		GameObject *planet2 = new GameObject(Transform(Vector3(1600.0f, 0.0f, 0.0f)));
 		planet2->SetName("Planet2");
-		planet2->AddComponent<Planet>(300.0f);
-		planet2->AddComponent<ColliderSphere>(300.0f);
-		planet2->AddComponent<Rigidbody>(10.0f);
-		planet2->AddComponent<Gravity>();
-		planet2->GetComponent<Rigidbody>()->AddForce<Force>(Vector3::FRONT * 420.0f, 5.5f, Vector3(0.0f, 100.0f, 0.0f));
+		planet2->AddComponent<Planet>(star1->GetComponent<Star>(), 200.0f);
 
 		// Waters.
 		/*GameObject *water = new GameObject(Transform());
@@ -149,7 +146,7 @@ namespace test
 			sphere->AddComponent<Gravity>();
 			sphere->AddComponent<MaterialDefault>(Colour::WHITE, nullptr, 0.0f, 1.0f);
 			sphere->AddComponent<MeshRender>();
-			rigidbody->AddForce<Force>((cameraRotation.ToQuaternion() * Vector3::FRONT) * -25.0f, 2.0f);
+			rigidbody->AddForce<Force>((cameraRotation.ToQuaternion() * Vector3::FRONT).Normalize() * -15.0f, 2.0f);
 		}
 
 		if (m_buttonFullscreen->WasDown())

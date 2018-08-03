@@ -6,10 +6,11 @@
 #include <Renderer/Renderer.hpp>
 #include <Scenes/Scenes.hpp>
 #include <Waters/MaterialWater.hpp>
-#include <Planet/Gravity.hpp>
-#include <Planet/Planet.hpp>
-#include <Planet/QuadtreeChunk.hpp>
-#include <Planet/MaterialChunk.hpp>
+#include "Celestial/Gravity.hpp"
+#include "Celestial/Planet.hpp"
+#include "Celestial/Star.hpp"
+#include "Chunks/QuadtreeChunk.hpp"
+#include "Chunks/MaterialChunk.hpp"
 #include "World/World.hpp"
 #include "Configs/ConfigManager.hpp"
 #include "MainUpdater.hpp"
@@ -44,6 +45,7 @@ int main(int argc, char **argv)
 	Scenes::Get()->RegisterComponent<FpsPlayer>("FpsPlayer");
 	Scenes::Get()->RegisterComponent<Gravity>("Gravity");
 	Scenes::Get()->RegisterComponent<Planet>("Planet");
+	Scenes::Get()->RegisterComponent<Star>("Star");
 	Scenes::Get()->RegisterComponent<QuadtreeChunk>("QuadtreeChunk");
 	Scenes::Get()->RegisterComponent<MaterialChunk>("MaterialChunk");
 	Scenes::Get()->RegisterComponent<MaterialWater>("MaterialWater");

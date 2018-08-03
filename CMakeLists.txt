@@ -5,6 +5,12 @@ project (Microverse)
 option(BUILD_SHARED_LIBS "Build Shared Libraries" ON)
 option(MICROVERSE_INSTALL "Generate installation target" ON)
 
+set(LIB_TYPE STATIC)
+
+if(BUILD_SHARED_LIBS)
+	set(LIB_TYPE SHARED)
+endif()
+
 # Preprocessor
 if("${CMAKE_BUILD_TYPE}" STREQUAL "Debug")
 	add_definitions(-DACID_VERBOSE)

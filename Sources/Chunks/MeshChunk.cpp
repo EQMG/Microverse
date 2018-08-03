@@ -1,6 +1,6 @@
 #include "MeshChunk.hpp"
 
-#include <World/World.hpp>
+#include "World/World.hpp"
 
 namespace test
 {

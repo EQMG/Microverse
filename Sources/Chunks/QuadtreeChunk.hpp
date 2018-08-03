@@ -5,8 +5,8 @@
 #include <Objects/IComponent.hpp>
 #include <Objects/GameObject.hpp>
 #include <Models/Model.hpp>
+#include "Celestial/Planet.hpp"
 #include "MeshChunk.hpp"
-#include "Planet.hpp"
 
 using namespace acid;
 

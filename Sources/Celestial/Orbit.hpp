@@ -1,22 +1,21 @@
 #pragma once
 
-#include <memory>
 #include <Objects/IComponent.hpp>
-#include <Physics/Force.hpp>
+#include "ICelestial.hpp"
 
 using namespace acid;
 
 namespace test
 {
-	class Gravity :
+	class Orbit :
 		public IComponent
 	{
 	private:
-		std::shared_ptr<Force> m_force;
+		ICelestial *m_parent;
 	public:
-		Gravity();
+		Orbit(ICelestial *parent = nullptr);
 
-		~Gravity();
+		~Orbit();
 
 		void Start() override;
 
@@ -26,6 +25,8 @@ namespace test
 
 		void Write(LoadedValue *destination) override;
 
-		std::string GetName() const override { return "Gravity"; };
+		std::string GetName() const override { return "Orbit"; };
+
+		ICelestial *GetParent() const { return m_parent; }
 	};
 }
