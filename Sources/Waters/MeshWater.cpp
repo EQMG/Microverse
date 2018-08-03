@@ -18,12 +18,18 @@ namespace test
 	{
 	}
 
-	MeshSimpleVertex MeshWater::CalculateVertex(const float &x, const float &z)
+	Vector3 MeshWater::GetPosition(const float &x, const float &z)
 	{
-		MeshSimpleVertex result = {};
-		result.position = Vector3(x, 0.0f, z);
-		result.normal = Vector3(0.0f, 1.0f, 0.0f);
-		result.colour = WATER_COLOUR;
-		return result;
+		return Vector3(x, 0.0f, z);
+	}
+
+	Vector3 MeshWater::GetNormal(const float &x, const float &z, const Vector3 &position)
+	{
+		return Vector3(0.0f, 1.0f, 0.0f);
+	}
+
+	Vector3 MeshWater::GetColour(const Vector3 &position, const Vector3 &normal)
+	{
+		return WATER_COLOUR;
 	}
 }

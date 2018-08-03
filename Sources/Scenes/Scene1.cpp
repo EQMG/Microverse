@@ -14,14 +14,13 @@
 #include <Renderer/Screenshot/Screenshot.hpp>
 #include <Shadows/ShadowRender.hpp>
 #include <Skyboxes/MaterialSkybox.hpp>
-#include <Textures/stb_image_write.h>
 #include <Helpers/FileSystem.hpp>
 #include <Scenes/Scenes.hpp>
 #include <Physics/ColliderSphere.hpp>
+#include <Physics/ColliderConvexHull.hpp>
+#include <Planet/Gravity.hpp>
+#include <Planet/Planet.hpp>
 #include "World/World.hpp"
-#include "Terrains/LodBehaviour.hpp"
-#include "Terrains/MeshTerrain.hpp"
-#include "Terrains/MaterialTerrain.hpp"
 #include "Waters/MaterialWater.hpp"
 #include "FpsCamera.hpp"
 #include "FpsPlayer.hpp"
@@ -72,6 +71,9 @@ namespace test
 
 	void Scene1::Start()
 	{
+		Scenes::Get()->SetGravity(Vector3::ZERO);
+		Scenes::Get()->SetAirDensity(0.0f);
+
 		// Camera.
 		//GameObject *cameraObject = new GameObject(Transform(Vector3(), Vector3(), 1.0f));
 		//cameraObject->SetName("Camera");
@@ -79,7 +81,7 @@ namespace test
 
 		// Player.
 		// GameObject *playerObject = new GameObject("Objects/Player/Player.json", Transform(Vector3(), Vector3(0.0f, 180.0f, 0.0f)));
-		GameObject *playerObject = new GameObject(Transform(Vector3(0.0f, 0.0f, 2000.0f), Vector3(0.0f, 180.0f, 0.0f), 1.0f));
+		GameObject *playerObject = new GameObject(Transform(Vector3(0.0f, 0.0f, 1000.0f), Vector3(0.0f, 180.0f, 0.0f), 1.0f));
 		playerObject->SetName("Player");
 		playerObject->AddComponent<FpsPlayer>();
 
@@ -106,8 +108,25 @@ namespace test
 		GameObject *sun = new GameObject(Transform(Vector3(100.0f, 8000.0f, 100.0f), Vector3(), 18.0f));
 		sun->AddComponent<Light>(Colour::WHITE, -1.0f);
 
-		// Terrains.
-		GameObject *planet1 = CreatePlanet(500.0f, Vector3());
+		// Chunks.
+		GameObject *core1 = new GameObject(Transform(Vector3(), Vector3(), 25.0f));
+		core1->AddComponent<Mesh>(ModelSphere::Resource(30, 30, 1.0f));
+		core1->AddComponent<MaterialDefault>(Colour::FUCHSIA, nullptr, 0.0f, 1.0f);
+		core1->AddComponent<MeshRender>();
+
+		GameObject *planet1 = new GameObject(Transform(Vector3()));
+		planet1->SetName("Planet1");
+		planet1->AddComponent<Planet>(700.0f);
+		planet1->AddComponent<ColliderSphere>(700.0f);
+		planet1->AddComponent<Rigidbody>(0.0f);
+
+		GameObject *planet2 = new GameObject(Transform(Vector3(1600.0f, 0.0f, 0.0f)));
+		planet2->SetName("Planet2");
+		planet2->AddComponent<Planet>(300.0f);
+		planet2->AddComponent<ColliderSphere>(300.0f);
+		planet2->AddComponent<Rigidbody>(10.0f);
+		planet2->AddComponent<Gravity>();
+		planet2->GetComponent<Rigidbody>()->AddForce<Force>(Vector3::FRONT * 420.0f, 5.5f, Vector3(0.0f, 100.0f, 0.0f));
 
 		// Waters.
 		/*GameObject *water = new GameObject(Transform());
@@ -123,13 +142,14 @@ namespace test
 		{
 			Vector3 cameraPosition = Scenes::Get()->GetCamera()->GetPosition();
 			Vector3 cameraRotation = Scenes::Get()->GetCamera()->GetRotation();
-			GameObject *sphere = new GameObject(Transform(cameraPosition, Vector3(), 0.5f));
+			GameObject *sphere = new GameObject(Transform(cameraPosition, Vector3(), 10.0f));
 			sphere->AddComponent<Mesh>(ModelSphere::Resource(30, 30, 1.0f));
 			sphere->AddComponent<ColliderSphere>();
 			auto rigidbody = sphere->AddComponent<Rigidbody>(0.5f);
+			sphere->AddComponent<Gravity>();
 			sphere->AddComponent<MaterialDefault>(Colour::WHITE, nullptr, 0.0f, 1.0f);
 			sphere->AddComponent<MeshRender>();
-			rigidbody->AddForce<Force>((cameraRotation.ToQuaternion() * Vector3::FRONT) * -3.0f, 2.0f);
+			rigidbody->AddForce<Force>((cameraRotation.ToQuaternion() * Vector3::FRONT) * -25.0f, 2.0f);
 		}
 
 		if (m_buttonFullscreen->WasDown())
@@ -173,95 +193,6 @@ namespace test
 	bool Scene1::IsGamePaused()
 	{
 		return m_uiStartLogo->IsStarting() || m_uiNavigation->GetAlpha() != 0.0f;
-	}
-
-	GameObject *Scene1::CreatePlanet(const float &radius, const Vector3 &position)
-	{
-		/*{
-			Noise noiseTerrain = Noise(69124);
-			noiseTerrain.SetNoiseType(NoiseType::TYPE_PERLINFRACTAL);
-			noiseTerrain.SetFrequency(0.00625f);
-			noiseTerrain.SetInterp(NoiseInterp::INTERP_QUINTIC);
-			noiseTerrain.SetFractalType(NoiseFractal::FRACTAL_FBM);
-			noiseTerrain.SetFractalOctaves(4);
-			noiseTerrain.SetFractalLacunarity(1.8f);
-			noiseTerrain.SetFractalGain(0.6f);
-
-			Noise noiseBiome = Noise(56744);
-			noiseBiome.SetNoiseType(NoiseType::TYPE_SIMPLEXFRACTAL);
-			noiseBiome.SetFrequency(0.001f);
-			noiseBiome.SetInterp(NoiseInterp::INTERP_QUINTIC);
-			noiseBiome.SetFractalType(NoiseFractal::FRACTAL_FBM);
-			noiseBiome.SetFractalOctaves(2);
-			noiseBiome.SetFractalLacunarity(2.0f);
-			noiseBiome.SetFractalGain(0.5f);
-
-			std::string filename = FileSystem::GetWorkingDirectory() + "/Planet1.png";
-			int width = 2500;
-			int height = 2500;
-			unsigned int *data = (unsigned int *) malloc(width * height * 4);
-
-			for (int x = 0; x < width; x++)
-			{
-				for (int y = 0; y < height; y++)
-				{
-					float random = (noiseTerrain.GetNoise(x, y) + 1.0f) / 2.0f;
-					float r = random * ((noiseBiome.GetNoise(x, y) + 1.0f) / 2.0f);
-					float g = random * ((noiseBiome.GetNoise(x * 10.0f, y * 10.0f) + 1.0f) / 2.0f);
-					float b = random * ((noiseBiome.GetNoise(x * 33.0f, y * 33.0f) + 1.0f) / 2.0f);
-
-					unsigned char buffer[4];
-					buffer[0] = std::floor(255 * Maths::Clamp(r, 0.0f, 1.0f));
-					buffer[1] = std::floor(255 * Maths::Clamp(g, 0.0f, 1.0f));
-					buffer[2] = std::floor(255 * Maths::Clamp(b, 0.0f, 1.0f));
-					buffer[3] = 255;
-					memcpy((char*)&data[x * width + y], buffer, 4);
-				}
-			}
-
-			FileSystem::DeleteFile(filename);
-			Texture::WritePixels(filename, data, width, height, 4);
-			free(data);
-		}*/
-
-		//	GameObject *planet = new GameObject("Objects/PlanetCentre/PlanetCentre.json", Transform(position, Vector3(), 5.0f));
-		GameObject *planet = new GameObject(Transform(position));
-		planet->AddComponent<ColliderSphere>(radius);
-		planet->AddComponent<Rigidbody>(0.0f);
-
-		GameObject *chunkTop = CreateChunk(radius, Transform(Vector3(0.0f, radius, 0.0f), Vector3(0.0f, 0.0f, 0.0f)));
-		chunkTop->SetName("Planet_Top");
-		chunkTop->SetParent(planet);
-		GameObject *chunkBottom = CreateChunk(radius, Transform(Vector3(0.0f, -radius, 0.0f), Vector3(180.0f, 0.0f, 0.0f)));
-		chunkBottom->SetName("Planet_Bottom");
-		chunkBottom->SetParent(planet);
-		GameObject *chunkBack = CreateChunk(radius, Transform(Vector3(0.0f, 0.0f, radius), Vector3(90.0f, 0.0f, 0.0f)));
-		chunkBack->SetName("Planet_Back");
-		chunkBack->SetParent(planet);
-		GameObject *chunkFront = CreateChunk(radius, Transform(Vector3(0.0f, 0.0f, -radius), Vector3(270.0f, 0.0f, 0.0f)));
-		chunkFront->SetName("Planet_Front");
-		chunkFront->SetParent(planet);
-		GameObject *chunkRight = CreateChunk(radius, Transform(Vector3(radius, 0.0f, 0.0f), Vector3(0.0f, 0.0f, 270.0f)));
-		chunkRight->SetName("Planet_Right");
-		chunkRight->SetParent(planet);
-		GameObject *chunkLeft = CreateChunk(radius, Transform(Vector3(-radius, 0.0f, 0.0f), Vector3(0.0f, 0.0f, 90.0f)));
-		chunkLeft->SetName("Planet_Left");
-		chunkLeft->SetParent(planet);
-
-		return planet;
-	}
-
-	GameObject *Scene1::CreateChunk(const float &radius, const Transform &transform)
-	{
-	//	new GameObject("Objects/PlanetCentre/PlanetCentre.json", Transform(transform.GetPosition().ProjectCubeToSphere(radius), transform.GetRotation(), 5.0f));
-
-		GameObject *terrainChunk = new GameObject(Transform());
-		terrainChunk->AddComponent<Mesh>();
-		terrainChunk->AddComponent<LodBehaviour>(0, 2.0f * radius, radius, radius * LodBehaviour::GetSideRadiusRatio(radius), transform);
-		terrainChunk->AddComponent<MaterialTerrain>();
-		terrainChunk->AddComponent<MeshRender>();
-		//terrainChunk->AddComponent<ShadowRender>();
-		return terrainChunk;
 	}
 
 	void Scene1::TogglePause()

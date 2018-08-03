@@ -4,7 +4,6 @@
 layout(set = 0, binding = 1) uniform UboObject
 {
 	mat4 transform;
-	vec4 baseColor;
 } object;
 
 layout(location = 0) in vec3 fragmentNormal;
@@ -44,7 +43,7 @@ void main()
 {
 	vec3 unitNormal = normalize(fragmentNormal);
 
-	outColour = encodeColour(fragmentColour * object.baseColor.rgb);
+	outColour = encodeColour(fragmentColour);
 	outNormal = encodeNormal(unitNormal);
 	outMaterial = vec4(0.0f, 1.0f, 0.0f, 1.0f);
 }

@@ -21,6 +21,10 @@ namespace test
 
 		~MeshWater();
 
-		MeshSimpleVertex CalculateVertex(const float &x, const float &z) override;
+		Vector3 GetPosition(const float &x, const float &z) override;
+
+		Vector3 GetNormal(const float &x, const float &z, const Vector3 &position) override;
+
+		Vector3 GetColour(const Vector3 &position, const Vector3 &normal) override;
 	};
 }

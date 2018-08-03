@@ -5,9 +5,11 @@
 #include <Inputs/Mouse.hpp>
 #include <Renderer/Renderer.hpp>
 #include <Scenes/Scenes.hpp>
-#include <Terrains/LodBehaviour.hpp>
-#include <Terrains/MaterialTerrain.hpp>
 #include <Waters/MaterialWater.hpp>
+#include <Planet/Gravity.hpp>
+#include <Planet/Planet.hpp>
+#include <Planet/QuadtreeChunk.hpp>
+#include <Planet/MaterialChunk.hpp>
 #include "World/World.hpp"
 #include "Configs/ConfigManager.hpp"
 #include "MainUpdater.hpp"
@@ -40,8 +42,10 @@ int main(int argc, char **argv)
 
 	// Registers components.
 	Scenes::Get()->RegisterComponent<FpsPlayer>("FpsPlayer");
-	Scenes::Get()->RegisterComponent<LodBehaviour>("LodBehaviour");
-	Scenes::Get()->RegisterComponent<MaterialTerrain>("MaterialTerrain");
+	Scenes::Get()->RegisterComponent<Gravity>("Gravity");
+	Scenes::Get()->RegisterComponent<Planet>("Planet");
+	Scenes::Get()->RegisterComponent<QuadtreeChunk>("QuadtreeChunk");
+	Scenes::Get()->RegisterComponent<MaterialChunk>("MaterialChunk");
 	Scenes::Get()->RegisterComponent<MaterialWater>("MaterialWater");
 
 	// Initializes modules.

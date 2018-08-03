@@ -8,7 +8,7 @@ namespace test
 	World::World() :
 		IModule(),
 		m_noiseTerrain(Noise(69124)),
-		m_fog(Fog(Colour::BLACK, 0.0001f, 2.0f, -10000.0f, -1000.0f)),
+		m_fog(Fog(Colour::BLACK, 0.0f, 2.0f, -10000.0f, -1000.0f)),
 		m_lightDirection(Vector3())
 	{
 		m_noiseTerrain.SetNoiseType(NoiseType::TYPE_PERLINFRACTAL);
