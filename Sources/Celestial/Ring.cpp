@@ -38,7 +38,7 @@ namespace test
 			return;
 		}
 
-		GetGameObject()->SetTransform(parent->GetTransform());
+		GetGameObject()->GetTransform().SetPosition(parent->GetTransform().GetPosition());
 	}
 
 	void Ring::Load(LoadedValue *value)

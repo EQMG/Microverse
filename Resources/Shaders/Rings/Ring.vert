@@ -21,7 +21,6 @@ layout(set = 0, location = 3) in vec3 vertexTangent;
 
 layout(location = 0) out vec3 fragmentPosition;
 layout(location = 1) out vec3 fragmentNormal;
-layout(location = 2) out vec2 fragmentUv;
 
 out gl_PerVertex
 {
@@ -39,5 +38,4 @@ void main()
 
     fragmentPosition = vertexPosition;
 	fragmentNormal = normalize((object.transform * totalNormal).xyz);
-	fragmentUv = vertexUv;
 }

@@ -44,11 +44,9 @@ void main()
 
     float lookupCoord = fragmentUv.y + final;
 	vec3 planetColour = texture(samplerBandLookup, vec2(0.5f, 2.0f * lookupCoord)).rgb;
-	//vec3 hsv = rgb2hsv(planetColour); // TODO: Cleanup hue change.
-	//hsv.x = object.hueOffset;
-	//planetColour = hsv2rgb(hsv);
+	planetColour = rgbHue(planetColour, object.hueOffset);
 
 	outColour = vec4(planetColour, 1.0f);
 	outNormal = encodeNormal(unitNormal);
-	outMaterial = vec4(0.0f, 0.0f, 1.0f, 1.0f);
+	outMaterial = vec4(0.0f, 0.0f, 0.0f, 1.0f);
 }

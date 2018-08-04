@@ -10,7 +10,7 @@ namespace test
 		IMaterial(),
 		m_material(PipelineMaterial::Resource({1, 0}, PipelineCreate({"Shaders/GasGiants/GasGiant.vert", "Shaders/GasGiants/GasGiant.frag"},
 			VertexModel::GetVertexInput(), PIPELINE_MODE_MRT, PIPELINE_POLYGON_MODE_FILL, PIPELINE_CULL_MODE_BACK), {})),
-		m_bandLookup(Texture::Resource("BandLookup.png")),
+		m_bandLookup(Texture::Resource("GasPlanets/JupiterLookup.png")),
 		m_hueOffset(hueOffset),
 		m_timeScale(timeScale),
 		m_octaves(5)

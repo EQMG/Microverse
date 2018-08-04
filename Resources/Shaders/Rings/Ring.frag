@@ -12,7 +12,6 @@ layout(set = 0, binding = 2) uniform sampler2D samplerRingLookup;
 
 layout(location = 0) in vec3 fragmentPosition;
 layout(location = 1) in vec3 fragmentNormal;
-layout(location = 2) in vec2 fragmentUv;
 
 layout(location = 0) out vec4 outColour;
 layout(location = 1) out vec2 outNormal;
@@ -34,10 +33,10 @@ void main()
 
     float u = (len - object.innerRadius) / (object.outerRadius - object.innerRadius);
 
-    if (abs(u) > 1.0f)
-    {
-        discard;
-    }
+    //if (abs(u) > 1.0f)
+    //{
+    //    discard;
+    //}
 
     vec4 ringColour = texture(samplerRingLookup, vec2(u, 0.0f)).rgba;
 
