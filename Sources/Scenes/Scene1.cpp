@@ -18,6 +18,7 @@
 #include <Scenes/Scenes.hpp>
 #include <Physics/ColliderSphere.hpp>
 #include <Physics/ColliderConvexHull.hpp>
+#include <Celestial/GasGiant/MaterialGasGiant.hpp>
 #include "Celestial/Gravity.hpp"
 #include "Celestial/Planet.hpp"
 #include "Celestial/Star.hpp"
@@ -82,27 +83,20 @@ namespace test
 
 		// Player.
 		// GameObject *playerObject = new GameObject("Objects/Player/Player.json", Transform(Vector3(), Vector3(0.0f, 180.0f, 0.0f)));
-		GameObject *playerObject = new GameObject(Transform(Vector3(0.0f, 0.0f, 1000.0f), Vector3(0.0f, 180.0f, 0.0f), 1.0f));
+		GameObject *playerObject = new GameObject(Transform(Vector3(1000.0f, 0.0f, 1800.0f), Vector3(0.0f, 180.0f, 0.0f), 1.0f));
 		playerObject->SetName("Player");
 		playerObject->AddComponent<FpsPlayer>();
 
 		// Skybox.
-		GameObject *skyboxObject1 = new GameObject("Objects/SkyboxChapel/SkyboxChapel.json", Transform(Vector3(), Vector3(), 2000.0f));
-
-		// Skybox.
-		// GameObject *skyboxObject = new GameObject("Objects/SkyboxClouds/SkyboxStars.json", Transform(Vector3(), Vector3(), 2048.0f));
-		GameObject *skyboxObject = new GameObject(Transform(Vector3(), Vector3(), 2048.0f));
-		skyboxObject->SetName("SkyboxStars");
-		skyboxObject->AddComponent<Mesh>(ModelSphere::Resource(6, 6, 1.0f));
-		skyboxObject->AddComponent<MaterialSkybox>(Cubemap::Resource("Objects/SkyboxStars", ".png"));
-		skyboxObject->AddComponent<MeshRender>();
+		GameObject *skyboxObject1 = new GameObject("Objects/SkyboxWhite/SkyboxWhite.json", Transform(Vector3(), Vector3(), 2128.0f));
+		GameObject *skyboxObject = new GameObject("Objects/SkyboxStars/SkyboxStars.json", Transform(Vector3(), Vector3(), 2048.0f));
 
 		// Animated.
-		GameObject *animatedObject = new GameObject(Transform(Vector3(0.0f, 600.0f, 0.0f), Vector3(), 0.25f));
-		animatedObject->SetName("Animated");
-		animatedObject->AddComponent<MeshAnimated>("Objects/Animated/Model.dae");
-		animatedObject->AddComponent<MaterialDefault>(Colour::WHITE, Texture::Resource("Objects/Animated/Diffuse.png"), 0.7f, 0.6f);
-		animatedObject->AddComponent<MeshRender>();
+	//	GameObject *animatedObject = new GameObject(Transform(Vector3(0.0f, 600.0f, 0.0f), Vector3(), 0.25f));
+	//	animatedObject->SetName("Animated");
+	//	animatedObject->AddComponent<MeshAnimated>("Objects/Animated/Model.dae");
+	//	animatedObject->AddComponent<MaterialDefault>(Colour::WHITE, Texture::Resource("Objects/Animated/Diffuse.png"), 0.7f, 0.6f);
+	//	animatedObject->AddComponent<MeshRender>();
 	//	animatedObject->AddComponent<ShadowRender>();
 
 		// Entities.
@@ -113,17 +107,25 @@ namespace test
 		GameObject *star1 = new GameObject(Transform(Vector3()));
 		star1->SetName("Star1");
 		star1->AddComponent<Star>(2000.0f);
+	//	star1->AddComponent<Light>(Colour::WHITE, -1.0f);
 	//	star1->AddComponent<Mesh>(ModelSphere::Resource(50, 50, 2000.0f));
 	//	star1->AddComponent<MaterialDefault>(star1->GetComponent<Star>()->GetColour(), nullptr, 0.0f, 1.0f);
 	//	star1->AddComponent<MeshRender>();
 
-		GameObject *planet1 = new GameObject(Transform());
+		GameObject *planet1 = new GameObject(Transform(Vector3(3000.0f, 0.0f, 0.0f)));
 		planet1->SetName("Planet1");
-		planet1->AddComponent<Planet>(star1->GetComponent<Star>(), 600.0f);
+		planet1->AddComponent<Planet>(star1->GetComponent<Star>(), 9784, 600.0f);
 
-		GameObject *planet2 = new GameObject(Transform(Vector3(1600.0f, 0.0f, 0.0f)));
-		planet2->SetName("Planet2");
-		planet2->AddComponent<Planet>(star1->GetComponent<Star>(), 200.0f);
+	//	GameObject *planet2 = new GameObject(Transform(Vector3(1600.0f, 0.0f, 0.0f)));
+	//	planet2->SetName("Planet2");
+	//	planet2->AddComponent<Planet>(star1->GetComponent<Star>(), 5444, 200.0f);
+
+		GameObject *planet3 = new GameObject(Transform());
+		planet3->SetName("Planet3");
+		planet3->AddComponent<Planet>(star1->GetComponent<Star>(), -1, 1500.0f, 1330.0f);
+		planet3->AddComponent<Mesh>(ModelSphere::Resource(50, 50, 1500.0f));
+		planet3->AddComponent<MaterialGasGiant>(0.68f, 0.0002f);
+		planet3->AddComponent<MeshRender>();
 
 		// Waters.
 		/*GameObject *water = new GameObject(Transform());

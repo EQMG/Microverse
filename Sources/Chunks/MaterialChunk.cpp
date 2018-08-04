@@ -8,7 +8,7 @@ namespace test
 	MaterialChunk::MaterialChunk() :
 		IMaterial(),
 		m_material(PipelineMaterial::Resource({1, 0}, PipelineCreate({"Shaders/Chunks/Chunk.vert", "Shaders/Chunks/Chunk.frag"},
-			VertexModel::GetVertexInput(), PIPELINE_MODE_MRT, PIPELINE_POLYGON_MODE_LINE, PIPELINE_CULL_MODE_BACK), {}))
+			VertexModel::GetVertexInput(), PIPELINE_MODE_MRT, PIPELINE_POLYGON_MODE_FILL, PIPELINE_CULL_MODE_BACK), {}))
 	{
 	}
 

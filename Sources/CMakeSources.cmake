@@ -2,6 +2,7 @@ set(MICROVERSE_HEADERS_
         "Configs/ConfigManager.hpp"
         "Post/Filters/FilterDamage.hpp"
         "MainRenderer.hpp"
+        "Celestial/GasGiant/MaterialGasGiant.hpp"
         "Celestial/ICelestial.hpp"
         "Celestial/Orbit.hpp"
         "Celestial/Gravity.hpp"
@@ -26,6 +27,7 @@ set(MICROVERSE_HEADERS_
 
 set(MICROVERSE_SOURCES_
         "Microverse.rc"
+        "Celestial/GasGiant/MaterialGasGiant.cpp"
         "Configs/ConfigManager.cpp"
         "Post/Filters/FilterDamage.cpp"
         "Main.cpp"

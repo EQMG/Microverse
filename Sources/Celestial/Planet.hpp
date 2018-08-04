@@ -1,7 +1,6 @@
 #pragma once
 
 #include <memory>
-#include <Textures/Texture.hpp>
 #include "Star.hpp"
 #include "ICelestial.hpp"
 
@@ -14,6 +13,8 @@ namespace test
 	{
 	private:
 		Star *m_star;
+		int m_seed;
+
 		float m_radius;
 		float m_density;
 		float m_mass;
@@ -23,7 +24,7 @@ namespace test
 		static const float MEDIAN_RADIUS;
 		static const float SQUARE_RADIUS_RATIO;
 
-		Planet(Star *star = nullptr, const float &radius = 700.0f, const float &density = 5510.0f);
+		Planet(Star *star = nullptr, const int &seed = 0, const float &radius = 700.0f, const float &density = 5510.0f);
 
 		~Planet();
 
@@ -46,7 +47,5 @@ namespace test
 		Star *GetStar() const { return m_star; }
 
 		float GetDensity() const { return m_density; }
-	private:
-		std::shared_ptr<Texture> GenerateMap();
 	};
 }

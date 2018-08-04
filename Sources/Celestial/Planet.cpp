@@ -1,12 +1,8 @@
 #include "Planet.hpp"
 
 #include <Maths/Maths.hpp>
-#include <Objects/GameObject.hpp>
-#include <Physics/Rigidbody.hpp>
 #include <Meshes/Mesh.hpp>
 #include <Meshes/MeshRender.hpp>
-#include <Noise/Noise.hpp>
-#include <Helpers/FileSystem.hpp>
 #include "Chunks/QuadtreeChunk.hpp"
 #include "Chunks/MaterialChunk.hpp"
 
@@ -15,9 +11,10 @@ namespace test
 	const float Planet::MEDIAN_RADIUS = 600.0f; // +- 50.0%
 	const float Planet::SQUARE_RADIUS_RATIO = 0.2f; // Or 0.4f;
 
-	Planet::Planet(Star *star, const float &radius, const float &density) :
+	Planet::Planet(Star *star, const int &seed, const float &radius, const float &density) :
 		ICelestial(),
 		m_star(star),
+		m_seed(seed),
 		m_radius(radius),
 		m_density(density),
 		m_mass(m_density * (4.0f / 3.0f) * PI * std::pow(m_radius, 3.0f)),
@@ -33,6 +30,11 @@ namespace test
 
 	void Planet::Start()
 	{
+		if (m_seed == -1)
+		{
+			return;
+		}
+
 		std::string baseName = GetGameObject()->GetName();
 		float sideLength = 2.0f * m_radius;
 		float squareSize = SQUARE_RADIUS_RATIO * m_radius;
@@ -70,55 +72,5 @@ namespace test
 		terrainChunk->AddComponent<MeshRender>();
 	//	terrainChunk->AddComponent<ShadowRender>();
 		return terrainChunk;
-	}
-
-	std::shared_ptr<Texture> Planet::GenerateMap()
-	{
-		Noise noiseTerrain = Noise(69124);
-		noiseTerrain.SetNoiseType(NoiseType::TYPE_PERLINFRACTAL);
-		noiseTerrain.SetFrequency(0.00625f);
-		noiseTerrain.SetInterp(NoiseInterp::INTERP_QUINTIC);
-		noiseTerrain.SetFractalType(NoiseFractal::FRACTAL_FBM);
-		noiseTerrain.SetFractalOctaves(4);
-		noiseTerrain.SetFractalLacunarity(1.8f);
-		noiseTerrain.SetFractalGain(0.6f);
-
-		Noise noiseBiome = Noise(56744);
-		noiseBiome.SetNoiseType(NoiseType::TYPE_SIMPLEXFRACTAL);
-		noiseBiome.SetFrequency(0.001f);
-		noiseBiome.SetInterp(NoiseInterp::INTERP_QUINTIC);
-		noiseBiome.SetFractalType(NoiseFractal::FRACTAL_FBM);
-		noiseBiome.SetFractalOctaves(2);
-		noiseBiome.SetFractalLacunarity(2.0f);
-		noiseBiome.SetFractalGain(0.5f);
-
-		std::string filename = FileSystem::GetWorkingDirectory() + "/" + GetGameObject()->GetName() + ".png";
-		int width = 2500;
-		int height = 2500;
-		unsigned int *data = (unsigned int *) malloc(width * height * 4);
-
-		for (int x = 0; x < width; x++)
-		{
-			for (int y = 0; y < height; y++)
-			{
-				float random = (noiseTerrain.GetNoise(x, y) + 1.0f) / 2.0f;
-				float r = random * ((noiseBiome.GetNoise(x, y) + 1.0f) / 2.0f);
-				float g = random * ((noiseBiome.GetNoise(x * 10.0f, y * 10.0f) + 1.0f) / 2.0f);
-				float b = random * ((noiseBiome.GetNoise(x * 33.0f, y * 33.0f) + 1.0f) / 2.0f);
-
-				unsigned char buffer[4];
-				buffer[0] = std::floor(255 * Maths::Clamp(r, 0.0f, 1.0f));
-				buffer[1] = std::floor(255 * Maths::Clamp(g, 0.0f, 1.0f));
-				buffer[2] = std::floor(255 * Maths::Clamp(b, 0.0f, 1.0f));
-				buffer[3] = 255;
-				memcpy((char*)&data[x * width + y], buffer, 4);
-			}
-		}
-
-		FileSystem::DeleteFile(filename);
-		Texture::WritePixels(filename, data, width, height, 4);
-		free(data);
-
-		return Texture::Resource(filename);
 	}
 }
