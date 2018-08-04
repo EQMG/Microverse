@@ -127,7 +127,7 @@ namespace test
 		rings1->SetName("Planet1_Rings");
 		rings1->SetParent(planet1);
 		rings1->AddComponent<Mesh>();
-		rings1->AddComponent<Ring>(2000.0f, 3300.0f);
+		rings1->AddComponent<Ring>(2010.0f, 3660.0f);
 		rings1->AddComponent<MaterialRing>();
 		rings1->AddComponent<MeshRender>();
 
@@ -163,7 +163,7 @@ namespace test
 			sphere->AddComponent<Gravity>();
 			sphere->AddComponent<MaterialDefault>(Colour::WHITE, nullptr, 0.0f, 1.0f);
 			sphere->AddComponent<MeshRender>();
-			rigidbody->AddForce<Force>((cameraRotation.ToQuaternion() * Vector3::FRONT).Normalize() * -15.0f, 2.0f);
+			rigidbody->AddForce<Force>((cameraRotation.ToQuaternion() * Vector3::FRONT).Normalize() * Vector3(-1.0f, 1.0f, -1.0f) * 15.0f, 2.0f);
 		}
 
 		if (m_buttonFullscreen->WasDown())
