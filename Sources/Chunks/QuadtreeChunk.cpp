@@ -97,6 +97,21 @@ namespace test
 	{
 	}
 
+	GameObject *QuadtreeChunk::CreateChunk(Planet *parent, const Transform &transform, const uint32_t &lod, const float &sideLength, const float &squareSize, const std::string &namePostfix)
+	{
+		GameObject *terrainChunk = new GameObject(Transform());
+		terrainChunk->SetName(parent->GetGameObject()->GetName() + "_" + namePostfix);
+		terrainChunk->SetParent(parent->GetGameObject());
+		terrainChunk->AddComponent<Mesh>();
+		terrainChunk->AddComponent<QuadtreeChunk>(parent, lod, sideLength, squareSize, transform);
+		//	terrainChunk->AddComponent<ColliderConvexHull>(transform.GetPosition());
+		//	terrainChunk->AddComponent<Rigidbody>(0.0f);
+		terrainChunk->AddComponent<MaterialChunk>();
+		terrainChunk->AddComponent<MeshRender>();
+		//	terrainChunk->AddComponent<ShadowRender>();
+		return terrainChunk;
+	}
+
 	uint32_t QuadtreeChunk::CalculateLod()
 	{
 		Vector3 cameraPosition = Scenes::Get()->GetCamera()->GetPosition();
@@ -179,7 +194,7 @@ namespace test
 			childOffset *= 0.25f * m_sideLength;
 			Transform childTransform = Transform(m_transform.GetPosition() + childOffset, m_transform.GetRotation(), m_transform.GetScaling());
 
-			GameObject *child = m_parent->CreateChunk(childTransform, m_lod + 1, m_sideLength / 2.0f, m_squareSize / 2.0f, offset.ToString());
+			GameObject *child = CreateChunk(m_parent, childTransform, m_lod + 1, m_sideLength / 2.0f, m_squareSize / 2.0f, offset.ToString());
 			m_children.emplace_back(child->GetComponent<QuadtreeChunk>());
 		}
 	}

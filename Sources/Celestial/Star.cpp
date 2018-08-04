@@ -6,7 +6,7 @@
 namespace test
 {
 	const float Star::MEDIAN_RADIUS = 2000.0f; // (Originally 8000m) +- 37.5%
-	const float Star::MU_TO_M = 1.496e+11f;
+	const float Star::AU_TO_M = 1.496e+11f;
 	const float Star::G_CONSTANT = 7.08398363e-7f;
 
 	Star::Star(const float &radius, const float &density) :
@@ -28,7 +28,7 @@ namespace test
 		m_habitableMin = std::sqrt(m_solarLuminosity / 1.11f);
 		m_habitableMax = std::sqrt(m_solarLuminosity / 0.53f);
 
-		fprintf(stdout, "Planet Inner Limit(mu)=%f, Planet Outer Limit(mu)=%f, Planet Frost Line(mu)=%f, Habitable Min(mu)=%f, Habitable Max(mu)=%f\n", m_planetInnerLimit, m_planetOuterLimit, m_planetFrostLine, m_habitableMin, m_habitableMax);
+		fprintf(stdout, "Planet Inner Limit(au)=%f, Planet Outer Limit(au)=%f, Planet Frost Line(au)=%f, Habitable Min(au)=%f, Habitable Max(au)=%f\n", m_planetInnerLimit, m_planetOuterLimit, m_planetFrostLine, m_habitableMin, m_habitableMax);
 		fprintf(stdout, "Star: Radius(m)=%f, Density(kg/m^3)=%f, Mass(kg)=%f, Escape Velocity(m/s)=%f, Temperature(K)=%f, Surface Colour=%s\n", m_radius, m_density, m_mass, m_escapeVelocity, m_surfaceTemperature, m_surfaceColour.GetHex().c_str());
 	}
 
@@ -52,6 +52,7 @@ namespace test
 
 	void Star::Load(LoadedValue *value)
 	{
+		// TODO
 	}
 
 	void Star::Write(LoadedValue *destination)

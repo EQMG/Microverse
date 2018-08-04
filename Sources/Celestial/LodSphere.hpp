@@ -5,7 +5,6 @@
 #include <Objects/IComponent.hpp>
 #include <Objects/GameObject.hpp>
 #include <Models/Model.hpp>
-#include "ICelestial.hpp"
 
 using namespace acid;
 
@@ -15,17 +14,15 @@ namespace test
 		public IComponent
 	{
 	private:
-		ICelestial *m_parent;
-
 		std::vector<std::shared_ptr<Model>> m_lods;
 
-		unsigned int m_latitudeBands;
-		unsigned int m_longitudeBands;
+		uint32_t m_latitudeBands;
+		uint32_t m_longitudeBands;
 		float m_radius;
 	public:
 		static const uint32_t HIGHEST_LOD;
 
-		LodSphere(ICelestial *parent = nullptr, const unsigned int &latitudeBands = 30, const unsigned int &longitudeBands = 30, const float &radius = 1.0f);
+		LodSphere(const uint32_t &latitudeBands = 30, const uint32_t &longitudeBands = 30, const float &radius = 1.0f);
 
 		~LodSphere();
 

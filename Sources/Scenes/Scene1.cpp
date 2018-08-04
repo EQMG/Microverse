@@ -20,6 +20,7 @@
 #include <Skyboxes/MaterialSkybox.hpp>
 #include "Celestial/Gravity.hpp"
 #include "Celestial/LodSphere.hpp"
+#include "Celestial/Orbit.hpp"
 #include "Celestial/Materials/MaterialGasGiant.hpp"
 #include "Celestial/Materials/MaterialRing.hpp"
 #include "Celestial/Planet.hpp"
@@ -103,40 +104,43 @@ namespace test
 	//	animatedObject->AddComponent<ShadowRender>();
 
 		// Entities.
-		GameObject *sun = new GameObject(Transform(Vector3(100.0f, 8000.0f, 100.0f), Vector3(), 18.0f));
-		sun->AddComponent<Light>(Colour::WHITE, -1.0f);
-
-		// Chunks.
 		GameObject *star1 = new GameObject(Transform(Vector3()));
 		star1->SetName("Star1");
-		star1->AddComponent<Star>(2000.0f);
+		star1->AddComponent<Star>(1000.0f);
 		star1->AddComponent<Light>(Colour::WHITE, -1.0f);
-		star1->AddComponent<Mesh>(ModelSphere::Resource(50, 50, 2000.0f));
+		star1->AddComponent<Mesh>();
+		star1->AddComponent<LodSphere>(50, 50, 2000.0f);
 		star1->AddComponent<MaterialDefault>(star1->GetComponent<Star>()->GetColour());
 		star1->AddComponent<MeshRender>();
 
-		GameObject *planet1 = new GameObject(Transform(Vector3(4000.0f, 0.0f, 0.0f)));
+		GameObject *planet1 = new GameObject(Transform(Vector3(4000.0f, 0.0f, 5000.0f)));
 		planet1->SetName("Planet1");
-		planet1->AddComponent<Planet>(star1->GetComponent<Star>(), 9784, 600.0f);
+		planet1->SetParent(star1);
+		planet1->AddComponent<Planet>(-1, 1500.0f, 1330.0f);
+		planet1->AddComponent<Orbit>();
+		planet1->AddComponent<Mesh>();
+		planet1->AddComponent<LodSphere>(50, 50, 1500.0f);
+		planet1->AddComponent<MaterialGasGiant>(0.32f, 0.0002f);
+		planet1->AddComponent<MeshRender>();
 
-	//	GameObject *planet2 = new GameObject(Transform(Vector3(1600.0f, 0.0f, 0.0f)));
-	//	planet2->SetName("Planet2");
-	//	planet2->AddComponent<Planet>(star1->GetComponent<Star>(), 5444, 200.0f);
+		GameObject *rings1 = new GameObject(Transform());
+		rings1->SetName("Planet1_Rings");
+		rings1->SetParent(planet1);
+		rings1->AddComponent<Mesh>();
+		rings1->AddComponent<Ring>(2000.0f, 3300.0f);
+		rings1->AddComponent<MaterialRing>();
+		rings1->AddComponent<MeshRender>();
 
-		GameObject *planet3 = new GameObject(Transform(Vector3(4000.0f, 0.0f, 5000.0f)));
-		planet3->SetName("Planet3");
-		planet3->AddComponent<Planet>(star1->GetComponent<Star>(), -1, 1500.0f, 1330.0f);
-		planet3->AddComponent<Mesh>();
-		planet3->AddComponent<LodSphere>(planet3->GetComponent<Planet>(), 50, 50, 1500.0f);
-		planet3->AddComponent<MaterialGasGiant>(0.32f, 0.0002f);
-		planet3->AddComponent<MeshRender>();
+		GameObject *planet2 = new GameObject(Transform(Vector3(3000.0f, 0.0f, 0.0f)));
+		planet2->SetName("Planet2");
+		planet2->AddComponent<Planet>(5444, 200.0f);
+		planet2->AddComponent<Orbit>();
 
-		GameObject *planet3Rings = new GameObject(Transform());
-		planet3Rings->SetName("Planet3_Rings");
-		planet3Rings->AddComponent<Mesh>();
-		planet3Rings->AddComponent<Ring>(planet3->GetComponent<Planet>(), 2000.0f, 3300.0f);
-		planet3Rings->AddComponent<MaterialRing>();
-		planet3Rings->AddComponent<MeshRender>();
+		GameObject *planet3 = new GameObject(Transform(Vector3(4500.0f, 0.0f, 0.0f)));
+		planet3->SetName("Planet1");
+		planet3->SetParent(star1);
+		planet3->AddComponent<Planet>(9784, 600.0f);
+		planet3->AddComponent<Orbit>();
 
 		// Waters.
 		/*GameObject *water = new GameObject(Transform());

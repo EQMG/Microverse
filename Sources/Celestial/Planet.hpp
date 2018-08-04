@@ -1,7 +1,6 @@
 #pragma once
 
 #include <memory>
-#include "Star.hpp"
 #include "ICelestial.hpp"
 
 using namespace acid;
@@ -12,19 +11,16 @@ namespace test
 		public ICelestial
 	{
 	private:
-		ICelestial *m_parent;
-		int m_seed;
-
-		float m_radius;
-		float m_density;
-		float m_mass;
-		float m_surfaceGravity;
-		float m_escapeVelocity;
+		int m_seed; // The seed used to generate this planet.
+		float m_radius; // The planets radius (m).
+		float m_density; // The planets density (kg/m^3).
+		float m_mass; // The planets mass (kg).
+		float m_escapeVelocity; // The planets escape velocity (m/s).
 	public:
 		static const float MEDIAN_RADIUS;
 		static const float SQUARE_RADIUS_RATIO;
 
-		Planet(ICelestial *parent = nullptr, const int &seed = 0, const float &radius = 700.0f, const float &density = 5510.0f);
+		Planet(const int &seed = 0, const float &radius = 700.0f, const float &density = 5510.0f);
 
 		~Planet();
 
@@ -38,7 +34,7 @@ namespace test
 
 		std::string GetName() const override { return "Planet"; };
 
-		GameObject *CreateChunk(const Transform &transform, const uint32_t &lod = 0, const float &sideLength = 100.0f, const float &squareSize = 100.0f, const std::string &namePostfix = "");
+		int GetSeed() const { return m_seed; }
 
 		float GetRadius() const { return m_radius; }
 

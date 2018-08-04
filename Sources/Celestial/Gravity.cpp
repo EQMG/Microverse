@@ -2,13 +2,15 @@
 
 #include <Objects/GameObject.hpp>
 #include <Physics/Rigidbody.hpp>
+#include <Scenes/Scenes.hpp>
 #include "Gravity.hpp"
 #include "Star.hpp"
 
 namespace test
 {
 	Gravity::Gravity() :
-		IComponent()
+		IComponent(),
+		m_influence(nullptr)
 	{
 	}
 
@@ -30,11 +32,28 @@ namespace test
 		}
 
 		Vector3 position = GetGameObject()->GetTransform().GetPosition();
-		Vector3 planet = Vector3();
-		float planetMass = 159467253530624.000000f;
+		auto celestialList = Scenes::Get()->GetStructure()->QueryComponents<ICelestial>(); // TODO: Only select on component type insert.
+		m_influence = nullptr;
 
-		float force = (Star::G_CONSTANT * rigidbody->GetMass() * planetMass) / planet.DistanceSquared(position);
-		rigidbody->SetGravity(force * (planet - position).Normalize());
+		Vector3 forcesSum = Vector3();
+		Vector3 strongest = Vector3();
+
+		for (auto &celestial : celestialList)
+		{
+			Vector3 celestialPosition = celestial->GetGameObject()->GetTransform().GetPosition();
+			float force = (Star::G_CONSTANT * rigidbody->GetMass() * celestial->GetMass()) / celestialPosition.DistanceSquared(position);
+			Vector3 vector = force * (celestialPosition - position).Normalize();
+
+			if (vector.LengthSquared() > strongest.LengthSquared())
+			{
+				strongest = vector;
+				m_influence = celestial;
+			}
+
+			forcesSum += vector;
+		}
+
+		rigidbody->SetGravity(forcesSum);
 	}
 
 	void Gravity::Load(LoadedValue *value)

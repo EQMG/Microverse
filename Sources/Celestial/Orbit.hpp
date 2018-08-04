@@ -11,9 +11,21 @@ namespace test
 		public IComponent
 	{
 	private:
-		ICelestial *m_parent;
+		float m_eccentricity; // The orbits deviation, 0<e<1.
+
+		float m_semiMajorAxis; // The semi-major axis (AU).
+		float m_semiMinorAxis; // The semi-minor axis (AU).
+
+		float m_periapsis; // The orbits size periapsis (AU).
+		float m_apoapsis; // The orbits size apoapsis (AU).
+		float m_period; // The orbital period (Earth Days).
+		float m_velocity; // The objects velocity (km/s).
+
+		float m_pitch; // The orbits inclination, orbits prograde 0<i<90, orbits retrograde 90<i<180 (Degrees).
+		float m_yaw; // The orbits longitude of the ascending node from 0-360 (Degrees).
+		float m_roll; // The orbits argument of periapsis from 0-360 (Degrees).
 	public:
-		Orbit(ICelestial *parent = nullptr);
+		Orbit();
 
 		~Orbit();
 
@@ -26,7 +38,5 @@ namespace test
 		void Write(LoadedValue *destination) override;
 
 		std::string GetName() const override { return "Orbit"; };
-
-		ICelestial *GetParent() const { return m_parent; }
 	};
 }

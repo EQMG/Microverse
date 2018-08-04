@@ -7,14 +7,14 @@
 #include <Events/EventTime.hpp>
 #include <Events/Events.hpp>
 #include <Models/Shapes/ModelSphere.hpp>
+#include "ICelestial.hpp"
 
 namespace test
 {
 	const uint32_t LodSphere::HIGHEST_LOD = 2;
 
-	LodSphere::LodSphere(ICelestial *parent, const unsigned int &latitudeBands, const unsigned int &longitudeBands, const float &radius) :
+	LodSphere::LodSphere(const uint32_t &latitudeBands, const uint32_t &longitudeBands, const float &radius) :
 		IComponent(),
-		m_parent(parent),
 		m_lods(std::vector<std::shared_ptr<Model>>(HIGHEST_LOD)),
 		m_latitudeBands(latitudeBands),
 		m_longitudeBands(longitudeBands),
@@ -28,14 +28,14 @@ namespace test
 
 	void LodSphere::Start()
 	{
-		unsigned int latitudeBands = m_latitudeBands;
-		unsigned int longitudeBands = m_longitudeBands;
+		uint32_t latitudeBands = m_latitudeBands;
+		uint32_t longitudeBands = m_longitudeBands;
 
 		for (int i = HIGHEST_LOD - 1; i >= 0; i--)
 		{
 			m_lods[i] = ModelSphere::Resource(latitudeBands, longitudeBands, m_radius);
-			latitudeBands = static_cast<unsigned int>(std::floor(static_cast<float>(latitudeBands) / 2.0f));
-			longitudeBands = static_cast<unsigned int>(std::floor(static_cast<float>(longitudeBands) / 2.0f));
+			latitudeBands = static_cast<uint32_t>(std::floor(static_cast<float>(latitudeBands) / 2.0f));
+			longitudeBands = static_cast<uint32_t>(std::floor(static_cast<float>(longitudeBands) / 2.0f));
 		}
 	}
 
@@ -53,17 +53,26 @@ namespace test
 
 	void LodSphere::Load(LoadedValue *value)
 	{
+		m_latitudeBands = value->GetChild("Latitude Bands")->Get<uint32_t>();
+		m_longitudeBands = value->GetChild("Longitude Bands")->Get<uint32_t>();
+		m_radius = value->GetChild("Radius")->Get<float>();
 	}
 
 	void LodSphere::Write(LoadedValue *destination)
 	{
+		destination->GetChild("Latitude Bands", true)->Set(m_latitudeBands);
+		destination->GetChild("Longitude Bands", true)->Set(m_longitudeBands);
+		destination->GetChild("Radius", true)->Set(m_radius);
 	}
 
 	uint32_t LodSphere::CalculateLod()
 	{
 		Vector3 cameraPosition = Scenes::Get()->GetCamera()->GetPosition();
 		Vector3 entityPosition = GetGameObject()->GetTransform().GetPosition();
-		float radius = m_parent->GetRadius();
+
+		auto celestial = GetGameObject()->GetComponent<ICelestial>();
+		float radius = celestial == nullptr ? 0.0f : celestial->GetRadius();
+
 		float distance = std::fabs(entityPosition.Distance(cameraPosition) - radius);
 		float lod = std::floor((-0.3f / radius) * distance + HIGHEST_LOD);
 		return static_cast<uint32_t>(Maths::Clamp(lod, 0.0f, HIGHEST_LOD - 1));

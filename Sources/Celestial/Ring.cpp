@@ -8,9 +8,8 @@ namespace test
 	const float Ring::INNER_SCALE = 0.8f;
 	const float Ring::OUTER_SCALE = 1.2f;
 
-	Ring::Ring(ICelestial *parent, const float &innerRadius, const float &outerRadius) :
+	Ring::Ring(const float &innerRadius, const float &outerRadius) :
 		IComponent(),
-		m_parent(parent),
 		m_innerRadius(innerRadius),
 		m_outerRadius(outerRadius)
 	{
@@ -32,14 +31,25 @@ namespace test
 
 	void Ring::Update()
 	{
-		GetGameObject()->SetTransform(m_parent->GetGameObject()->GetTransform());
+		auto parent = GetGameObject()->GetParent();
+
+		if (parent == nullptr)
+		{
+			return;
+		}
+
+		GetGameObject()->SetTransform(parent->GetTransform());
 	}
 
 	void Ring::Load(LoadedValue *value)
 	{
+		m_innerRadius = value->GetChild("Inner Radius")->Get<float>();
+		m_outerRadius = value->GetChild("Outer Radius")->Get<float>();
 	}
 
 	void Ring::Write(LoadedValue *destination)
 	{
+		destination->GetChild("Inner Radius", true)->Set(m_innerRadius);
+		destination->GetChild("Outer Radius", true)->Set(m_outerRadius);
 	}
 }

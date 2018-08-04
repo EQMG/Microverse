@@ -35,10 +35,14 @@ namespace test
 
 	void MaterialGasGiant::Load(LoadedValue *value)
 	{
+		m_hueOffset = value->GetChild("Hue Offset")->Get<float>();
+		m_timeScale = value->GetChild("Time Scale")->Get<float>();
 	}
 
 	void MaterialGasGiant::Write(LoadedValue *destination)
 	{
+		destination->GetChild("Hue Offset", true)->Set(m_hueOffset);
+		destination->GetChild("Time Scale", true)->Set(m_timeScale);
 	}
 
 	void MaterialGasGiant::PushUniforms(UniformHandler &uniformObject)

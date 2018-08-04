@@ -3,7 +3,6 @@
 #include <memory>
 #include <Objects/IComponent.hpp>
 #include <Objects/GameObject.hpp>
-#include "ICelestial.hpp"
 
 using namespace acid;
 
@@ -16,12 +15,10 @@ namespace test
 		static const float INNER_SCALE;
 		static const float OUTER_SCALE;
 
-		ICelestial *m_parent;
-
 		float m_innerRadius;
 		float m_outerRadius;
 	public:
-		Ring(ICelestial *parent = nullptr, const float &innerRadius = 900.0f, const float &outerRadius = 1300.0f);
+		Ring(const float &innerRadius = 900.0f, const float &outerRadius = 1300.0f);
 
 		~Ring();
 
