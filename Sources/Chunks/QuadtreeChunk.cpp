@@ -20,9 +20,9 @@ namespace test
 		Vector3(-1.0f, 0.0f, 1.0f)
 	};
 
-	QuadtreeChunk::QuadtreeChunk(Planet *planet, const uint32_t &lod, const float &sideLength, const float &squareSize, const Transform &transform) :
+	QuadtreeChunk::QuadtreeChunk(Planet *parent, const uint32_t &lod, const float &sideLength, const float &squareSize, const Transform &transform) :
 		IComponent(),
-		m_planet(planet),
+		m_parent(parent),
 		m_lod(lod),
 		m_sideLength(sideLength),
 		m_squareSize(squareSize),
@@ -56,7 +56,7 @@ namespace test
 		int vertexCount = CalculateVertexCount(m_sideLength, m_squareSize);
 		float textureScale = CalculateTextureScale(m_sideLength);
 		float lodFixScale = 1.0f + (0.006f * m_lod);
-		mesh->SetModel(std::make_shared<MeshChunk>(lodFixScale * m_sideLength, lodFixScale * m_squareSize, vertexCount, textureScale, m_planet->GetRadius(), m_transform));
+		mesh->SetModel(std::make_shared<MeshChunk>(lodFixScale * m_sideLength, lodFixScale * m_squareSize, vertexCount, textureScale, m_parent->GetRadius(), m_transform));
 #if ACID_VERBOSE
 		float debugEnd = Engine::Get()->GetTimeMs();
 
@@ -69,7 +69,7 @@ namespace test
 
 	void QuadtreeChunk::Update()
 	{
-		GetGameObject()->SetTransform(m_planet->GetGameObject()->GetTransform());
+		GetGameObject()->SetTransform(m_parent->GetGameObject()->GetTransform());
 
 		if (!m_subdivided && !m_children.empty() && Engine::Get()->GetTime() - m_lastChanged > DELAY_PURGE)
 		{
@@ -77,7 +77,7 @@ namespace test
 			return;
 		}
 
-		auto targetLod = CalculateLod(this);
+		auto targetLod = CalculateLod();
 
 		if (targetLod > m_lod && !m_subdivided)
 		{
@@ -97,14 +97,14 @@ namespace test
 	{
 	}
 
-	uint32_t QuadtreeChunk::CalculateLod(QuadtreeChunk *behaviour)
+	uint32_t QuadtreeChunk::CalculateLod()
 	{
 		Vector3 cameraPosition = Scenes::Get()->GetCamera()->GetPosition();
-		Matrix4 worldMatrix = behaviour->GetGameObject()->GetTransform().GetWorldMatrix();
-		Vector3 chunkPosition = behaviour->m_transform.GetPosition().ProjectCubeToSphere(behaviour->m_planet->GetRadius());
+		Matrix4 worldMatrix = GetGameObject()->GetTransform().GetWorldMatrix();
+		Vector3 chunkPosition = m_transform.GetPosition().ProjectCubeToSphere(m_parent->GetRadius());
 		chunkPosition = Vector3(worldMatrix.Multiply(chunkPosition));
 		float distance = std::fabs(chunkPosition.Distance(cameraPosition));
-		float lod = std::floor((-1.618f / behaviour->m_planet->GetRadius()) * distance + (HIGHEST_LOD + 1));
+		float lod = std::floor((-1.618f / m_parent->GetRadius()) * distance + (HIGHEST_LOD + 1));
 		return static_cast<uint32_t>(Maths::Clamp(lod, 0.0f, HIGHEST_LOD));
 	}
 
@@ -179,7 +179,7 @@ namespace test
 			childOffset *= 0.25f * m_sideLength;
 			Transform childTransform = Transform(m_transform.GetPosition() + childOffset, m_transform.GetRotation(), m_transform.GetScaling());
 
-			GameObject *child = m_planet->CreateChunk(childTransform, m_lod + 1, m_sideLength / 2.0f, m_squareSize / 2.0f, offset.ToString());
+			GameObject *child = m_parent->CreateChunk(childTransform, m_lod + 1, m_sideLength / 2.0f, m_squareSize / 2.0f, offset.ToString());
 			m_children.emplace_back(child->GetComponent<QuadtreeChunk>());
 		}
 	}

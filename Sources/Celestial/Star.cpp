@@ -1,6 +1,7 @@
 #include "Star.hpp"
 
 #include <Maths/Maths.hpp>
+#include <Post/Filters/FilterLensflare.hpp>
 
 namespace test
 {
@@ -41,6 +42,12 @@ namespace test
 
 	void Star::Update()
 	{
+		auto filterLensflare = Renderer::Get()->GetManager()->GetRenderer<FilterLensflare>();
+
+		if (filterLensflare != nullptr)
+		{
+			filterLensflare->SetSunPosition(GetGameObject()->GetTransform().GetPosition());
+		}
 	}
 
 	void Star::Load(LoadedValue *value)

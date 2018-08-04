@@ -23,27 +23,13 @@ vec3 blend(vec3 left, vec3 right, float blend)
 	return result;
 }
 
-vec4 encodeColour(vec3 colour)
-{
-	vec4 result = vec4(0.0f);
-	result.rgb = colour;
-	result.a = 1.0f;
-	return result;
-}
-
-vec2 encodeNormal(vec3 normal)
-{
-	vec2 result = vec2(0.0f);
-	result.x = (atan(normal.y, normal.x) / 3.14159f) * 0.5f + 0.5f;
-	result.y = normal.z * 0.5f + 0.5f;
-	return result;
-}
+#include "Shaders/Pipeline.glsl"
 
 void main() 
 {
 	vec3 unitNormal = normalize(fragmentNormal);
 
-	outColour = encodeColour(fragmentColour);
+	outColour = vec4(fragmentColour, 1.0f);
 	outNormal = encodeNormal(unitNormal);
 	outMaterial = vec4(0.0f, 1.0f, 0.0f, 1.0f);
 }

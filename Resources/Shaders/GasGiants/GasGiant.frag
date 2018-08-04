@@ -43,12 +43,12 @@ void main()
 	float final = (n1 + n2 + n3);
 
     float lookupCoord = fragmentUv.y + final;
-	vec3 textureColour = texture(samplerBandLookup, vec2(0.5f, 2.0f * lookupCoord)).rgb;
-	vec3 hsv = rgb2hsv(textureColour); // TODO: Cleanup hue change.
-	hsv.x = object.hueOffset;
-	textureColour = hsv2rgb(hsv);
+	vec3 planetColour = texture(samplerBandLookup, vec2(0.5f, 2.0f * lookupCoord)).rgb;
+	//vec3 hsv = rgb2hsv(planetColour); // TODO: Cleanup hue change.
+	//hsv.x = object.hueOffset;
+	//planetColour = hsv2rgb(hsv);
 
-	outColour = vec4(textureColour, 1.0f);
+	outColour = vec4(planetColour, 1.0f);
 	outNormal = encodeNormal(unitNormal);
 	outMaterial = vec4(0.0f, 0.0f, 1.0f, 1.0f);
 }

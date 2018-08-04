@@ -16,7 +16,7 @@ namespace test
 		public IComponent
 	{
 	private:
-		Planet *m_planet;
+		Planet *m_parent;
 
 		uint32_t m_lod;
 		float m_sideLength;
@@ -33,7 +33,7 @@ namespace test
 		static const float DELAY_PURGE;
 		static const std::vector<Vector3> OFFSETS;
 
-		QuadtreeChunk(Planet *planet = nullptr, const uint32_t &lod = 0, const float &sideLength = 200.0f, const float &squareSize = 4.0f, const Transform &transform = Transform());
+		QuadtreeChunk(Planet *parent = nullptr, const uint32_t &lod = 0, const float &sideLength = 200.0f, const float &squareSize = 4.0f, const Transform &transform = Transform());
 
 		~QuadtreeChunk();
 
@@ -47,7 +47,7 @@ namespace test
 
 		std::string GetName() const override { return "QuadtreeChunk"; };
 
-		static uint32_t CalculateLod(QuadtreeChunk *behaviour);
+		uint32_t CalculateLod();
 
 		void SetVisible(const bool &visible, const float &timeout);
 

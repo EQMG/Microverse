@@ -48,7 +48,7 @@ namespace test
 	MainRenderer::MainRenderer() :
 		IManagerRender({RENDERPASS_0_CREATE, RENDERPASS_1_CREATE})
 	{
-		AddRenderer<RendererShadows>(GraphicsStage(0, 0));
+		AddRenderer<RendererShadows>(GraphicsStage(0, 0))->SetEnabled(false);
 		AddRenderer<RendererMeshes>(GraphicsStage(1, 0));
 	//	AddRenderer<RendererParticles>(GraphicsStage(1, 0));
 		AddRenderer<RendererDeferred>(GraphicsStage(1, 1));
@@ -59,8 +59,6 @@ namespace test
 	//	AddRenderer<FilterGrain>(GraphicsStage(1, 2));
 		AddRenderer<RendererGuis>(GraphicsStage(1, 2));
 		AddRenderer<RendererFonts>(GraphicsStage(1, 2));
-
-		GetRenderer<RendererShadows>()->SetEnabled(false);
 
 #ifdef ACID_BUILD_MACOS
 		GetRenderer<FilterFxaa>()->SetEnabled(false);

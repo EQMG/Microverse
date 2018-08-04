@@ -11,9 +11,9 @@ namespace test
 	const float Planet::MEDIAN_RADIUS = 600.0f; // +- 50.0%
 	const float Planet::SQUARE_RADIUS_RATIO = 0.2f; // Or 0.4f;
 
-	Planet::Planet(Star *star, const int &seed, const float &radius, const float &density) :
+	Planet::Planet(ICelestial *parent, const int &seed, const float &radius, const float &density) :
 		ICelestial(),
-		m_star(star),
+		m_parent(parent),
 		m_seed(seed),
 		m_radius(radius),
 		m_density(density),

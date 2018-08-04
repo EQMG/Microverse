@@ -6,6 +6,10 @@
 #include <Renderer/Renderer.hpp>
 #include <Scenes/Scenes.hpp>
 #include <Waters/MaterialWater.hpp>
+#include "Celestial/Materials/MaterialGasGiant.hpp"
+#include "Celestial/Materials/MaterialRing.hpp"
+#include "Celestial/Ring.hpp"
+#include "Celestial/LodSphere.hpp"
 #include "Celestial/Gravity.hpp"
 #include "Celestial/Planet.hpp"
 #include "Celestial/Star.hpp"
@@ -44,8 +48,12 @@ int main(int argc, char **argv)
 	// Registers components.
 	Scenes::Get()->RegisterComponent<FpsPlayer>("FpsPlayer");
 	Scenes::Get()->RegisterComponent<Gravity>("Gravity");
+	Scenes::Get()->RegisterComponent<LodSphere>("LodSphere");
 	Scenes::Get()->RegisterComponent<Planet>("Planet");
+	Scenes::Get()->RegisterComponent<Ring>("Ring");
 	Scenes::Get()->RegisterComponent<Star>("Star");
+	Scenes::Get()->RegisterComponent<MaterialGasGiant>("MaterialGasGiant");
+	Scenes::Get()->RegisterComponent<MaterialRing>("MaterialRing");
 	Scenes::Get()->RegisterComponent<QuadtreeChunk>("QuadtreeChunk");
 	Scenes::Get()->RegisterComponent<MaterialChunk>("MaterialChunk");
 	Scenes::Get()->RegisterComponent<MaterialWater>("MaterialWater");

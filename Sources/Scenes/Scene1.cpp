@@ -1,6 +1,7 @@
 #include "Scene1.hpp"
 
 #include <Animations/MeshAnimated.hpp>
+#include <Helpers/FileSystem.hpp>
 #include <Inputs/ButtonCompound.hpp>
 #include <Inputs/ButtonKeyboard.hpp>
 #include <Inputs/Mouse.hpp>
@@ -11,21 +12,23 @@
 #include <Meshes/Mesh.hpp>
 #include <Meshes/MeshRender.hpp>
 #include <Models/Shapes/ModelSphere.hpp>
+#include <Physics/ColliderConvexHull.hpp>
+#include <Physics/ColliderSphere.hpp>
 #include <Renderer/Screenshot/Screenshot.hpp>
+#include <Scenes/Scenes.hpp>
 #include <Shadows/ShadowRender.hpp>
 #include <Skyboxes/MaterialSkybox.hpp>
-#include <Helpers/FileSystem.hpp>
-#include <Scenes/Scenes.hpp>
-#include <Physics/ColliderSphere.hpp>
-#include <Physics/ColliderConvexHull.hpp>
-#include <Celestial/GasGiant/MaterialGasGiant.hpp>
 #include "Celestial/Gravity.hpp"
+#include "Celestial/LodSphere.hpp"
+#include "Celestial/Materials/MaterialGasGiant.hpp"
+#include "Celestial/Materials/MaterialRing.hpp"
 #include "Celestial/Planet.hpp"
+#include "Celestial/Ring.hpp"
 #include "Celestial/Star.hpp"
-#include "World/World.hpp"
-#include "Waters/MaterialWater.hpp"
 #include "FpsCamera.hpp"
 #include "FpsPlayer.hpp"
+#include "Waters/MaterialWater.hpp"
+#include "World/World.hpp"
 
 namespace test
 {
@@ -83,7 +86,7 @@ namespace test
 
 		// Player.
 		// GameObject *playerObject = new GameObject("Objects/Player/Player.json", Transform(Vector3(), Vector3(0.0f, 180.0f, 0.0f)));
-		GameObject *playerObject = new GameObject(Transform(Vector3(1000.0f, 0.0f, 1800.0f), Vector3(0.0f, 180.0f, 0.0f), 1.0f));
+		GameObject *playerObject = new GameObject(Transform(Vector3(0.0f, 0.0f, 3000.0f), Vector3(0.0f, 180.0f, 0.0f), 1.0f));
 		playerObject->SetName("Player");
 		playerObject->AddComponent<FpsPlayer>();
 
@@ -107,12 +110,12 @@ namespace test
 		GameObject *star1 = new GameObject(Transform(Vector3()));
 		star1->SetName("Star1");
 		star1->AddComponent<Star>(2000.0f);
-	//	star1->AddComponent<Light>(Colour::WHITE, -1.0f);
-	//	star1->AddComponent<Mesh>(ModelSphere::Resource(50, 50, 2000.0f));
-	//	star1->AddComponent<MaterialDefault>(star1->GetComponent<Star>()->GetColour(), nullptr, 0.0f, 1.0f);
-	//	star1->AddComponent<MeshRender>();
+		star1->AddComponent<Light>(Colour::WHITE, -1.0f);
+		star1->AddComponent<Mesh>(ModelSphere::Resource(50, 50, 2000.0f));
+		star1->AddComponent<MaterialDefault>(star1->GetComponent<Star>()->GetColour());
+		star1->AddComponent<MeshRender>();
 
-		GameObject *planet1 = new GameObject(Transform(Vector3(3000.0f, 0.0f, 0.0f)));
+		GameObject *planet1 = new GameObject(Transform(Vector3(4000.0f, 0.0f, 0.0f)));
 		planet1->SetName("Planet1");
 		planet1->AddComponent<Planet>(star1->GetComponent<Star>(), 9784, 600.0f);
 
@@ -120,12 +123,20 @@ namespace test
 	//	planet2->SetName("Planet2");
 	//	planet2->AddComponent<Planet>(star1->GetComponent<Star>(), 5444, 200.0f);
 
-		GameObject *planet3 = new GameObject(Transform());
+		GameObject *planet3 = new GameObject(Transform(Vector3(4000.0f, 0.0f, 5000.0f)));
 		planet3->SetName("Planet3");
 		planet3->AddComponent<Planet>(star1->GetComponent<Star>(), -1, 1500.0f, 1330.0f);
-		planet3->AddComponent<Mesh>(ModelSphere::Resource(50, 50, 1500.0f));
-		planet3->AddComponent<MaterialGasGiant>(0.68f, 0.0002f);
+		planet3->AddComponent<Mesh>();
+		planet3->AddComponent<LodSphere>(planet3->GetComponent<Planet>(), 50, 50, 1500.0f);
+		planet3->AddComponent<MaterialGasGiant>(0.32f, 0.0002f);
 		planet3->AddComponent<MeshRender>();
+
+		GameObject *planet3Rings = new GameObject(Transform());
+		planet3Rings->SetName("Planet3_Rings");
+		planet3Rings->AddComponent<Mesh>();
+		planet3Rings->AddComponent<Ring>(planet3->GetComponent<Planet>(), 2000.0f, 3300.0f);
+		planet3Rings->AddComponent<MaterialRing>();
+		planet3Rings->AddComponent<MeshRender>();
 
 		// Waters.
 		/*GameObject *water = new GameObject(Transform());

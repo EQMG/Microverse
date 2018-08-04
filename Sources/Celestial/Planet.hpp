@@ -12,7 +12,7 @@ namespace test
 		public ICelestial
 	{
 	private:
-		Star *m_star;
+		ICelestial *m_parent;
 		int m_seed;
 
 		float m_radius;
@@ -24,7 +24,7 @@ namespace test
 		static const float MEDIAN_RADIUS;
 		static const float SQUARE_RADIUS_RATIO;
 
-		Planet(Star *star = nullptr, const int &seed = 0, const float &radius = 700.0f, const float &density = 5510.0f);
+		Planet(ICelestial *parent = nullptr, const int &seed = 0, const float &radius = 700.0f, const float &density = 5510.0f);
 
 		~Planet();
 
@@ -43,8 +43,6 @@ namespace test
 		float GetRadius() const { return m_radius; }
 
 		float GetMass() const { return m_mass; }
-
-		Star *GetStar() const { return m_star; }
 
 		float GetDensity() const { return m_density; }
 	};
