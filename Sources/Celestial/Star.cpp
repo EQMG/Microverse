@@ -6,6 +6,8 @@
 namespace test
 {
 	const float Star::MEDIAN_RADIUS = 2000.0f; // (Originally 8000m) +- 37.5%
+	const float Star::MEDIAN_DENSITY = 1410.0f;
+	const float Star::MEDIAN_MASS = MEDIAN_DENSITY * (4.0f / 3.0f) * PI * std::pow(MEDIAN_RADIUS, 3.0f);
 	const float Star::AU_TO_M = 1.496e+11f;
 	const float Star::G_CONSTANT = 7.08398363e-7f;
 
@@ -14,22 +16,20 @@ namespace test
 		m_radius(radius),
 		m_density(density),
 		m_mass(m_density * (4.0f / 3.0f) * PI * std::pow(m_radius, 3.0f)),
-		m_escapeVelocity(std::sqrt(2.0f * G_CONSTANT * m_mass / m_radius))
+		m_escapeVelocity(std::sqrt(2.0f * G_CONSTANT * m_mass / m_radius)),
+		m_solarLuminosity(std::pow(m_mass / MEDIAN_MASS, 3.5f)),
+		m_surfaceTemperature(std::pow(m_solarLuminosity / std::pow(m_radius / MEDIAN_RADIUS, 2.0f), 0.25f) * 5778.0f),
+		m_surfaceColour(CalculateColour(m_surfaceTemperature)),
+		m_planetInnerLimit(0.1f * (m_mass / MEDIAN_MASS)),
+		m_planetOuterLimit(40.0f * (m_mass / MEDIAN_MASS)),
+		m_planetFrostLine(4.85f * std::sqrt(m_solarLuminosity)),
+		m_habitableMin(std::sqrt(m_solarLuminosity / 1.11f)),
+		m_habitableMax(std::sqrt(m_solarLuminosity / 0.53f))
 	{
-		float solarMass = m_mass / (m_density * (4.0f / 3.0f) * PI * std::pow(MEDIAN_RADIUS, 3.0f));
-
-		m_solarLuminosity = std::pow(solarMass, 3.5f);
-		m_surfaceTemperature = std::pow(m_solarLuminosity / std::pow(m_radius / MEDIAN_RADIUS, 2.0f), 0.25f) * 5778.0f;
-		m_surfaceColour = CalculateColour(m_surfaceTemperature);
-
-		m_planetInnerLimit = 0.1f * solarMass;
-		m_planetOuterLimit = 40.0f * solarMass;
-		m_planetFrostLine = 4.85f * std::sqrt(m_solarLuminosity);
-		m_habitableMin = std::sqrt(m_solarLuminosity / 1.11f);
-		m_habitableMax = std::sqrt(m_solarLuminosity / 0.53f);
-
-		fprintf(stdout, "Planet Inner Limit(au)=%f, Planet Outer Limit(au)=%f, Planet Frost Line(au)=%f, Habitable Min(au)=%f, Habitable Max(au)=%f\n", m_planetInnerLimit, m_planetOuterLimit, m_planetFrostLine, m_habitableMin, m_habitableMax);
-		fprintf(stdout, "Star: Radius(m)=%f, Density(kg/m^3)=%f, Mass(kg)=%f, Escape Velocity(m/s)=%f, Temperature(K)=%f, Surface Colour=%s\n", m_radius, m_density, m_mass, m_escapeVelocity, m_surfaceTemperature, m_surfaceColour.GetHex().c_str());
+		fprintf(stdout, "Star: Radius(m)=%f, Density(kg/m^3)=%f, Mass(kg)=%f, Escape Velocity(m/s)=%f, Temperature(K)=%f, Surface Colour=%s, "
+				  "Planet Inner Limit(au)=%f, Planet Outer Limit(au)=%f, Planet Frost Line(au)=%f, Habitable Min(au)=%f, Habitable Max(au)=%f\n",
+				  m_radius, m_density, m_mass, m_escapeVelocity, m_surfaceTemperature, m_surfaceColour.GetHex().c_str(),
+			m_planetInnerLimit, m_planetOuterLimit, m_planetFrostLine, m_habitableMin, m_habitableMax);
 	}
 
 	Star::~Star()

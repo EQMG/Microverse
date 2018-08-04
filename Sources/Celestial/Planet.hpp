@@ -18,9 +18,11 @@ namespace test
 		float m_escapeVelocity; // The planets escape velocity (m/s).
 	public:
 		static const float MEDIAN_RADIUS;
+		static const float MEDIAN_DENSITY;
+		static const float MEDIAN_MASS;
 		static const float SQUARE_RADIUS_RATIO;
 
-		Planet(const int &seed = 0, const float &radius = 700.0f, const float &density = 5510.0f);
+		Planet(const int &seed = 0, const float &radius = MEDIAN_RADIUS, const float &density = MEDIAN_DENSITY);
 
 		~Planet();
 

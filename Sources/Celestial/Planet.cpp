@@ -10,6 +10,8 @@
 namespace test
 {
 	const float Planet::MEDIAN_RADIUS = 600.0f; // +- 50.0%
+	const float Planet::MEDIAN_DENSITY = 5510.0f;
+	const float Planet::MEDIAN_MASS = MEDIAN_MASS * (4.0f / 3.0f) * PI * std::pow(MEDIAN_RADIUS, 3.0f);
 	const float Planet::SQUARE_RADIUS_RATIO = 0.2f; // Or 0.4f;
 
 	Planet::Planet(const int &seed, const float &radius, const float &density) :

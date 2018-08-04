@@ -26,10 +26,12 @@ namespace test
 		float m_habitableMax; // The habitable max distance for carbon based life (AU).
 	public:
 		static const float MEDIAN_RADIUS;
+		static const float MEDIAN_DENSITY;
+		static const float MEDIAN_MASS;
 		static const float AU_TO_M;
 		static const float G_CONSTANT;
 
-		Star(const float &radius = 8000.0f, const float &density = 1410.0f);
+		Star(const float &radius = MEDIAN_RADIUS, const float &density = MEDIAN_DENSITY);
 
 		~Star();
 
@@ -43,12 +45,12 @@ namespace test
 
 		std::string GetName() const override { return "Star"; };
 
+		static Colour CalculateColour(const float &surfaceTemperature);
+
 		float GetRadius() const { return m_radius; }
 
 		float GetMass() const { return m_mass; }
 
 		Colour GetColour() const { return m_surfaceColour; }
-	private:
-		Colour CalculateColour(const float &surfaceTemperature);
 	};
 }
