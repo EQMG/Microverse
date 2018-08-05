@@ -10,7 +10,7 @@ namespace test
 	MaterialRing::MaterialRing() :
 		IMaterial(),
 		m_material(PipelineMaterial::Resource({1, 0}, PipelineCreate({"Shaders/Rings/Ring.vert", "Shaders/Rings/Ring.frag"},
-			VertexModel::GetVertexInput(), PIPELINE_MODE_MRT, PIPELINE_POLYGON_MODE_FILL, PIPELINE_CULL_MODE_NONE), {})),
+			VertexModel::GetVertexInput(), PIPELINE_MODE_MRT, PIPELINE_POLYGON_MODE_FILL, PIPELINE_CULL_MODE_NONE, {}))),
 		m_ringLookup(Texture::Resource("RingLookup.png")),
 		m_innerRadius(0.0f),
 		m_outerRadius(0.0f)

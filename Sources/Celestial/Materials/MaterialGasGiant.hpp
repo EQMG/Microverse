@@ -18,7 +18,7 @@ namespace test
 		float m_timeScale;
 		int m_octaves;
 	public:
-		MaterialGasGiant(const float &hueOffset = 0.0f, const float &timeScale = 0.001f);
+		MaterialGasGiant(const std::shared_ptr<Texture> &bandLookup = nullptr, const float &hueOffset = 0.0f, const float &timeScale = 0.001f);
 
 		~MaterialGasGiant();
 
