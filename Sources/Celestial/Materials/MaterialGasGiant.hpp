@@ -22,7 +22,7 @@ namespace test
 		std::shared_ptr<Texture> m_diffuseTexture;
 		Timer m_diffuseUpdate;
 	public:
-		MaterialGasGiant(const std::shared_ptr<Texture> &bandLookup = nullptr, const float &hueOffset = 0.0f, const float &timeScale = 0.00003f);
+		MaterialGasGiant(const std::shared_ptr<Texture> &bandLookup = nullptr, const float &hueOffset = 0.0f, const float &timeScale = 0.00002f);
 
 		~MaterialGasGiant();
 

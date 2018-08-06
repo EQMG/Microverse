@@ -105,7 +105,7 @@ namespace test
 
 		/*{
 			auto test = Texture::Resource("Undefined.png");
-			std::string filename = FileSystem::GetWorkingDirectory() + "/Undefined.png";
+			std::string filename = FileSystem::GetWorkingDirectory() + "/Test.png";
 			FileSystem::ClearFile(filename);
 			unsigned char *pixels = test->CopyPixels();
 			Texture::WritePixels(filename, pixels, test->GetWidth(), test->GetHeight(), test->GetComponents());
@@ -137,7 +137,7 @@ namespace test
 			planet1->AddComponent<Orbit>();
 			planet1->AddComponent<Mesh>();
 			planet1->AddComponent<LodSphere>(50, 50, radius);
-			planet1->AddComponent<MaterialGasGiant>(Texture::Resource(lookup), hue, 0.00003f);
+			planet1->AddComponent<MaterialGasGiant>(Texture::Resource(lookup), hue);
 			planet1->AddComponent<MeshRender>();
 		}
 

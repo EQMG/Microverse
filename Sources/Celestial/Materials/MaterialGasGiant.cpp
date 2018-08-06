@@ -16,7 +16,7 @@ namespace test
 		m_timeScale(timeScale),
 		m_diffuseCompute(Compute(ComputeCreate("Shaders/GasGiants/GasGiant.comp", 3072, 3072, 32, {}))),
 		m_diffuseTexture(std::make_shared<Texture>(3072, 3072)),
-		m_diffuseUpdate(Timer(Maths::Random(16.0f, 22.0f)))
+		m_diffuseUpdate(Timer(Maths::Random(16.0f, 20.0f)))
 	{
 		UpdateDiffuse();
 	}
@@ -62,6 +62,9 @@ namespace test
 
 	void MaterialGasGiant::UpdateDiffuse()
 	{
+#if ACID_VERBOSE
+		float debugStart = Engine::Get()->GetTimeMs();
+#endif
 		CommandBuffer commandBuffer = CommandBuffer(true, COMMAND_BUFFER_LEVEL_PRIMARY, COMMAND_QUEUE_COMPUTE);
 
 		// Bind the pipeline.
@@ -88,5 +91,9 @@ namespace test
 
 		commandBuffer.End();
 		commandBuffer.Submit();
+#if ACID_VERBOSE
+		float debugEnd = Engine::Get()->GetTimeMs();
+		fprintf(stdout, "Computed gas giant diffuse in %fms\n", debugEnd - debugStart);
+#endif
 	}
 }
