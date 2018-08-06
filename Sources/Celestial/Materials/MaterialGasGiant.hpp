@@ -3,6 +3,7 @@
 #include <Maths/Colour.hpp>
 #include <Materials/IMaterial.hpp>
 #include <Textures/Texture.hpp>
+#include <Renderer/Pipelines/Compute.hpp>
 
 using namespace acid;
 
@@ -16,9 +17,12 @@ namespace test
 		std::shared_ptr<Texture> m_bandLookup;
 		float m_hueOffset;
 		float m_timeScale;
-		int m_octaves;
+
+		Compute m_diffuseCompute;
+		std::shared_ptr<Texture> m_diffuseTexture;
+		Timer m_diffuseUpdate;
 	public:
-		MaterialGasGiant(const std::shared_ptr<Texture> &bandLookup = nullptr, const float &hueOffset = 0.0f, const float &timeScale = 0.001f);
+		MaterialGasGiant(const std::shared_ptr<Texture> &bandLookup = nullptr, const float &hueOffset = 0.0f, const float &timeScale = 0.00003f);
 
 		~MaterialGasGiant();
 
@@ -45,5 +49,7 @@ namespace test
 		float GetTimeScale() const { return m_timeScale; }
 
 		void SetTimeScale(const float &timeScale) { m_timeScale = timeScale; }
+	private:
+		void UpdateDiffuse();
 	};
 }

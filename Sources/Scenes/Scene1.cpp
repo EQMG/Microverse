@@ -103,6 +103,15 @@ namespace test
 	//	animatedObject->AddComponent<MeshRender>();
 	//	animatedObject->AddComponent<ShadowRender>();
 
+		/*{
+			auto test = Texture::Resource("Undefined.png");
+			std::string filename = FileSystem::GetWorkingDirectory() + "/Undefined.png";
+			FileSystem::ClearFile(filename);
+			unsigned char *pixels = test->CopyPixels();
+			Texture::WritePixels(filename, pixels, test->GetWidth(), test->GetHeight(), test->GetComponents());
+			delete[] pixels;
+		}*/
+
 		// Entities.
 		GameObject *star1 = new GameObject(Transform(Vector3(0.0f, 0.0f, 4500.0f)));
 		star1->SetName("Star1");
@@ -115,7 +124,7 @@ namespace test
 
 		std::vector<std::string> lookups = {"GasPlanets/JupiterLookup.png", "GasPlanets/NeptuneLookup.png", "GasPlanets/NeptuneLookup2.png", "GasPlanets/SaturnLookup.png", "GasPlanets/SaturnLookup2.png", "GasPlanets/UranusLookup.png"};
 
-		for (int i = -5; i <= 5; i++)
+		for (int i = -4; i <= 4; i++)
 		{
 			float radius = Maths::Random(1300.0f, 2500.0f);
 			float hue = Maths::Random(-80.0f, 80.0f);
@@ -128,7 +137,7 @@ namespace test
 			planet1->AddComponent<Orbit>();
 			planet1->AddComponent<Mesh>();
 			planet1->AddComponent<LodSphere>(50, 50, radius);
-			planet1->AddComponent<MaterialGasGiant>(Texture::Resource(lookup), hue, 0.008f);
+			planet1->AddComponent<MaterialGasGiant>(Texture::Resource(lookup), hue, 0.00003f);
 			planet1->AddComponent<MeshRender>();
 		}
 

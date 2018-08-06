@@ -1,0 +1,50 @@
+#version 450
+#extension GL_ARB_separate_shader_objects : enable
+
+layout(local_size_x = WORKGROUP_SIZE, local_size_y = WORKGROUP_SIZE, local_size_z = 1) in;
+
+layout(set = 0, binding = 0) uniform UboObject
+{
+	float hueOffset;
+	float time;
+	int octaves;
+} object;
+
+layout(set = 0, binding = 1) uniform sampler2D samplerBandLookup;
+
+layout(rgba16f, set = 0, binding = 2) uniform writeonly image2D outColour;
+
+#include "Shaders/Noise.glsl"
+#include "Shaders/Hsv.glsl"
+
+void main()
+{
+    if (gl_GlobalInvocationID.x >= WIDTH || gl_GlobalInvocationID.y >= HEIGHT)
+    {
+        return;
+    }
+
+	vec2 uv = (vec2(gl_GlobalInvocationID.x, gl_GlobalInvocationID.y) + vec2(0.5f, 0.5f)) / vec2(WIDTH, HEIGHT);
+
+    float xx = cos(uv.y * 50.0f);
+    vec3 position = vec3(uv, 0.0f) + xx * 0.04f;
+    vec3 tOffset = vec3(object.time, 0.0f, object.time);
+    position.xz *= 0.5f;
+    position = position + tOffset;
+
+    float n1 = noise(position, object.octaves + 1, 10.0f, 0.8f) * 0.01f;
+    float n2 = ridgedNoise(position, object.octaves, 5.8f, 0.75f) * 0.015f - 0.01f;
+
+    float s = 0.6f;
+    float t1 = snoise(position * 2.0f) - s;
+    float t2 = snoise((position + 800.0f) * 2.0f) - s;
+    float t3 = snoise((position + 1600.0f) * 2.0f) - s;
+    float n3 = snoise(position * 0.1f) * max(t1 * t2 * t3, 0.0f);
+    float final = n1 + n2 + n3;
+
+    float lookupCoord = uv.y + final;
+    vec3 planetColour = texture(samplerBandLookup, vec2(0.5f, 2.0f * lookupCoord)).rgb;
+    planetColour = rgbHue(planetColour, object.hueOffset);
+
+	imageStore(outColour, ivec2(gl_GlobalInvocationID.xy), vec4(planetColour, 1.0f));
+}

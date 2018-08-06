@@ -1,5 +1,6 @@
 #include "MaterialGasGiant.hpp"
 
+#include <Maths/Maths.hpp>
 #include <Objects/GameObject.hpp>
 #include <Models/VertexModel.hpp>
 #include <Scenes/Scenes.hpp>
@@ -13,8 +14,11 @@ namespace test
 		m_bandLookup(bandLookup),
 		m_hueOffset(hueOffset),
 		m_timeScale(timeScale),
-		m_octaves(5)
+		m_diffuseCompute(Compute(ComputeCreate("Shaders/GasGiants/GasGiant.comp", 3072, 3072, 32, {}))),
+		m_diffuseTexture(std::make_shared<Texture>(3072, 3072)),
+		m_diffuseUpdate(Timer(Maths::Random(16.0f, 22.0f)))
 	{
+		UpdateDiffuse();
 	}
 
 	MaterialGasGiant::~MaterialGasGiant()
@@ -27,10 +31,11 @@ namespace test
 
 	void MaterialGasGiant::Update()
 	{
-		Vector3 cameraPosition = Scenes::Get()->GetCamera()->GetPosition();
-		Vector3 planetPosition = GetGameObject()->GetTransform().GetPosition();
-		float distance = planetPosition.Distance(cameraPosition);
-		m_octaves = static_cast<int>(Maths::Clamp((-5.312e-4f * distance) + 6.204f, 1.0f, 6.0f));
+		if (m_diffuseUpdate.IsPassedTime())
+		{
+			m_diffuseUpdate.ResetStartTime();
+			UpdateDiffuse();
+		}
 	}
 
 	void MaterialGasGiant::Load(LoadedValue *value)
@@ -48,13 +53,40 @@ namespace test
 	void MaterialGasGiant::PushUniforms(UniformHandler &uniformObject)
 	{
 		uniformObject.Push("transform", GetGameObject()->GetTransform().GetWorldMatrix());
-		uniformObject.Push("hueOffset", m_hueOffset);
-		uniformObject.Push("time", Engine::Get()->GetTime() * m_timeScale);
-		uniformObject.Push("octaves", m_octaves);
 	}
 
 	void MaterialGasGiant::PushDescriptors(DescriptorsHandler &descriptorSet)
 	{
+		descriptorSet.Push("samplerDiffuse", m_diffuseTexture);
+	}
+
+	void MaterialGasGiant::UpdateDiffuse()
+	{
+		CommandBuffer commandBuffer = CommandBuffer(true, COMMAND_BUFFER_LEVEL_PRIMARY, COMMAND_QUEUE_COMPUTE);
+
+		// Bind the pipeline.
+		m_diffuseCompute.BindPipeline(commandBuffer);
+
+		// Uniform Object.
+		auto uniformBlock = m_diffuseCompute.GetShaderProgram()->GetUniformBlock("UboObject");
+		UniformHandler uniform = UniformHandler(uniformBlock);
+		uniform.Push("hueOffset", m_hueOffset);
+		uniform.Push("time", Engine::Get()->GetTime() * m_timeScale);
+		uniform.Push("octaves", 8);
+		uniform.Update(uniformBlock);
+
+		// Updates descriptors.
+		DescriptorsHandler descriptorSet = DescriptorsHandler(m_diffuseCompute);
+		descriptorSet.Push("UboObject", uniform);
 		descriptorSet.Push("samplerBandLookup", m_bandLookup);
+		descriptorSet.Push("outColour", m_diffuseTexture);
+		descriptorSet.Update(m_diffuseCompute);
+
+		// Runs the compute pipeline.
+		descriptorSet.BindDescriptor(commandBuffer);
+		m_diffuseCompute.CmdRender(commandBuffer);
+
+		commandBuffer.End();
+		commandBuffer.Submit();
 	}
 }
