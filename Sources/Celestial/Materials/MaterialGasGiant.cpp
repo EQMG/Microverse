@@ -4,6 +4,7 @@
 #include <Objects/GameObject.hpp>
 #include <Models/VertexModel.hpp>
 #include <Scenes/Scenes.hpp>
+#include <Helpers/FileSystem.hpp>
 
 namespace test
 {
@@ -18,7 +19,6 @@ namespace test
 		m_diffuseTexture(std::make_shared<Texture>(3072, 3072)),
 		m_diffuseUpdate(Timer(Maths::Random(16.0f, 20.0f)))
 	{
-		UpdateDiffuse();
 	}
 
 	MaterialGasGiant::~MaterialGasGiant()
@@ -27,15 +27,22 @@ namespace test
 
 	void MaterialGasGiant::Start()
 	{
+		UpdateDiffuse();
+
+	//	std::string filename = FileSystem::GetWorkingDirectory() + "/" + GetGameObject()->GetName() + ".png";
+	//	FileSystem::ClearFile(filename);
+	//	unsigned char *pixels = m_diffuseTexture->CopyPixels();
+	//	Texture::WritePixels(filename, pixels, m_diffuseTexture->GetWidth(), m_diffuseTexture->GetHeight(), m_diffuseTexture->GetComponents());
+	//	delete[] pixels;
 	}
 
 	void MaterialGasGiant::Update()
 	{
-		if (m_diffuseUpdate.IsPassedTime())
+		/*if (m_diffuseUpdate.IsPassedTime())
 		{
 			m_diffuseUpdate.ResetStartTime();
 			UpdateDiffuse();
-		}
+		}*/
 	}
 
 	void MaterialGasGiant::Load(LoadedValue *value)
@@ -65,7 +72,7 @@ namespace test
 #if ACID_VERBOSE
 		float debugStart = Engine::Get()->GetTimeMs();
 #endif
-		CommandBuffer commandBuffer = CommandBuffer(true, COMMAND_BUFFER_LEVEL_PRIMARY, COMMAND_QUEUE_COMPUTE);
+		CommandBuffer commandBuffer = CommandBuffer(true, VK_QUEUE_COMPUTE_BIT);
 
 		// Bind the pipeline.
 		m_diffuseCompute.BindPipeline(commandBuffer);

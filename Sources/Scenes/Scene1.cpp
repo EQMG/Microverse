@@ -103,15 +103,6 @@ namespace test
 	//	animatedObject->AddComponent<MeshRender>();
 	//	animatedObject->AddComponent<ShadowRender>();
 
-		/*{
-			auto test = Texture::Resource("Undefined.png");
-			std::string filename = FileSystem::GetWorkingDirectory() + "/Test.png";
-			FileSystem::ClearFile(filename);
-			unsigned char *pixels = test->CopyPixels();
-			Texture::WritePixels(filename, pixels, test->GetWidth(), test->GetHeight(), test->GetComponents());
-			delete[] pixels;
-		}*/
-
 		// Entities.
 		GameObject *star1 = new GameObject(Transform(Vector3(0.0f, 0.0f, 4500.0f)));
 		star1->SetName("Star1");
@@ -131,7 +122,7 @@ namespace test
 			std::string lookup = lookups[(int)Maths::Clamp(Maths::Random(0.0f, lookups.size()), 0.0f, lookups.size() - 1)];
 
 			GameObject *planet1 = new GameObject(Transform(Vector3(10000.0f * i, 0.0f, 0.0f)));
-			planet1->SetName("Planet1");
+			planet1->SetName("Planet" + std::to_string(i));
 			planet1->SetParent(star1);
 			planet1->AddComponent<Planet>(-1, radius, 1330.0f);
 			planet1->AddComponent<Orbit>();
