@@ -171,7 +171,7 @@ namespace test
 
 	void Scene1::Update()
 	{
-		if (m_buttonSpawnSphere->WasDown())
+		if (m_buttonSpawnSphere->WasDown() && !IsGamePaused())
 		{
 			Vector3 cameraPosition = Scenes::Get()->GetCamera()->GetPosition();
 			Vector3 cameraRotation = Scenes::Get()->GetCamera()->GetRotation();

@@ -10,7 +10,7 @@ namespace test
 		IMaterial(),
 		m_colour(Colour(MeshWater::WATER_COLOUR)),
 		m_material(PipelineMaterial::Resource({1, 0}, PipelineCreate({"Shaders/Waters/Water.vert", "Shaders/Waters/Water.frag"},
-			VertexModel::GetVertexInput(), PIPELINE_MODE_MRT, PIPELINE_POLYGON_MODE_FILL, PIPELINE_CULL_MODE_BACK, {})))
+			VertexModel::GetVertexInput(), PIPELINE_MODE_MRT, VK_POLYGON_MODE_FILL, VK_CULL_MODE_BACK_BIT, {})))
 	{
 	}
 
