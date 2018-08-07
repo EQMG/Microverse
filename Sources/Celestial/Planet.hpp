@@ -41,8 +41,6 @@ namespace test
 
 		void Write(LoadedValue *destination) override;
 
-		std::string GetName() const override { return "Planet"; };
-
 		int GetSeed() const { return m_seed; }
 
 		float GetRadius() const { return m_radius; }

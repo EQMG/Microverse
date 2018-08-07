@@ -14,10 +14,10 @@
 #include <Models/Shapes/ModelSphere.hpp>
 #include <Physics/ColliderConvexHull.hpp>
 #include <Physics/ColliderSphere.hpp>
-#include <Renderer/Screenshot/Screenshot.hpp>
 #include <Scenes/Scenes.hpp>
 #include <Shadows/ShadowRender.hpp>
 #include <Skyboxes/MaterialSkybox.hpp>
+#include <Renderer/Renderer.hpp>
 #include "Celestial/Gravity.hpp"
 #include "Celestial/LodSphere.hpp"
 #include "Celestial/Orbit.hpp"
@@ -201,7 +201,7 @@ namespace test
 			std::string filename = "Screenshots/" + Engine::Get()->GetDateTime() + ".png";
 
 			m_soundScreenshot->Play();
-			Screenshot::Capture(filename);
+			Renderer::Get()->CaptureScreenshot(filename);
 		}
 
 		if (m_buttonExit->WasDown())

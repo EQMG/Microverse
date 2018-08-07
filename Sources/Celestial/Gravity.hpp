@@ -25,8 +25,6 @@ namespace test
 
 		void Write(LoadedValue *destination) override;
 
-		std::string GetName() const override { return "Gravity"; };
-
 		ICelestial *GetStrongestInfluence() const { return m_influence; }
 	};
 }

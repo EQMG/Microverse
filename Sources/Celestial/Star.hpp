@@ -43,8 +43,6 @@ namespace test
 
 		void Write(LoadedValue *destination) override;
 
-		std::string GetName() const override { return "Star"; };
-
 		static Colour CalculateColour(const float &surfaceTemperature);
 
 		float GetRadius() const { return m_radius; }

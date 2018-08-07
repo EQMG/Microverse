@@ -45,8 +45,6 @@ namespace test
 
 		void Write(LoadedValue *destination) override;
 
-		std::string GetName() const override { return "QuadtreeChunk"; };
-
 		static GameObject *CreateChunk(Planet *parent, const Transform &transform, const uint32_t &lod = 0, const float &sideLength = 100.0f, const float &squareSize = 100.0f, const std::string &namePostfix = "");
 
 		uint32_t CalculateLod();

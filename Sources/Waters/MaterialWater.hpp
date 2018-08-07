@@ -34,8 +34,6 @@ namespace test
 
 		void PushDescriptors(DescriptorsHandler &descriptorSet) override;
 
-		std::string GetName() const override { return "MaterialWater"; };
-
 		Colour GetColour() const { return m_colour; }
 
 		void SetColour(const Colour &colour) { m_colour = colour; }

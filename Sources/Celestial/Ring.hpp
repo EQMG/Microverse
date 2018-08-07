@@ -30,8 +30,6 @@ namespace test
 
 		void Write(LoadedValue *destination) override;
 
-		std::string GetName() const override { return "Ring"; };
-
 		float GetInnerRadius() const { return m_innerRadius; }
 
 		float GetOuterRadius() const { return m_outerRadius; }

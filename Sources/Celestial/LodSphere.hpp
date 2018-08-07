@@ -34,8 +34,6 @@ namespace test
 
 		void Write(LoadedValue *destination) override;
 
-		std::string GetName() const override { return "LodSphere"; };
-
 		uint32_t CalculateLod();
 	};
 }

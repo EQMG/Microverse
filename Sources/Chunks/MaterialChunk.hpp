@@ -29,8 +29,6 @@ namespace test
 
 		void PushDescriptors(DescriptorsHandler &descriptorSet) override;
 
-		std::string GetName() const override { return "MaterialChunk"; };
-
 		std::shared_ptr<PipelineMaterial> GetMaterial() const override { return m_material; }
 	};
 }

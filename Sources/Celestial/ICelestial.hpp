@@ -28,8 +28,6 @@ namespace test
 
 		virtual void Write(LoadedValue *destination) override = 0;
 
-		virtual std::string GetName() const override { return "ICelestial"; };
-
 		virtual float GetRadius() const = 0;
 
 		virtual float GetMass() const = 0;
