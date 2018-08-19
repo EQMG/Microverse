@@ -10,7 +10,6 @@ layout(set = 0, binding = 0) uniform UboScene
 layout(set = 0, binding = 1) uniform UboObject
 {
 	mat4 transform;
-	vec3 position;
 	float radius;
 } object;
 
@@ -19,8 +18,7 @@ layout(set = 0, location = 1) in vec2 inUv;
 layout(set = 0, location = 2) in vec3 inNormal;
 
 layout(location = 0) out vec3 outWorldPos;
-layout(location = 1) out vec2 outUv;
-layout(location = 2) out vec3 outNormal;
+layout(location = 1) out vec3 outPosition;
 
 out gl_PerVertex
 {
@@ -38,6 +36,5 @@ void main()
 
 	outWorldPos = worldPosition.xyz;
 	outWorldPos.y = -outWorldPos.y;
-	outUv = inUv;
-	outNormal = normalize((object.transform * totalNormal).xyz);
+	outPosition = inPosition;
 }

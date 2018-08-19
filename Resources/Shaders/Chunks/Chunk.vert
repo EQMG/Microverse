@@ -12,14 +12,15 @@ layout(set = 0, binding = 1) uniform UboObject
 	mat4 transform;
 } object;
 
-layout(set = 0, location = 0) in vec3 vertexPosition;
-layout(set = 0, location = 1) in vec2 vertexUv;
-layout(set = 0, location = 2) in vec3 vertexNormal;
-layout(set = 0, location = 3) in vec3 vertexTangent;
+layout(set = 0, location = 0) in vec3 inPosition;
+layout(set = 0, location = 1) in vec2 inUv;
+layout(set = 0, location = 2) in vec3 inNormal;
+layout(set = 0, location = 3) in vec3 inTangent;
 
-layout(location = 0) out vec3 fragmentNormal;
-layout(location = 1) out vec2 fragmentUv;
-layout(location = 2) out vec3 fragmentColour;
+layout(location = 0) out vec3 outWorldPos;
+layout(location = 1) out vec2 outUv;
+layout(location = 2) out vec3 outNormal;
+layout(location = 3) out vec3 outTangent;
 
 out gl_PerVertex 
 {
@@ -28,14 +29,16 @@ out gl_PerVertex
 
 void main() 
 {
-	vec4 totalLocalPos = vec4(vertexPosition, 1.0f);
-	vec4 totalNormal = vec4(vertexNormal, 0.0f);
+	vec4 totalLocalPos = vec4(inPosition, 1.0f);
+	vec4 totalNormal = vec4(inNormal, 0.0f);
 
 	vec4 worldPosition = object.transform * totalLocalPos;
 
 	gl_Position = scene.projection * scene.view * worldPosition;
 
-	fragmentNormal = normalize((object.transform * totalNormal).xyz);
-	fragmentUv = vertexUv;
-	fragmentColour = vertexTangent;
+	outWorldPos = worldPosition.xyz;
+	outWorldPos.y = -outWorldPos.y;
+	outUv = inUv;
+	outNormal = normalize((object.transform * totalNormal).xyz);
+	outTangent = inTangent;
 }

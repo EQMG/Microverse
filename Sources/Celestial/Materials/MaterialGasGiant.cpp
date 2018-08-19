@@ -5,6 +5,7 @@
 #include <Models/VertexModel.hpp>
 #include <Scenes/Scenes.hpp>
 #include <Helpers/FileSystem.hpp>
+#include "Celestial/Planet.hpp"
 
 namespace test
 {
@@ -13,6 +14,7 @@ namespace test
 		m_material(PipelineMaterial::Resource({1, 0}, PipelineCreate({"Shaders/GasGiants/GasGiant.vert", "Shaders/GasGiants/GasGiant.frag"},
 			VertexModel::GetVertexInput(), PIPELINE_MODE_MRT, VK_POLYGON_MODE_FILL, VK_CULL_MODE_BACK_BIT, {}))),
 		m_bandLookup(bandLookup),
+		m_radius(0.0f),
 		m_hueOffset(hueOffset),
 		m_timeScale(timeScale),
 		m_diffuseCompute(Compute(ComputeCreate("Shaders/GasGiants/GasGiant.comp", 3072, 3072, 32, {}))),
@@ -27,13 +29,15 @@ namespace test
 
 	void MaterialGasGiant::Start()
 	{
-		UpdateDiffuse();
+		auto planet = GetGameObject()->GetComponent<Planet>(true);
 
-	//	std::string filename = FileSystem::GetWorkingDirectory() + "/" + GetGameObject()->GetName() + ".png";
-	//	FileSystem::ClearFile(filename);
-	//	unsigned char *pixels = m_diffuseTexture->CopyPixels();
-	//	Texture::WritePixels(filename, pixels, m_diffuseTexture->GetWidth(), m_diffuseTexture->GetHeight(), m_diffuseTexture->GetComponents());
-	//	delete[] pixels;
+		if (planet != nullptr)
+		{
+			m_radius = planet->GetRadius();
+		}
+
+		UpdateDiffuse();
+	//	WriteDiffuse();
 	}
 
 	void MaterialGasGiant::Update()
@@ -60,11 +64,13 @@ namespace test
 	void MaterialGasGiant::PushUniforms(UniformHandler &uniformObject)
 	{
 		uniformObject.Push("transform", GetGameObject()->GetTransform().GetWorldMatrix());
+		uniformObject.Push("position", GetGameObject()->GetTransform().GetPosition());
+		uniformObject.Push("radius", m_radius);
 	}
 
 	void MaterialGasGiant::PushDescriptors(DescriptorsHandler &descriptorSet)
 	{
-		descriptorSet.Push("samplerDiffuse", m_diffuseTexture);
+		descriptorSet.Push("samplerAlbedo", m_diffuseTexture);
 	}
 
 	void MaterialGasGiant::UpdateDiffuse()
@@ -102,5 +108,14 @@ namespace test
 		float debugEnd = Engine::Get()->GetTimeMs();
 		fprintf(stdout, "Computed gas giant diffuse in %fms\n", debugEnd - debugStart);
 #endif
+	}
+
+	void MaterialGasGiant::WriteDiffuse()
+	{
+		std::string filename = FileSystem::GetWorkingDirectory() + "/" + GetGameObject()->GetName() + ".png";
+		FileSystem::ClearFile(filename);
+		uint8_t *pixels = m_diffuseTexture->GetPixels();
+		Texture::WritePixels(filename, pixels, m_diffuseTexture->GetWidth(), m_diffuseTexture->GetHeight(), m_diffuseTexture->GetComponents());
+		delete[] pixels;
 	}
 }

@@ -15,6 +15,7 @@ namespace test
 	private:
 		std::shared_ptr<PipelineMaterial> m_material;
 		std::shared_ptr<Texture> m_bandLookup;
+		float m_radius;
 		float m_hueOffset;
 		float m_timeScale;
 
@@ -49,5 +50,7 @@ namespace test
 		void SetTimeScale(const float &timeScale) { m_timeScale = timeScale; }
 	private:
 		void UpdateDiffuse();
+
+		void WriteDiffuse();
 	};
 }

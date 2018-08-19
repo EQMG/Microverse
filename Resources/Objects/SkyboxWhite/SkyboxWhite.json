@@ -1,14 +1,14 @@
 {
   "Mesh": {
-    "Model": "Sphere_10_10_1.0"
+	"Model": "Sphere_10_10_1.0"
   },
   "MaterialSkybox": {
-    "Cubemap Texture": "Objects/SkyboxWhite",
-    "Cubemap Extension": ".png",
-    "Sky Colour": "#FFFFFF"
+	"Cubemap Texture": "Objects/SkyboxWhite",
+	"Cubemap Extension": ".png",
+	"Sky Colour": "#FFFFFF"
   },
   "SkyboxCycle": {
-    "Enable Fog": false
+	"Enable Fog": false
   },
   "MeshRender": {
   }

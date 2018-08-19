@@ -1,0 +1,28 @@
+#version 450
+#extension GL_ARB_separate_shader_objects : enable
+
+layout(local_size_x = WORKGROUP_SIZE, local_size_y = WORKGROUP_SIZE) in;
+
+layout(set = 0, binding = 0) uniform UboObject
+{
+} object;
+
+layout(set = 0, binding = 1) uniform sampler2D samplerBandLookup;
+
+layout(rgba16f, set = 0, binding = 2) uniform writeonly image2D outColour;
+
+#include "Shaders/Noise.glsl"
+
+void main()
+{
+	if (gl_GlobalInvocationID.x >= WIDTH || gl_GlobalInvocationID.y >= HEIGHT)
+	{
+		return;
+	}
+
+	vec2 uv = (vec2(gl_GlobalInvocationID.x, gl_GlobalInvocationID.y) + vec2(0.5f, 0.5f)) / vec2(WIDTH, HEIGHT);
+
+	float n2 = ridgedNoise(vec3(uv, 0.0f), 6, 5.8f, 0.75f);
+
+	imageStore(outColour, ivec2(gl_GlobalInvocationID.xy), vec4(n2, n2, n2, 1.0f));
+}

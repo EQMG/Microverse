@@ -1,6 +1,8 @@
 #include "Star.hpp"
 
 #include <Maths/Maths.hpp>
+#include <Meshes/Mesh.hpp>
+#include <Models/Shapes/ModelSphere.hpp>
 #include <Post/Filters/FilterLensflare.hpp>
 
 namespace test
@@ -38,6 +40,12 @@ namespace test
 
 	void Star::Start()
 	{
+		auto mesh = GetGameObject()->GetComponent<Mesh>();
+
+		if (mesh != nullptr)
+		{
+			mesh->SetModel(ModelSphere::Resource(30, 30, m_radius));
+		}
 	}
 
 	void Star::Update()

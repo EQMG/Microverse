@@ -19,31 +19,33 @@
 namespace test
 {
 	RenderpassCreate *RENDERPASS_0_CREATE = new RenderpassCreate
+	{
+		4096, 4096, // width / height
 		{
-			4096, 4096, // width / height
-			{
-				Attachment(0, ATTACHMENT_IMAGE, VK_FORMAT_R8_UNORM) // shadows
-			}, // images
-			{
-				SubpassType(0, {0})
-			} // subpasses
-		};
+			Attachment(0, ATTACHMENT_IMAGE, VK_FORMAT_R8_UNORM) // shadows
+		}, // images
+		{
+			SubpassType(0, {0})
+		} // subpasses
+	};
 	RenderpassCreate *RENDERPASS_1_CREATE = new RenderpassCreate
+	{
+		0, 0, // width / height
 		{
-			0, 0, // width / height
-			{
-				Attachment(0, ATTACHMENT_DEPTH), // depth
-				Attachment(1, ATTACHMENT_SWAPCHAIN), // swapchain
-				Attachment(2, ATTACHMENT_IMAGE, VK_FORMAT_R8G8B8A8_UNORM), // colours
-				Attachment(3, ATTACHMENT_IMAGE, VK_FORMAT_R16G16_UNORM), // normals
-				Attachment(4, ATTACHMENT_IMAGE, VK_FORMAT_R8G8B8A8_UNORM) // materials
-			}, // images
-			{
-				SubpassType(0, {0, 2, 3, 4}),
-				SubpassType(1, {1}),
-				SubpassType(2, {1}),
-			} // subpasses
-		};
+			Attachment(0, ATTACHMENT_DEPTH), // depth
+			Attachment(1, ATTACHMENT_SWAPCHAIN), // swapchain
+			Attachment(2, ATTACHMENT_IMAGE, VK_FORMAT_R16G16B16A16_SFLOAT), // positions (world-space)
+			Attachment(3, ATTACHMENT_IMAGE, VK_FORMAT_R8G8B8A8_UNORM), // albedo
+			Attachment(4, ATTACHMENT_IMAGE, VK_FORMAT_R16G16B16A16_SFLOAT), // normals (world-space)
+			Attachment(5, ATTACHMENT_IMAGE, VK_FORMAT_R8G8B8A8_UNORM), // materials
+		//	Attachment(6, ATTACHMENT_RESOLVE) // resolve
+		}, // images
+		{
+			SubpassType(0, {0, 2, 3, 4, 5}),
+			SubpassType(1, {1}),
+			SubpassType(2, {1}),
+		} // subpasses
+	};
 
 	MainRenderer::MainRenderer() :
 		IManagerRender({RENDERPASS_0_CREATE, RENDERPASS_1_CREATE})

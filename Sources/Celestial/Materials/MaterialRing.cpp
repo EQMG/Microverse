@@ -23,10 +23,6 @@ namespace test
 
 	void MaterialRing::Start()
 	{
-	}
-
-	void MaterialRing::Update()
-	{
 		auto ring = GetGameObject()->GetComponent<Ring>(true);
 
 		if (ring != nullptr)
@@ -34,6 +30,10 @@ namespace test
 			m_innerRadius = ring->GetInnerRadius();
 			m_outerRadius = ring->GetOuterRadius();
 		}
+	}
+
+	void MaterialRing::Update()
+	{
 	}
 
 	void MaterialRing::Load(LoadedValue *value)

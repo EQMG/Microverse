@@ -10,8 +10,8 @@ add_executable(Microverse ${MICROVERSE_SOURCES})
 #endif()
 
 set_target_properties(Microverse PROPERTIES
-        POSITION_INDEPENDENT_CODE ON
-        FOLDER "Microverse")
+		POSITION_INDEPENDENT_CODE ON
+		FOLDER "Microverse")
 
 add_dependencies(Microverse Acid)
 
@@ -20,17 +20,17 @@ target_link_libraries(Microverse PRIVATE Acid)
 
 # Install
 if (MICROVERSE_INSTALL)
-    install(
-            DIRECTORY .
-            DESTINATION include
-            FILES_MATCHING PATTERN "*.h"
-            PATTERN "Private" EXCLUDE
-    )
+	install(
+			DIRECTORY .
+			DESTINATION include
+			FILES_MATCHING PATTERN "*.h"
+			PATTERN "Private" EXCLUDE
+	)
 
-    install(
-            TARGETS Microverse
-            RUNTIME DESTINATION bin
-            LIBRARY DESTINATION lib
-            ARCHIVE DESTINATION lib
-    )
+	install(
+			TARGETS Microverse
+			RUNTIME DESTINATION bin
+			LIBRARY DESTINATION lib
+			ARCHIVE DESTINATION lib
+	)
 endif()

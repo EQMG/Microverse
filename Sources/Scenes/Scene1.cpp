@@ -19,7 +19,6 @@
 #include <Skyboxes/MaterialSkybox.hpp>
 #include <Renderer/Renderer.hpp>
 #include "Celestial/Gravity.hpp"
-#include "Celestial/LodSphere.hpp"
 #include "Celestial/Orbit.hpp"
 #include "Celestial/Materials/MaterialGasGiant.hpp"
 #include "Celestial/Materials/MaterialRing.hpp"
@@ -28,7 +27,6 @@
 #include "Celestial/Star.hpp"
 #include "FpsCamera.hpp"
 #include "FpsPlayer.hpp"
-#include "Waters/MaterialWater.hpp"
 #include "World/World.hpp"
 
 namespace test
@@ -109,11 +107,10 @@ namespace test
 		star1->AddComponent<Star>(1000.0f);
 		star1->AddComponent<Light>(Colour::WHITE, -1.0f);
 		star1->AddComponent<Mesh>();
-		star1->AddComponent<LodSphere>(50, 50, 1000.0f);
 		star1->AddComponent<MaterialDefault>(star1->GetComponent<Star>()->GetColour());
 		star1->AddComponent<MeshRender>();
 
-		std::vector<std::string> lookups = {"GasPlanets/JupiterLookup.png", "GasPlanets/NeptuneLookup.png", "GasPlanets/NeptuneLookup2.png", "GasPlanets/SaturnLookup.png", "GasPlanets/SaturnLookup2.png", "GasPlanets/UranusLookup.png"};
+		std::vector<std::string> lookups = {"GasGiants/JupiterLookup.png", "GasGiants/NeptuneLookup.png", "GasGiants/NeptuneLookup2.png", "GasGiants/SaturnLookup.png", "GasGiants/SaturnLookup2.png", "GasGiants/UranusLookup.png"};
 
 		for (int i = -4; i <= 4; i++)
 		{
@@ -127,10 +124,24 @@ namespace test
 			planet1->AddComponent<Planet>(-1, radius, 1330.0f);
 			planet1->AddComponent<Orbit>();
 			planet1->AddComponent<Mesh>();
-			planet1->AddComponent<LodSphere>(50, 50, radius);
-			planet1->AddComponent<MaterialGasGiant>(Texture::Resource(lookup), hue);
 			planet1->AddComponent<MeshRender>();
+			planet1->AddComponent<MaterialGasGiant>(Texture::Resource(lookup), hue);
+
+		//  GameObject *rings1 = new GameObject(Transform());
+		//  rings1->SetName("Planet" + std::to_string(i) + "_Rings");
+		//  rings1->SetParent(planet1);
+		//  rings1->AddComponent<Ring>(1.34f * radius, 2.44f * radius);
+		//  rings1->AddComponent<Mesh>();
+		//  rings1->AddComponent<MaterialRing>();
+		//  rings1->AddComponent<MeshRender>();
 		}
+
+		/*GameObject *planet1 = new GameObject(Transform(Vector3(0.0f, 0.0f, 0.0f)));
+		planet1->SetName("Planet1");
+		planet1->SetParent(star1);
+		planet1->AddComponent<Planet>(9784, 900.0f);
+		planet1->AddComponent<Orbit>();
+		planet1->AddComponent<Mesh>();*/
 
 		/*GameObject *planet1 = new GameObject(Transform(Vector3(4000.0f, 0.0f, 5000.0f)));
 		planet1->SetName("Planet1");
@@ -138,15 +149,14 @@ namespace test
 		planet1->AddComponent<Planet>(-1, 2500.0f, 1330.0f);
 		planet1->AddComponent<Orbit>();
 		planet1->AddComponent<Mesh>();
-		planet1->AddComponent<LodSphere>(50, 50, 2500.0f);
-		planet1->AddComponent<MaterialGasGiant>(Texture::Resource("GasPlanets/JupiterLookup.png"), -60.0f, 0.0003f);
+		planet1->AddComponent<MaterialGasGiant>(Texture::Resource("GasGiants/JupiterLookup.png"), -60.0f, 0.0003f);
 		planet1->AddComponent<MeshRender>();
 
 		GameObject *rings1 = new GameObject(Transform());
 		rings1->SetName("Planet1_Rings");
 		rings1->SetParent(planet1);
-		rings1->AddComponent<Mesh>();
 		rings1->AddComponent<Ring>(3350.0f, 6100.0f);
+		rings1->AddComponent<Mesh>();
 		rings1->AddComponent<MaterialRing>();
 		rings1->AddComponent<MeshRender>();
 
@@ -154,19 +164,14 @@ namespace test
 		planet2->SetName("Planet2");
 		planet2->AddComponent<Planet>(5444, 400.0f);
 		planet2->AddComponent<Orbit>();
+		planet2->AddComponent<Mesh>();
 
 		GameObject *planet3 = new GameObject(Transform(Vector3(4500.0f, 0.0f, 0.0f)));
 		planet3->SetName("Planet3");
 		planet3->SetParent(star1);
 		planet3->AddComponent<Planet>(9784, 900.0f);
-		planet3->AddComponent<Orbit>();*/
-
-		// Waters.
-		/*GameObject *water = new GameObject(Transform());
-		water->SetName("Water");
-		water->AddComponent<Mesh>();
-		water->AddComponent<MaterialWater>();
-		water->AddComponent<MeshRender>();*/
+		planet3->AddComponent<Orbit>();
+		planet3->AddComponent<Mesh>();*/
 	}
 
 	void Scene1::Update()

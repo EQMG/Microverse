@@ -10,12 +10,23 @@ using namespace acid;
 
 namespace test
 {
+	enum EdgeFlagBits
+	{
+		EDGE_NONE = 0,
+		EDGE_NORTH = 1,
+		EDGE_EAST = 2,
+		EDGE_SOUTH = 4,
+		EDGE_WEST = 8
+	};
+	typedef uint32_t EdgeFlags;
+
 	class MeshChunk :
 		public MeshSimple
 	{
 	private:
 		float m_radius;
 		Matrix4 m_worldMatrix;
+		EdgeFlags m_edgeConditions;
 	public:
 		MeshChunk(const float &sideLength, const float &squareSize, const int &vertexCount, const float &textureScale, const float &radius, const Transform &transform);
 

@@ -10,37 +10,34 @@ layout(set = 0, binding = 1) uniform UboObject
 
 layout(set = 0, binding = 2) uniform sampler2D samplerRingLookup;
 
-layout(location = 0) in vec3 fragmentPosition;
-layout(location = 1) in vec3 fragmentNormal;
+layout(location = 0) in vec3 inWorldPos;
+layout(location = 1) in vec3 inNormal;
+layout(location = 2) in vec3 inPosition;
 
-layout(location = 0) out vec4 outColour;
-layout(location = 1) out vec2 outNormal;
-layout(location = 2) out vec4 outMaterial;
+layout(location = 0) out vec4 outPosition;
+layout(location = 1) out vec4 outDiffuse;
+layout(location = 2) out vec4 outNormal;
+layout(location = 3) out vec4 outMaterial;
 
-#include "Shaders/Pipeline.glsl"
 #include "Shaders/Noise.glsl"
 
 void main()
 {
-	vec3 unitNormal = normalize(fragmentNormal);
+	float len = length(inPosition);
 
-    float len = length(fragmentPosition);
+	if (len < object.innerRadius || len > object.outerRadius)
+	{
+		discard;
+	}
 
-    if (len < object.innerRadius || len > object.outerRadius) // TODO: Remove this!
-    {
-        discard;
-    }
+	vec3 unitNormal = normalize(inNormal);
 
-    float u = (len - object.innerRadius) / (object.outerRadius - object.innerRadius);
+	float u = (len - object.innerRadius) / (object.outerRadius - object.innerRadius);
 
-    //if (abs(u) > 1.0f)
-    //{
-    //    discard;
-    //}
+	vec4 diffuse = texture(samplerRingLookup, vec2(u, 0.0f)).rgba;
 
-    vec4 ringColour = texture(samplerRingLookup, vec2(u, 0.0f)).rgba;
-
-	outColour = ringColour;
-	outNormal = encodeNormal(unitNormal);
+	outPosition = vec4(inWorldPos, 1.0);
+	outDiffuse = diffuse;
+	outNormal = vec4(unitNormal, 1.0f);
 	outMaterial = vec4(0.0f, 0.0f, 1.0f, 1.0f);
 }

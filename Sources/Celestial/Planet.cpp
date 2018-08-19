@@ -3,6 +3,9 @@
 #include <Maths/Maths.hpp>
 #include <Meshes/Mesh.hpp>
 #include <Meshes/MeshRender.hpp>
+#include <Models/Shapes/ModelRectangle.hpp>
+#include <Models/Shapes/ModelSphere.hpp>
+#include <Models/Obj/ModelObj.hpp>
 #include "Chunks/QuadtreeChunk.hpp"
 #include "Chunks/MaterialChunk.hpp"
 #include "Star.hpp"
@@ -40,6 +43,15 @@ namespace test
 	{
 		if (m_seed == -1)
 		{
+			auto mesh = GetGameObject()->GetComponent<Mesh>();
+
+			if (mesh != nullptr)
+			{
+				mesh->SetModel(ModelSphere::Resource(32, 32, m_radius));
+			//	mesh->SetModel(ModelObj::Resource("Icosphere.obj"));
+			//	GetGameObject()->GetTransform().SetScaling(Vector3(m_radius, m_radius, m_radius));
+			}
+
 			return;
 		}
 

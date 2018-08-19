@@ -15,7 +15,8 @@ namespace test
 	MeshChunk::MeshChunk(const float &sideLength, const float &squareSize, const int &vertexCount, const float &textureScale, const float &radius, const Transform &transform) :
 		MeshSimple(sideLength, squareSize, vertexCount, textureScale),
 		m_radius(radius),
-		m_worldMatrix(transform.GetWorldMatrix())
+		m_worldMatrix(transform.GetWorldMatrix()),
+		m_edgeConditions(EDGE_EAST | EDGE_SOUTH)
 	{
 		MeshSimple::GenerateMesh();
 	}

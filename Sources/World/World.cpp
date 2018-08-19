@@ -11,7 +11,7 @@ namespace test
 		m_fog(Fog(Colour::BLACK, 0.0f, 2.0f, -10000.0f, -1000.0f)),
 		m_lightDirection(Vector3())
 	{
-		m_noiseTerrain.SetNoiseType(NoiseType::TYPE_PERLINFRACTAL);
+		m_noiseTerrain.SetNoiseType(NoiseType::TYPE_SIMPLEXFRACTAL);
 		m_noiseTerrain.SetFrequency(0.00625f);
 		m_noiseTerrain.SetInterp(NoiseInterp::INTERP_QUINTIC);
 		m_noiseTerrain.SetFractalType(NoiseFractal::FRACTAL_FBM);

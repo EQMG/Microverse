@@ -4,15 +4,11 @@
 layout(set = 0, binding = 1) uniform UboObject
 {
 	mat4 transform;
-	vec3 position;
 	float radius;
 } object;
 
-layout(set = 0, binding = 2) uniform sampler2D samplerAlbedo;
-
 layout(location = 0) in vec3 inWorldPos;
-layout(location = 1) in vec2 inUv;
-layout(location = 2) in vec3 inNormal;
+layout(location = 1) in vec3 inPosition;
 
 layout(location = 0) out vec4 outPosition;
 layout(location = 1) out vec4 outDiffuse;
@@ -21,12 +17,8 @@ layout(location = 3) out vec4 outMaterial;
 
 void main() 
 {
-	vec3 unitNormal = normalize(inNormal);
-
-	vec4 diffuse = texture(samplerAlbedo, inUv);
-
 	outPosition = vec4(inWorldPos, 1.0);
-	outDiffuse = diffuse;
-	outNormal = vec4(unitNormal, 1.0f);
-	outMaterial = vec4(0.0f, 1.0f, 0.0f, 1.0f);
+	outDiffuse = vec4(1.0f);
+	outNormal = vec4(0.0f, 0.0f, 0.0f, 1.0f);
+	outMaterial = vec4(0.0f, 0.0f, 1.0f, 1.0f);
 }
