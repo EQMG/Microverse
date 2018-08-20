@@ -103,11 +103,11 @@ namespace test
 		terrainChunk->SetParent(parent->GetGameObject());
 		terrainChunk->AddComponent<Mesh>();
 		terrainChunk->AddComponent<QuadtreeChunk>(parent, lod, sideLength, squareSize, transform);
-		//	terrainChunk->AddComponent<ColliderConvexHull>(transform.GetPosition());
-		//	terrainChunk->AddComponent<Rigidbody>(0.0f);
+	//	terrainChunk->AddComponent<ColliderConvexHull>(transform.GetPosition());
+	//	terrainChunk->AddComponent<Rigidbody>(0.0f);
 		terrainChunk->AddComponent<MaterialChunk>();
 		terrainChunk->AddComponent<MeshRender>();
-		//	terrainChunk->AddComponent<ShadowRender>();
+	//	terrainChunk->AddComponent<ShadowRender>();
 		return terrainChunk;
 	}
 

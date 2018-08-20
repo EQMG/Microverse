@@ -15,7 +15,7 @@ namespace test
 	const float Planet::MEDIAN_RADIUS = 700.0f; // +- 50.0%
 	const float Planet::MEDIAN_DENSITY = 5510.0f;
 	const float Planet::MEDIAN_MASS = MEDIAN_MASS * (4.0f / 3.0f) * PI * std::pow(MEDIAN_RADIUS, 3.0f);
-	const float Planet::SQUARE_RADIUS_RATIO = 0.2f; // Or 0.4f;
+	const float Planet::SQUARE_RADIUS_RATIO = 0.2f; // 0.2 or 0.4;
 
 	Planet::Planet(const int &seed, const float &radius, const float &density, const float &axialTilt) :
 		ICelestial(),

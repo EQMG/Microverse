@@ -10,7 +10,10 @@ layout(set = 0, binding = 0) uniform UboScene
 layout(set = 0, binding = 1) uniform UboObject
 {
 	mat4 transform;
-	float radius;
+	vec4 colour;
+	float innerRadius;
+	float outerRadius;
+	float falloff;
 } object;
 
 layout(set = 0, location = 0) in vec3 inPosition;

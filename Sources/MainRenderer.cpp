@@ -8,19 +8,21 @@
 #include <Fonts/RendererFonts.hpp>
 #include <Guis/RendererGuis.hpp>
 #include <Particles/RendererParticles.hpp>
+#include <Shadows/RendererShadows.hpp>
 #include <Post/Deferred/RendererDeferred.hpp>
+#include <Post/Filters/FilterDefault.hpp>
 #include <Post/Filters/FilterFxaa.hpp>
 #include <Post/Filters/FilterGrain.hpp>
 #include <Post/Filters/FilterLensflare.hpp>
 #include <Post/Filters/FilterTiltshift.hpp>
-#include <Shadows/RendererShadows.hpp>
+#include <Fog/RendererFog.hpp>
 #include "Post/Filters/FilterDamage.hpp"
 
 namespace test
 {
 	RenderpassCreate *RENDERPASS_0_CREATE = new RenderpassCreate
 	{
-		4096, 4096, // width / height
+		4096, 4096, // width, height
 		{
 			Attachment(0, ATTACHMENT_IMAGE, VK_FORMAT_R8_UNORM) // shadows
 		}, // images
@@ -30,31 +32,34 @@ namespace test
 	};
 	RenderpassCreate *RENDERPASS_1_CREATE = new RenderpassCreate
 	{
-		0, 0, // width / height
+		0, 0, // width, height
 		{
 			Attachment(0, ATTACHMENT_DEPTH), // depth
 			Attachment(1, ATTACHMENT_SWAPCHAIN), // swapchain
-			Attachment(2, ATTACHMENT_IMAGE, VK_FORMAT_R16G16B16A16_SFLOAT), // positions (world-space)
-			Attachment(3, ATTACHMENT_IMAGE, VK_FORMAT_R8G8B8A8_UNORM), // albedo
-			Attachment(4, ATTACHMENT_IMAGE, VK_FORMAT_R16G16B16A16_SFLOAT), // normals (world-space)
-			Attachment(5, ATTACHMENT_IMAGE, VK_FORMAT_R8G8B8A8_UNORM), // materials
-		//	Attachment(6, ATTACHMENT_RESOLVE) // resolve
+			Attachment(2, ATTACHMENT_IMAGE, VK_FORMAT_R16G16B16A16_SFLOAT, true), // positions (world-space)
+			Attachment(3, ATTACHMENT_IMAGE, VK_FORMAT_R8G8B8A8_UNORM, true), // diffuse
+			Attachment(4, ATTACHMENT_IMAGE, VK_FORMAT_R16G16B16A16_SFLOAT, true), // normals (world-space)
+			Attachment(5, ATTACHMENT_IMAGE, VK_FORMAT_R8G8B8A8_UNORM, true), // materials
+			Attachment(6, ATTACHMENT_IMAGE, VK_FORMAT_R8G8B8A8_UNORM) // resolved
 		}, // images
 		{
 			SubpassType(0, {0, 2, 3, 4, 5}),
-			SubpassType(1, {1}),
-			SubpassType(2, {1}),
+			SubpassType(1, {6}),
+			SubpassType(2, {1})
 		} // subpasses
 	};
 
 	MainRenderer::MainRenderer() :
 		IManagerRender({RENDERPASS_0_CREATE, RENDERPASS_1_CREATE})
 	{
-		AddRenderer<RendererShadows>(GraphicsStage(0, 0))->SetEnabled(false);
+	//	AddRenderer<RendererShadows>(GraphicsStage(0, 0));
+	
 		AddRenderer<RendererMeshes>(GraphicsStage(1, 0));
 	//	AddRenderer<RendererParticles>(GraphicsStage(1, 0));
 		AddRenderer<RendererDeferred>(GraphicsStage(1, 1));
-		AddRenderer<FilterFxaa>(GraphicsStage(1, 2));
+	//	AddRenderer<RendererFog>(GraphicsStage(1, 1));
+		AddRenderer<FilterDefault>(GraphicsStage(1, 2));
+	//	AddRenderer<FilterFxaa>(GraphicsStage(1, 2));
 	//	AddRenderer<FilterLensflare>(GraphicsStage(1, 2));
 	//	AddRenderer<FilterTiltshift>(GraphicsStage(1, 2));
 	//	AddRenderer<FilterDamage>(GraphicsStage(1, 2));

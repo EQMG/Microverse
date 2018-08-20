@@ -34,7 +34,7 @@ namespace test
 		m_projectionMatrix(Matrix4()),
 		m_viewFrustum(Frustum()),
 		m_viewRay(Ray(false, Vector2(0.5f, 0.5f))),
-		m_angleOfElevation(45.0f),
+		m_angleOfElevation(0.0f),
 		m_angleAroundPlayer(0.0f),
 		m_targetPosition(Vector3()),
 		m_targetRotation(Vector3()),
@@ -70,12 +70,12 @@ namespace test
 		CalculateHorizontalAngle();
 		CalculateVerticalAngle();
 
-		auto player = Scenes::Get()->GetStructure()->GetComponent<FpsPlayer>();
+		auto scenePlayer = Scenes::Get()->GetStructure()->GetComponent<FpsPlayer>();
 
-		if (player != nullptr)
+		if (scenePlayer != nullptr)
 		{
-			auto playerRotation = player->GetGameObject()->GetTransform().GetRotation();
-			auto playerPosition = player->GetGameObject()->GetTransform().GetPosition();
+			auto playerRotation = scenePlayer->GetGameObject()->GetTransform().GetRotation();
+			auto playerPosition = scenePlayer->GetGameObject()->GetTransform().GetPosition();
 
 			m_velocity = (playerPosition - m_targetPosition) / delta;
 			m_targetPosition = playerPosition;

@@ -12,12 +12,12 @@ namespace test
 		m_lightDirection(Vector3())
 	{
 		m_noiseTerrain.SetNoiseType(NoiseType::TYPE_SIMPLEXFRACTAL);
-		m_noiseTerrain.SetFrequency(0.00625f);
+		m_noiseTerrain.SetFrequency(0.004f);
 		m_noiseTerrain.SetInterp(NoiseInterp::INTERP_QUINTIC);
 		m_noiseTerrain.SetFractalType(NoiseFractal::FRACTAL_FBM);
 		m_noiseTerrain.SetFractalOctaves(4);
-		m_noiseTerrain.SetFractalLacunarity(1.8f);
-		m_noiseTerrain.SetFractalGain(0.6f);
+		m_noiseTerrain.SetFractalLacunarity(2.0f);
+		m_noiseTerrain.SetFractalGain(0.5f);
 	}
 
 	World::~World()
@@ -47,7 +47,7 @@ namespace test
 
 	float World::GetTerrainRadius(const float &radius, const float &theta, const float &phi) const
 	{
-		float height = m_noiseTerrain.GetValue(radius * Maths::WrapRadians(theta), radius * Maths::WrapRadians(phi));
-		return radius + (38.0f * height);
+		float height = m_noiseTerrain.GetValueFractal(radius * theta, radius * phi);
+		return radius + (20.0f * height);
 	}
 }
