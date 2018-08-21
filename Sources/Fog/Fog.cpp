@@ -37,21 +37,6 @@ namespace test
 
 	void Fog::Update()
 	{
-		auto camera = Scenes::Get()->GetCamera();
-		auto transform = GetGameObject()->GetTransform();
-
-		Vector3 lightDirection = Vector3(0.0f, 0.0f, 8000.0f) - transform.GetPosition();
-		m_planetToCamera = camera->GetPosition() - transform.GetPosition();
-		Vector3 wavelength = Vector3(std::pow(0.65f, 4.0f), std::pow(0.57f, 4.0f), std::pow(0.475f, 4.0f));
-
-		m_uniformObject.Push("transform", transform.GetWorldMatrix());
-		m_uniformObject.Push("cameraPos", m_planetToCamera);
-		m_uniformObject.Push("lightDir", lightDirection.Normalize());
-		m_uniformObject.Push("invWavelength", 1.0f / wavelength);
-		m_uniformObject.Push("cameraHeight", m_planetToCamera.Length());
-		m_uniformObject.Push("innerRadius", m_radius);
-		m_uniformObject.Push("outerRadius", m_radius * m_thickness);
-		m_uniformObject.Push("scaleDepth", 0.25f);
 	}
 
 	void Fog::Load(LoadedValue *value)
@@ -64,6 +49,22 @@ namespace test
 
 	void Fog::CmdRender(const CommandBuffer &commandBuffer, UniformHandler &uniformScene, const Pipeline &pipeline)
 	{
+		auto camera = Scenes::Get()->GetCamera();
+		auto transform = GetGameObject()->GetTransform();
+
+		Vector3 lightDirection = Vector3(0.0f, 0.0f, 8000.0f) - transform.GetPosition();
+		m_planetToCamera = camera->GetPosition() - transform.GetPosition();
+		Colour wavelength = Colour(std::pow(0.65f, 4.0f), std::pow(0.57f, 4.0f), std::pow(0.475f, 4.0f));
+
+		m_uniformObject.Push("transform", transform.GetWorldMatrix());
+		m_uniformObject.Push("cameraPos", m_planetToCamera);
+		m_uniformObject.Push("lightDir", lightDirection.Normalize());
+		m_uniformObject.Push("invWavelength", 1.0f / wavelength);
+		m_uniformObject.Push("innerRadius", m_radius);
+		m_uniformObject.Push("outerRadius", m_radius * m_thickness);
+		m_uniformObject.Push("scaleDepth", 0.25f);
+		m_uniformObject.Push("samples", 4.0f);
+
 		// Binds the material pipeline.
 		pipeline.BindPipeline(commandBuffer);
 

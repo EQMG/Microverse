@@ -13,10 +13,10 @@ layout(set = 0, binding = 1) uniform UboObject
 	vec3 cameraPos;
 	vec3 lightDir;
 	vec3 invWavelength;
-	float cameraHeight;
 	float innerRadius;
 	float outerRadius;
 	float scaleDepth;
+	float samples;
 } object;
 
 layout(set = 0, location = 0) in vec3 inPosition;

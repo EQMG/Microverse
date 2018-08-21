@@ -127,35 +127,23 @@ namespace test
 		planet2->AddComponent<Fog>();
 		planet2->AddComponent<Mesh>();
 
-		/*GameObject *planet1 = new GameObject(Transform(Vector3(4000.0f, 0.0f, 5000.0f)));
-		planet1->SetName("Planet1");
-		planet1->SetParent(star1);
-		planet1->AddComponent<Planet>(-1, 2500.0f, 1330.0f);
-		planet1->AddComponent<Orbit>();
-		planet1->AddComponent<Mesh>();
-		planet1->AddComponent<MaterialGasGiant>(Texture::Resource("GasGiants/JupiterLookup.png"), -60.0f, 0.0003f);
-		planet1->AddComponent<MeshRender>();
-
-		GameObject *rings1 = new GameObject(Transform());
-		rings1->SetName("Planet1_Rings");
-		rings1->SetParent(planet1);
-		rings1->AddComponent<Ring>(3350.0f, 6100.0f);
-		rings1->AddComponent<Mesh>();
-		rings1->AddComponent<MaterialRing>();
-		rings1->AddComponent<MeshRender>();
-
-		GameObject *planet2 = new GameObject(Transform(Vector3(6500.0f, 100.0f, 2000.0f)));
-		planet2->SetName("Planet2");
-		planet2->AddComponent<Planet>(5444, 400.0f);
-		planet2->AddComponent<Orbit>();
-		planet2->AddComponent<Mesh>();
-
-		GameObject *planet3 = new GameObject(Transform(Vector3(4500.0f, 0.0f, 0.0f)));
-		planet3->SetName("Planet3");
+		GameObject *planet3 = new GameObject(Transform(Vector3(-6000.0f, 0.0f, 500.0f)));
+		planet3->SetName("Plane31");
 		planet3->SetParent(star1);
-		planet3->AddComponent<Planet>(9784, 900.0f);
+		planet3->AddComponent<Planet>(-1, 2500.0f, 1330.0f);
 		planet3->AddComponent<Orbit>();
-		planet3->AddComponent<Mesh>();*/
+		planet3->AddComponent<Fog>(1.1f);
+		planet3->AddComponent<Mesh>();
+		planet3->AddComponent<MaterialGasGiant>(Texture::Resource("GasGiants/JupiterLookup.png"), -60.0f, 0.0003f);
+		planet3->AddComponent<MeshRender>();
+
+		/*GameObject *rings3 = new GameObject(Transform());
+		rings3->SetName("Planet3_Rings");
+		rings3->SetParent(planet3);
+		rings3->AddComponent<Ring>(3350.0f, 6100.0f);
+		rings3->AddComponent<Mesh>();
+		rings3->AddComponent<MaterialRing>();
+		rings3->AddComponent<MeshRender>();*/
 	}
 
 	void Scene1::Update()
