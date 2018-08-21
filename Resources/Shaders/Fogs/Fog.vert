@@ -5,23 +5,35 @@ layout(set = 0, binding = 0) uniform UboScene
 {
 	mat4 projection;
 	mat4 view;
+	vec3 cameraPos;
 } scene;
 
 layout(set = 0, binding = 1) uniform UboObject
 {
 	mat4 transform;
-	vec3 cameraPos;
-	vec3 lightDir;
+
+	vec3 planetPos;
+	vec3 lightPos;
 	vec3 invWavelength;
 	float innerRadius;
 	float outerRadius;
+	float gMie;
+    float KrESun;
+    float KmESun;
+    float Kr4PI;
+    float Km4PI;
+	float scale;
 	float scaleDepth;
+	float scaleOverScaleDepth;
 	float samples;
+
+	float hdrExposure;
 } object;
 
 layout(set = 0, location = 0) in vec3 inPosition;
 
-layout(location = 0) out vec3 outPosition;
+layout(location = 0) out vec3 outWorldPos;
+layout(location = 1) out vec3 outCameraPos;
 
 out gl_PerVertex
 {
@@ -36,5 +48,6 @@ void main()
 
 	gl_Position = scene.projection * scene.view * worldPosition;
 
-    outPosition = inPosition;
+	outWorldPos = worldPosition.xyz;
+	outCameraPos = scene.cameraPos;
 }

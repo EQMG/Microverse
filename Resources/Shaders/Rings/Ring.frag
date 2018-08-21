@@ -34,7 +34,7 @@ void main()
 
 	float u = (len - object.innerRadius) / (object.outerRadius - object.innerRadius);
 
-	vec4 diffuse = texture(samplerRingLookup, vec2(u, 0.0f)).rgba;
+	vec4 diffuse = texture(samplerRingLookup, vec2(u, 0.0f));
 
 	outPosition = vec4(inWorldPos, 1.0);
 	outDiffuse = diffuse;

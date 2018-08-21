@@ -23,13 +23,10 @@ namespace test
 	{
 		m_uniformScene.Push("projection", camera.GetProjectionMatrix());
 		m_uniformScene.Push("view", camera.GetViewMatrix());
+		m_uniformScene.Push("cameraPos", camera.GetPosition());
 
 		auto sceneFogs = Scenes::Get()->GetStructure()->QueryComponents<Fog>();
-
-		std::sort(sceneFogs.begin(), sceneFogs.end(), [](Fog *a, Fog *b) -> bool
-		{
-		    return a->GetPlanetToCamera().LengthSquared() > b->GetPlanetToCamera().LengthSquared();
-		});
+		std::sort(sceneFogs.begin(), sceneFogs.end());
 
 		for (auto &fog : sceneFogs)
 		{

@@ -19,11 +19,10 @@ namespace test
 		std::shared_ptr<Model> m_sphere;
 
 		float m_thickness;
-		float m_radius;
-
-		Vector3 m_planetToCamera;
+		float m_innerRadius;
+		float m_outerRadius;
 	public:
-		Fog(const float &thickness = 1.428f);
+		Fog(const float &thickness = 1.3f);
 
 		~Fog();
 
@@ -39,6 +38,6 @@ namespace test
 
 		UniformHandler GetUniformObject() const { return m_uniformObject; }
 
-		Vector3 GetPlanetToCamera() const { return m_planetToCamera; }
+		bool operator<(const Fog &other) const;
 	};
 }
