@@ -4,16 +4,16 @@
 layout(set = 0, binding = 1) uniform UboObject
 {
 	mat4 transform;
-	vec3 planetPos;
 	vec3 cameraPos;
-	vec3 lightPos;
+	vec3 lightDir;
 	vec3 invWavelength;
 	float cameraHeight;
 	float innerRadius;
 	float outerRadius;
+	float scaleDepth;
 } object;
 
-layout(location = 0) in vec3 inWorldPos;
+layout(location = 0) in vec3 inPosition;
 
 layout(location = 0) out vec4 outColour;
 
@@ -38,23 +38,21 @@ float getNearIntersection(vec3 pos, vec3 ray, float distance2, float radius2)
 	return 0.5f * (-B - sqrt(det));
 }
 
-float scale(float fCos, float fScaleDepth)
+float scale(float fCos)
 {
     float x = 1.0f - fCos;
-    return fScaleDepth * exp(-0.00287f + x * (0.459f + x * (3.83f + x * (-6.80f + x * 5.25f))));
+    return object.scaleDepth * exp(-0.00287f + x * (0.459f + x * (3.83f + x * (-6.80f + x * 5.25f))));
 }
 
 void main()
 {
-	float fScaleDepth = 0.25f;
 	float fSamples = 3.0f;
 	float fScale = 1.0f / (object.outerRadius - object.innerRadius);
-	float fScaleOverScaleDepth = fScale / fScaleDepth;
+	float fScaleOverScaleDepth = fScale / object.scaleDepth;
 
 	// Get the ray from the camera to the vertex and its length (which
 	// is the far point of the ray passing through the atmosphere)
-	vec3 worldPos = inWorldPos - object.planetPos;
-	vec3 v3Ray = worldPos - object.cameraPos;
+	vec3 v3Ray = inPosition - object.cameraPos;
 	float fFar = length(v3Ray);
 	v3Ray /= fFar;
 
@@ -70,14 +68,14 @@ void main()
         v3Start = object.cameraPos + v3Ray * fNear;
         fFar -= fNear;
         float fStartAngle = dot(v3Ray, v3Start) / object.outerRadius;
-        float fStartDepth = exp(-1.0 / fScaleDepth);
-        fStartOffset = fStartDepth * scale(fStartAngle, fScaleDepth);
+        float fStartDepth = exp(-1.0 / object.scaleDepth);
+        fStartOffset = fStartDepth * scale(fStartAngle);
     } else {
         v3Start = object.cameraPos;
         float fHeight = length(v3Start);
         float fDepth = exp(fScaleOverScaleDepth * (object.innerRadius - object.cameraHeight));
         float fStartAngle = dot(v3Ray, v3Start) / fHeight;
-        fStartOffset = fDepth*scale(fStartAngle, fScaleDepth);
+        fStartOffset = fDepth*scale(fStartAngle);
     }
 
 	// Initialize the scattering loop variables
@@ -93,9 +91,9 @@ void main()
 	{
         float fHeight = length(v3SamplePoint);
         float fDepth = exp(fScaleOverScaleDepth * (object.innerRadius - fHeight));
-        float fLightAngle = dot(object.lightPos, v3SamplePoint) / fHeight;
+        float fLightAngle = dot(object.lightDir, v3SamplePoint) / fHeight;
         float fCameraAngle = dot(v3Ray, v3SamplePoint) / fHeight;
-        float fScatter = (fStartOffset + fDepth*(scale(fLightAngle, fScaleDepth) - scale(fCameraAngle, fScaleDepth)));
+        float fScatter = (fStartOffset + fDepth*(scale(fLightAngle) - scale(fCameraAngle)));
         vec3 v3Attenuate = exp(-fScatter * (object.invWavelength * fKr4PI + fKm4PI));
         v3FrontColor += v3Attenuate * (fDepth * fScaledLength);
         v3SamplePoint += v3SampleRay;
@@ -104,9 +102,9 @@ void main()
     // Finally, scale the Mie and Rayleigh colors and set up the varying variables for the pixel shader
     vec4 secondaryColor = vec4(v3FrontColor * fKmESun, 1.0);
     vec4 primaryColor = vec4(v3FrontColor * (object.invWavelength * fKrESun), 1.0);
-    vec3 v3Direction = object.cameraPos - worldPos;
+    vec3 v3Direction = object.cameraPos - inPosition;
 
-    float fCos = dot(object.lightPos, v3Direction) / length(v3Direction);
+    float fCos = dot(object.lightDir, v3Direction) / length(v3Direction);
     float fRayleighPhase = 0.75 * (1.0 + fCos*fCos);
     float fMiePhase = 1.5 * ((1.0 - g2) / (2.0 + g2)) * (1.0 + fCos*fCos) / pow(1.0 + g2 - 2.0*g*fCos, 1.5);
     outColour = fRayleighPhase * primaryColor + fMiePhase * secondaryColor;
