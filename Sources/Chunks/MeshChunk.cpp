@@ -4,8 +4,12 @@
 
 namespace test
 {
-	const std::array<Colour, 4> COLOUR_BIOMES = {
-		Colour("#6e3529"), Colour("#934838"), Colour("#9e402c"), Colour("#656565")
+	const std::array<Colour, 4> COLOUR_BIOMES =
+	{
+		Colour("#6e3529"),
+		Colour("#934838"),
+		Colour("#9e402c"),
+		Colour("#656565")
 	};
 	const float COLOUR_SPREAD = 0.76f;
 	const float COLOUR_HALF_SPREAD = COLOUR_SPREAD / 2.0f;

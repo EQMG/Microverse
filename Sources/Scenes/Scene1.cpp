@@ -27,6 +27,7 @@
 #include "Celestial/Star.hpp"
 #include "FpsCamera.hpp"
 #include "FpsPlayer.hpp"
+#include "Fog/Fog.hpp"
 #include "World/World.hpp"
 
 namespace test
@@ -115,7 +116,16 @@ namespace test
 		planet1->SetParent(star1);
 		planet1->AddComponent<Planet>(6456, 700.0f);
 		planet1->AddComponent<Orbit>();
+		planet1->AddComponent<Fog>();
 		planet1->AddComponent<Mesh>();
+
+		GameObject *planet2 = new GameObject(Transform(Vector3(2000.0f, 0.0f, 500.0f)));
+		planet2->SetName("Planet2");
+		planet2->SetParent(star1);
+		planet2->AddComponent<Planet>(1244, 400.0f);
+		planet2->AddComponent<Orbit>();
+		planet2->AddComponent<Fog>();
+		planet2->AddComponent<Mesh>();
 
 		/*GameObject *planet1 = new GameObject(Transform(Vector3(4000.0f, 0.0f, 5000.0f)));
 		planet1->SetName("Planet1");

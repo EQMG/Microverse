@@ -1,14 +1,16 @@
 ﻿#include "RendererFog.hpp"
 
+#include <algorithm>
 #include <Scenes/Scenes.hpp>
 #include <Models/VertexModel.hpp>
+#include "Fog.hpp"
 
-namespace acid
+namespace test
 {
 	RendererFog::RendererFog(const GraphicsStage &graphicsStage) :
 		IRenderer(graphicsStage),
-		m_pipeline(Pipeline(graphicsStage, PipelineCreate({"Shaders/Fog/Fog.vert", "Shaders/Fog/Fog.frag"},
-			VertexModel::GetVertexInput(), PIPELINE_MODE_POLYGON, VK_POLYGON_MODE_FILL, VK_CULL_MODE_NONE, {}))),
+		m_pipeline(Pipeline(graphicsStage, PipelineCreate({"Shaders/Fogs/Fog.vert", "Shaders/Fogs/Fog.frag"},
+			VertexModel::GetVertexInput(), PIPELINE_MODE_POLYGON, VK_POLYGON_MODE_FILL, VK_CULL_MODE_BACK_BIT, {}))),
 		m_uniformScene(UniformHandler(true))
 	{
 	}
@@ -22,11 +24,16 @@ namespace acid
 		m_uniformScene.Push("projection", camera.GetProjectionMatrix());
 		m_uniformScene.Push("view", camera.GetViewMatrix());
 
-		//auto sceneFogRenders = Scenes::Get()->GetStructure()->QueryComponents<FogRender>();
+		auto sceneFogs = Scenes::Get()->GetStructure()->QueryComponents<Fog>();
 
-		//for (auto &meshRender : sceneFogRenders)
-		//{
-		//	meshRender->CmdRender(commandBuffer, m_uniformScene);
-		//}
+		std::sort(sceneFogs.begin(), sceneFogs.end(), [](Fog *a, Fog *b) -> bool
+		{
+		    return a->GetPlanetToCamera().LengthSquared() > b->GetPlanetToCamera().LengthSquared();
+		});
+
+		for (auto &fog : sceneFogs)
+		{
+			fog->CmdRender(commandBuffer, m_uniformScene, m_pipeline);
+		}
 	}
 }

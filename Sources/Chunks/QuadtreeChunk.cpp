@@ -13,7 +13,8 @@ namespace test
 	const uint32_t QuadtreeChunk::HIGHEST_LOD = 3;
 	const float QuadtreeChunk::DELAY_RENDER = 0.3f;
 	const float QuadtreeChunk::DELAY_PURGE = 6.0f;
-	const std::vector<Vector3> QuadtreeChunk::OFFSETS = {
+	const std::vector<Vector3> QuadtreeChunk::OFFSETS =
+	{
 		Vector3(1.0f, 0.0f, 1.0f),
 		Vector3(1.0f, 0.0f, -1.0f),
 		Vector3(-1.0f, 0.0f, -1.0f),

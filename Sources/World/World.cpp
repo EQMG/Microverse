@@ -8,7 +8,7 @@ namespace test
 	World::World() :
 		IModule(),
 		m_noiseTerrain(Noise(69124)),
-		m_fog(Fog(Colour::BLACK, 0.0f, 2.0f, -10000.0f, -1000.0f)),
+		m_skyFog(SkyFog(Colour::BLACK, 0.0f, 2.0f, -10000.0f, -1000.0f)),
 		m_lightDirection(Vector3())
 	{
 		m_noiseTerrain.SetNoiseType(NoiseType::TYPE_SIMPLEXFRACTAL);
@@ -32,7 +32,7 @@ namespace test
 
 		if (deferred != nullptr)
 		{
-			deferred->SetFog(m_fog);
+			deferred->SetSkyFog(m_skyFog);
 		}
 
 		if (Shadows::Get() != nullptr)
@@ -47,7 +47,7 @@ namespace test
 
 	float World::GetTerrainRadius(const float &radius, const float &theta, const float &phi) const
 	{
-		float height = m_noiseTerrain.GetValueFractal(radius * theta, radius * phi);
-		return radius + (20.0f * height);
+	//	float height = m_noiseTerrain.GetValueFractal(radius * theta, radius * phi);
+		return radius;// + (38.0f * height);
 	}
 }

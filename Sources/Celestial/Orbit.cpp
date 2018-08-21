@@ -35,15 +35,15 @@ namespace test
 
 	void Orbit::Update()
 	{
-		auto parent = GetGameObject()->GetParent();
+	//	auto parent = GetGameObject()->GetParent();
 
-		if (parent == nullptr)
-		{
-			return;
-		}
+	//	if (parent == nullptr)
+	//	{
+	//		return;
+	//	}
 
-		auto celestial = GetGameObject()->GetComponent<ICelestial>();
-		auto parentCelestial = GetGameObject()->GetParent()->GetComponent<ICelestial>();
+	//	auto celestial = GetGameObject()->GetComponent<ICelestial>();
+	//	auto parentCelestial = GetGameObject()->GetParent()->GetComponent<ICelestial>();
 
 	//	Vector3 position = GetGameObject()->GetTransform().GetPosition();
 	//	Vector3 parentPosition = GetGameObject()->GetParent()->GetTransform().GetPosition();

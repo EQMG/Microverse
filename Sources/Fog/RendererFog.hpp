@@ -5,9 +5,11 @@
 #include <Renderer/Handlers/UniformHandler.hpp>
 #include <Renderer/Pipelines/Pipeline.hpp>
 
-namespace acid
+using namespace acid;
+
+namespace test
 {
-	class ACID_EXPORT RendererFog :
+	class RendererFog :
 		public IRenderer
 	{
 	private:

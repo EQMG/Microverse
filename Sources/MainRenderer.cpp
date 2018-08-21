@@ -34,7 +34,7 @@ namespace test
 	{
 		0, 0, // width, height
 		{
-			Attachment(0, ATTACHMENT_DEPTH), // depth
+			Attachment(0, ATTACHMENT_DEPTH, VK_FORMAT_D32_SFLOAT_S8_UINT, true), // depth
 			Attachment(1, ATTACHMENT_SWAPCHAIN), // swapchain
 			Attachment(2, ATTACHMENT_IMAGE, VK_FORMAT_R16G16B16A16_SFLOAT, true), // positions (world-space)
 			Attachment(3, ATTACHMENT_IMAGE, VK_FORMAT_R8G8B8A8_UNORM, true), // diffuse
@@ -44,7 +44,7 @@ namespace test
 		}, // images
 		{
 			SubpassType(0, {0, 2, 3, 4, 5}),
-			SubpassType(1, {6}),
+			SubpassType(1, {0, 6}),
 			SubpassType(2, {1})
 		} // subpasses
 	};
@@ -57,7 +57,7 @@ namespace test
 		AddRenderer<RendererMeshes>(GraphicsStage(1, 0));
 	//	AddRenderer<RendererParticles>(GraphicsStage(1, 0));
 		AddRenderer<RendererDeferred>(GraphicsStage(1, 1));
-	//	AddRenderer<RendererFog>(GraphicsStage(1, 1));
+		AddRenderer<RendererFog>(GraphicsStage(1, 1));
 		AddRenderer<FilterDefault>(GraphicsStage(1, 2));
 	//	AddRenderer<FilterFxaa>(GraphicsStage(1, 2));
 	//	AddRenderer<FilterLensflare>(GraphicsStage(1, 2));

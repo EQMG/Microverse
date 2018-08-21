@@ -5,7 +5,7 @@
 #include <Maths/Visual/DriverLinear.hpp>
 #include <Maths/Vector3.hpp>
 #include <Maths/Colour.hpp>
-#include <Lights/Fog.hpp>
+#include <Lights/SkyFog.hpp>
 
 using namespace acid;
 
@@ -20,7 +20,7 @@ namespace test
 	private:
 		Noise m_noiseTerrain;
 
-		Fog m_fog;
+		SkyFog m_skyFog;
 
 		Vector3 m_lightDirection;
 	public:
@@ -49,7 +49,7 @@ namespace test
 
 		Noise GetTerrainNoise() const { return m_noiseTerrain; }
 
-		Fog GetFog() const { return m_fog; }
+		SkyFog GetSkyFog() const { return m_skyFog; }
 
 		Vector3 GetLightDirection() const { return m_lightDirection; }
 	};

@@ -7,7 +7,8 @@
 
 namespace test
 {
-	const std::vector<std::pair<std::string, Colour>> TABS = {
+	const std::vector<std::pair<std::string, Colour>> TABS =
+	{
 		{"Play",		 Colour("#B8312F")},
 		{"News",		 Colour("#2969af")},
 		{"Achievements", Colour("#41A85F")},
