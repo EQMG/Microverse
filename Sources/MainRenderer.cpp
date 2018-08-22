@@ -15,7 +15,6 @@
 #include <Post/Filters/FilterGrain.hpp>
 #include <Post/Filters/FilterLensflare.hpp>
 #include <Post/Filters/FilterTiltshift.hpp>
-#include <Fog/RendererFog.hpp>
 #include "Post/Filters/FilterDamage.hpp"
 
 namespace test
@@ -57,7 +56,7 @@ namespace test
 		AddRenderer<RendererMeshes>(GraphicsStage(1, 0));
 	//	AddRenderer<RendererParticles>(GraphicsStage(1, 0));
 		AddRenderer<RendererDeferred>(GraphicsStage(1, 1));
-		AddRenderer<RendererFog>(GraphicsStage(1, 1));
+		AddRenderer<RendererMeshes>(GraphicsStage(1, 1), SORT_BACK);
 		AddRenderer<FilterDefault>(GraphicsStage(1, 2));
 	//	AddRenderer<FilterFxaa>(GraphicsStage(1, 2));
 	//	AddRenderer<FilterLensflare>(GraphicsStage(1, 2));

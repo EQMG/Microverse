@@ -17,7 +17,7 @@ namespace test
 	static const float CROUCH_SPEED = 1.2f;
 	static const float JUMP_SPEED = 6.5f;
 	static const float CROUCH_JUMP_SPEED = 3.0f;
-	static const float NOCLIP_SPEED = 50.0f;
+	static const float NOCLIP_SPEED = 30.0f;
 	static const float GRAVITY = -9.81f;
 	static const Vector3 DAMP_NOCLIP = Vector3(10.0f, 10.0f, 10.0f);
 	static const Vector3 DAMP_NORMAL = Vector3(20.0f, 1.0f, 20.0f);

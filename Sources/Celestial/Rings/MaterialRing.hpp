@@ -14,10 +14,12 @@ namespace test
 	private:
 		std::shared_ptr<PipelineMaterial> m_material;
 		std::shared_ptr<Texture> m_ringLookup;
+		float m_innerScale;
+		float m_outerScale;
 		float m_innerRadius;
 		float m_outerRadius;
 	public:
-		MaterialRing();
+		MaterialRing(const float &innerScale = 1.34f, const float &outerScale = 2.44f);
 
 		~MaterialRing();
 

@@ -8,8 +8,8 @@
 namespace test
 {
 	const float FpsCamera::NEAR_PLANE = 0.1f;
-	const float FpsCamera::FAR_PLANE = 250000.0f;
-	const float FpsCamera::FIELD_OF_VIEW = 60.0f;
+	const float FpsCamera::FAR_PLANE = 150000.0f;
+	const float FpsCamera::FIELD_OF_VIEW = 70.0f;
 
 	const float FpsCamera::ROTATE_AGILITY = 32.0f;
 	const float FpsCamera::PITCH_AGILITY = 32.0f;

@@ -5,9 +5,9 @@
 #include <Inputs/Mouse.hpp>
 #include <Renderer/Renderer.hpp>
 #include <Scenes/Scenes.hpp>
-#include "Celestial/Materials/MaterialGasGiant.hpp"
-#include "Celestial/Materials/MaterialRing.hpp"
-#include "Celestial/Ring.hpp"
+#include "Celestial/Fogs/MaterialFog.hpp"
+#include "Celestial/GasGiants/MaterialGasGiant.hpp"
+#include "Celestial/Rings/MaterialRing.hpp"
 #include "Celestial/Gravity.hpp"
 #include "Celestial/Planet.hpp"
 #include "Celestial/Star.hpp"
@@ -47,8 +47,8 @@ int main(int argc, char **argv)
 	Scenes::Get()->RegisterComponent<FpsPlayer>("FpsPlayer");
 	Scenes::Get()->RegisterComponent<Gravity>("Gravity");
 	Scenes::Get()->RegisterComponent<Planet>("Planet");
-	Scenes::Get()->RegisterComponent<Ring>("Ring");
 	Scenes::Get()->RegisterComponent<Star>("Star");
+	Scenes::Get()->RegisterComponent<MaterialFog>("MaterialFog");
 	Scenes::Get()->RegisterComponent<MaterialGasGiant>("MaterialGasGiant");
 	Scenes::Get()->RegisterComponent<MaterialRing>("MaterialRing");
 	Scenes::Get()->RegisterComponent<QuadtreeChunk>("QuadtreeChunk");
