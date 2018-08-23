@@ -68,18 +68,13 @@ namespace test
 
 	void MaterialFog::PushUniforms(UniformHandler &uniformObject)
 	{
-		auto camera = Scenes::Get()->GetCamera();
-		auto transform = GetGameObject()->GetTransform();
-
 		Vector3 lightPos = Vector3(0.0f, 0.0f, 8000.0f);
-		Vector3 planetToCamera = camera->GetPosition() - transform.GetPosition();
 
-		uniformObject.Push("transform", transform.GetWorldMatrix());
+		uniformObject.Push("transform", GetGameObject()->GetTransform().GetWorldMatrix());
 		uniformObject.Push("colourCeiling", Colour::WHITE);
 		uniformObject.Push("colourFloor", Colour::WHITE);
 		uniformObject.Push("colourNight", Colour("#3B445B"));
-		uniformObject.Push("planetPos", transform.GetPosition());
-		uniformObject.Push("cameraPos", camera->GetPosition());
+		uniformObject.Push("planetPos", GetGameObject()->GetTransform().GetPosition());
 		uniformObject.Push("lightPos", lightPos);
 		uniformObject.Push("innerRadius", m_innerRadius);
 		uniformObject.Push("outerRadius", m_outerRadius);

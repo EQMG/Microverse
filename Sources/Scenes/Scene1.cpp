@@ -106,7 +106,7 @@ namespace test
 		star1->AddComponent<Star>(1000.0f);
 		star1->AddComponent<Light>(Colour::WHITE);
 		star1->AddComponent<Mesh>();
-		star1->AddComponent<MaterialDefault>(star1->GetComponent<Star>()->GetColour(), nullptr, 0.0f, 0.0f, nullptr, nullptr, false, true, true);
+		star1->AddComponent<MaterialDefault>(star1->GetComponent<Star>()->GetColour(), nullptr, 1.0f, 0.0f, nullptr, nullptr, false, true, true);
 		star1->AddComponent<MeshRender>();
 
 		/*GameObject *planet1 = new GameObject(Transform(Vector3(0.0f, 0.0f, 5000.0f)));

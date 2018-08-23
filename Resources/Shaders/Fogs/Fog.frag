@@ -16,17 +16,12 @@ layout(set = 0, binding = 1) uniform UboObject
 } object;
 
 layout(location = 0) in vec3 inWorldPos;
-layout(location = 1) in vec3 inCameraPos;
+layout(location = 1) in vec3 inNormal;
+layout(location = 2) in vec3 inCameraPos;
 
 layout(location = 0) out vec4 outColour;
 
 void main()
 {
-	vec3 relCameraPos = inCameraPos - object.planetPos;
-    vec3 relPosition = inWorldPos - object.planetPos;
-    float cameraHeight = length(relCameraPos);
-    vec3 lightDir = normalize(object.lightPos - inWorldPos);
-
-	float a = cameraHeight / object.outerRadius;
-	outColour = vec4(0.0f, 0.0f, a, 0.4f);
+	outColour = vec4(object.colourCeiling.rgb, 0.4f);
 }

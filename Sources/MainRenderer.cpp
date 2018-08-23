@@ -54,9 +54,9 @@ namespace test
 	//	AddRenderer<RendererShadows>(GraphicsStage(0, 0));
 	
 		AddRenderer<RendererMeshes>(GraphicsStage(1, 0));
-	//	AddRenderer<RendererParticles>(GraphicsStage(1, 0));
 		AddRenderer<RendererDeferred>(GraphicsStage(1, 1));
 		AddRenderer<RendererMeshes>(GraphicsStage(1, 1), SORT_BACK);
+	//	AddRenderer<RendererParticles>(GraphicsStage(1, 1));
 		AddRenderer<FilterDefault>(GraphicsStage(1, 2));
 	//	AddRenderer<FilterFxaa>(GraphicsStage(1, 2));
 	//	AddRenderer<FilterLensflare>(GraphicsStage(1, 2));

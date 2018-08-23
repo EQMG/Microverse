@@ -55,6 +55,7 @@ namespace test
 		if (filterLensflare != nullptr)
 		{
 			filterLensflare->SetSunPosition(GetGameObject()->GetTransform().GetPosition());
+			filterLensflare->SetSunHeight(1000.0f);
 		}
 	}
 
