@@ -16,6 +16,7 @@ namespace test
 		m_ringLookup(Texture::Resource("RingLookup.png")),
 		m_innerScale(innerScale),
 		m_outerScale(outerScale),
+		m_planetRadius(700.0f),
 		m_innerRadius(1000.0f),
 		m_outerRadius(1300.0f)
 	{
@@ -35,8 +36,9 @@ namespace test
 
 			if (celestial != nullptr)
 			{
-				m_innerRadius = celestial->GetRadius() * m_innerScale;
-				m_outerRadius = celestial->GetRadius() * m_outerScale;
+				m_planetRadius = celestial->GetRadius();
+				m_innerRadius = m_planetRadius * m_innerScale;
+				m_outerRadius = m_planetRadius * m_outerScale;
 			}
 		}
 
@@ -70,7 +72,13 @@ namespace test
 
 	void MaterialRing::PushUniforms(UniformHandler &uniformObject)
 	{
+		Vector3 planetPos = GetGameObject()->GetParent()->GetTransform().GetPosition();
+		Vector3 lightPos = Vector3(0.0f, 0.0f, 0.0f);
+
 		uniformObject.Push("transform", GetGameObject()->GetTransform().GetWorldMatrix());
+		uniformObject.Push("planetPos", planetPos);
+		uniformObject.Push("lightPos", lightPos);
+		uniformObject.Push("planetRadius", m_planetRadius);
 		uniformObject.Push("innerRadius", m_innerRadius);
 		uniformObject.Push("outerRadius", m_outerRadius);
 	}

@@ -24,7 +24,7 @@ void main()
 		return;
 	}
 
-	vec2 uv = (vec2(gl_GlobalInvocationID.x, gl_GlobalInvocationID.y) + vec2(0.5f, 0.5f)) / vec2(WIDTH, HEIGHT);
+	vec2 uv = (gl_GlobalInvocationID.xy + vec2(0.5f)) / vec2(WIDTH, HEIGHT);
 
 	float xx = cos(uv.y * 50.0f);
 	vec3 position = vec3(uv, 0.0f) + xx * 0.04f;

@@ -5,6 +5,7 @@
 #include <Models/VertexModel.hpp>
 #include <Meshes/Mesh.hpp>
 #include <Scenes/Scenes.hpp>
+#include <Models/Obj/ModelObj.hpp>
 #include "Celestial/ICelestial.hpp"
 
 namespace test
@@ -42,7 +43,8 @@ namespace test
 
 		if (mesh != nullptr)
 		{
-			mesh->SetModel(ModelSphere::Resource(30, 30, m_outerRadius));
+			mesh->SetModel(ModelObj::Resource("Icosphere.obj"));
+		//	mesh->SetModel(ModelSphere::Resource(20, 20, m_outerRadius)); //  * 1.2f
 		}
 	}
 
@@ -68,16 +70,43 @@ namespace test
 
 	void MaterialFog::PushUniforms(UniformHandler &uniformObject)
 	{
-		Vector3 lightPos = Vector3(0.0f, 0.0f, 8000.0f);
+		Transform transform = GetGameObject()->GetTransform();
+		transform.SetScaling(Vector3(m_outerRadius, m_outerRadius, m_outerRadius));
 
-		uniformObject.Push("transform", GetGameObject()->GetTransform().GetWorldMatrix());
-		uniformObject.Push("colourCeiling", Colour::WHITE);
-		uniformObject.Push("colourFloor", Colour::WHITE);
-		uniformObject.Push("colourNight", Colour("#3B445B"));
-		uniformObject.Push("planetPos", GetGameObject()->GetTransform().GetPosition());
+		Vector3 lightPos = Vector3(0.0f, 0.0f, 0.0f);
+
+		Colour wavelength = Colour(std::pow(0.65f, 4.0f), std::pow(0.57f, 4.0f), std::pow(0.475f, 4.0f));
+		float gMie = -0.95f;
+		float gMie2 = gMie * gMie;
+		float KrESun = 0.0025f * 15.0f;
+		float KmESun = 0.0015f * 15.0f;
+		float Kr4PI = 0.0025f * 4.0f * PI;
+		float Km4PI = 0.0015f * 4.0f * PI;
+
+		float scale = 1.0f / (m_outerRadius - m_innerRadius);
+		float scaleDepth = 0.25f;
+		float scaleOverScaleDepth = scale / scaleDepth;
+		float samples = 2.0f;
+
+		float hdrExposure = 0.9f;
+
+		uniformObject.Push("transform", transform.GetWorldMatrix());
+		uniformObject.Push("planetPos", transform.GetPosition());
 		uniformObject.Push("lightPos", lightPos);
+		uniformObject.Push("invWavelength", 1.0f / wavelength);
 		uniformObject.Push("innerRadius", m_innerRadius);
 		uniformObject.Push("outerRadius", m_outerRadius);
+		uniformObject.Push("gMie", gMie);
+		uniformObject.Push("gMie2", gMie2);
+		uniformObject.Push("KrESun", KrESun);
+		uniformObject.Push("KmESun", KmESun);
+		uniformObject.Push("Kr4PI", Kr4PI);
+		uniformObject.Push("Km4PI", Km4PI);
+		uniformObject.Push("scale", scale);
+		uniformObject.Push("scaleDepth", scaleDepth);
+		uniformObject.Push("scaleOverScaleDepth", scaleOverScaleDepth);
+		uniformObject.Push("samples", samples);
+		uniformObject.Push("hdrExposure", hdrExposure);
 	}
 
 	void MaterialFog::PushDescriptors(DescriptorsHandler &descriptorSet)

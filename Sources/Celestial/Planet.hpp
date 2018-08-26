@@ -1,6 +1,8 @@
 #pragma once
 
 #include <memory>
+#include <Maths/Colour.hpp>
+#include <Textures/Texture.hpp>
 #include "ICelestial.hpp"
 
 using namespace acid;
@@ -23,6 +25,8 @@ namespace test
 
 		float m_innerRings; // The ring rule min bounds (Earth radius) += 0.2.
 		float m_outterRings; // The ring rule max bounds (Earth radius) += 0.2.
+
+		Colour *m_heightmap;
 	public:
 		static const float MEDIAN_RADIUS;
 		static const float MEDIAN_DENSITY;
@@ -48,5 +52,7 @@ namespace test
 		float GetMass() const { return m_mass; }
 
 		float GetDensity() const { return m_density; }
+	private:
+		void GenerateHeightmap();
 	};
 }

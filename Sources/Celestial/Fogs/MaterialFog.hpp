@@ -17,7 +17,7 @@ namespace test
 		float m_innerRadius;
 		float m_outerRadius;
 	public:
-		MaterialFog(const float &thickness = 1.41f);
+		MaterialFog(const float &thickness = 1.3f);
 
 		~MaterialFog();
 

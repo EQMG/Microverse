@@ -16,6 +16,7 @@ namespace test
 		std::shared_ptr<Texture> m_ringLookup;
 		float m_innerScale;
 		float m_outerScale;
+		float m_planetRadius;
 		float m_innerRadius;
 		float m_outerRadius;
 	public:
