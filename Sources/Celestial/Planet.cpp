@@ -31,7 +31,8 @@ namespace test
 		m_axialPolar(90.0f - axialTilt),
 		m_innerRings(1.34f * (m_radius / MEDIAN_RADIUS)),
 		m_outterRings(2.44f * (m_radius / MEDIAN_RADIUS)),
-		m_heightmap(nullptr)
+		m_heightmap(std::vector<Colour>()),
+		m_heightmapSize(3072)
 	{
 		float surfaceGravity = Star::G_CONSTANT * m_mass / std::pow(m_radius, 2.0f);
 
@@ -40,7 +41,6 @@ namespace test
 
 	Planet::~Planet()
 	{
-		free(m_heightmap);
 	}
 
 	void Planet::Start()
@@ -86,15 +86,30 @@ namespace test
 	{
 	}
 
+	Colour Planet::GetColour(const Vector3 &cartesian)
+	{
+		float u = ((std::atan2(cartesian.m_z / m_radius, cartesian.m_x / m_radius) / PI) + 1.0f) / 2.0f;
+		float v = 0.5f - (std::asin(cartesian.m_y / m_radius) / PI);
+
+		return m_heightmap[uint32_t(u * m_heightmapSize) * (m_heightmapSize - 1) + uint32_t(v * m_heightmapSize)];
+	}
+
+	float Planet::GetRadius(const Vector3 &cartesian)
+	{
+		Colour heightmap = GetColour(cartesian);
+		float height = 38.0f * ((2.0f * heightmap.m_r) - 1.0f);
+		return m_radius + height;
+	}
+
 	void Planet::GenerateHeightmap()
 	{
 #if ACID_VERBOSE
 		float debugStart = Engine::Get()->GetTimeMs();
 #endif
-		auto result = std::make_shared<Texture>(3072, 3072);
+		auto result = std::make_shared<Texture>(m_heightmapSize, m_heightmapSize);
 
 		CommandBuffer commandBuffer = CommandBuffer(true, VK_QUEUE_GRAPHICS_BIT);
-		Compute compute = Compute(ComputeCreate("Shaders/Planet/Planet.comp", 3072, 3072, 32, {}));
+		Compute compute = Compute(ComputeCreate("Shaders/Planet/Planet.comp", m_heightmapSize, m_heightmapSize, 32, {}));
 
 		// Bind the pipeline.
 		compute.BindPipeline(commandBuffer);
@@ -119,23 +134,27 @@ namespace test
 		commandBuffer.Submit();
 
 		uint8_t *pixels = result->GetPixels();
+		test = result;
 
-#if ACID_VERBOSE
+/*#if ACID_VERBOSE
 		// Saves the planet texture.
 		std::string filename = FileSystem::GetWorkingDirectory() + "/Planet.png";
 		FileSystem::ClearFile(filename);
 		Texture::WritePixels(filename, pixels, result->GetWidth(), result->GetHeight(), result->GetComponents());
-#endif
+#endif*/
 
 		uint32_t pixelCount = result->GetWidth() * result->GetHeight();
-		m_heightmap = (Colour *)malloc(sizeof(Colour) * pixelCount);
+		m_heightmap.reserve(pixelCount);
 
-		for (int i = 0; i < pixelCount; i++)
+		for (uint32_t i = 0; i < pixelCount; i++)
 		{
-			m_heightmap[i].m_r = static_cast<float>(pixels[i * 4]) / 255.0f;
-			m_heightmap[i].m_g = static_cast<float>(pixels[i * 4 + 1]) / 255.0f;
-			m_heightmap[i].m_b = static_cast<float>(pixels[i * 4 + 2]) / 255.0f;
-			m_heightmap[i].m_a = static_cast<float>(pixels[i * 4 + 3]) / 255.0f;
+			uint8_t *pixelOffset = pixels + (i * result->GetComponents());
+			float r = static_cast<float>(pixelOffset[0]) / 255.0f;
+			float g = static_cast<float>(pixelOffset[1]) / 255.0f;
+			float b = static_cast<float>(pixelOffset[2]) / 255.0f;
+			float a = result->GetComponents() >= 4 ? static_cast<float>(pixelOffset[3]) / 255.0f : 0xff;
+
+			m_heightmap[i] = Colour(r, g, b, a);
 		}
 
 		delete[] pixels;

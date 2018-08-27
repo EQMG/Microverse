@@ -18,10 +18,7 @@ namespace test
 		public IModule
 	{
 	private:
-		Noise m_noiseTerrain;
-
 		Fog m_fog;
-
 		Vector3 m_lightDirection;
 	public:
 		/// <summary>
@@ -44,10 +41,6 @@ namespace test
 		~World();
 
 		void Update() override;
-
-		float GetTerrainRadius(const float &radius, const float &theta, const float &phi) const;
-
-		Noise GetTerrainNoise() const { return m_noiseTerrain; }
 
 		Fog GetFog() const { return m_fog; }
 

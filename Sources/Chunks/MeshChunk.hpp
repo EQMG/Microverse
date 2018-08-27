@@ -5,6 +5,7 @@
 #include <Maths/Colour.hpp>
 #include <Maths/Matrix4.hpp>
 #include <Maths/Transform.hpp>
+#include "Celestial/Planet.hpp"
 
 using namespace acid;
 
@@ -24,18 +25,19 @@ namespace test
 		public MeshSimple
 	{
 	private:
-		float m_radius;
+		Planet *m_parent;
+
 		Matrix4 m_worldMatrix;
 		EdgeFlags m_edgeConditions;
 	public:
-		MeshChunk(const float &sideLength, const float &squareSize, const int &vertexCount, const float &textureScale, const float &radius, const Transform &transform);
+		MeshChunk(Planet *parent, const float &sideLength, const float &squareSize, const int &vertexCount, const float &textureScale, const Transform &transform);
 
 		~MeshChunk();
 
-		virtual Vector3 GetPosition(const float &x, const float &z) override;
+		VertexModel *GetVertex(const uint32_t &col, const uint32_t &row) override;
+	private:
+		Vector3 GetPosition(const float &x, const float &z);
 
-		virtual Vector3 GetNormal(const float &x, const float &z, const Vector3 &position) override;
-
-		virtual Vector3 GetColour(const Vector3 &position, const Vector3 &normal) override;
+		Vector3 GetNormal(const float &x, const float &z);
 	};
 }

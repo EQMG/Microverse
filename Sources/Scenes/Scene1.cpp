@@ -123,12 +123,12 @@ namespace test
 		planet2->AddComponent<Orbit>();
 		planet2->AddComponent<Mesh>();
 
-		GameObject *fog2 = new GameObject(Transform());
-		fog2->SetName("Planet2_Fog");
-		fog2->SetParent(planet2);
-		fog2->AddComponent<Mesh>();
-		fog2->AddComponent<MaterialFog>();
-		fog2->AddComponent<MeshRender>();
+//		GameObject *fog2 = new GameObject(Transform());
+//		fog2->SetName("Planet2_Fog");
+//		fog2->SetParent(planet2);
+//		fog2->AddComponent<Mesh>();
+//		fog2->AddComponent<MaterialFog>();
+//		fog2->AddComponent<MeshRender>();
 
 		/*GameObject *planet3 = new GameObject(Transform(Vector3(0.0f, 0.0f, 18000.0f)));
 		planet3->SetName("Planet3");

@@ -139,7 +139,7 @@ namespace test
 		Vector3 rotation = GetGameObject()->GetTransform().GetRotation();
 
 		// Planet collision.
-		if (!m_noclipEnabled)
+		/*if (!m_noclipEnabled)
 		{
 			Vector3 cartesian = position - Vector3::ZERO;
 			Vector3 polar = cartesian.CartesianToPolar();
@@ -154,7 +154,7 @@ namespace test
 				m_jumping = false;
 			//	newPosition.m_y = groundHeight;
 			}
-		}
+		}*/
 
 		// Calculates the deltas to the moved distance, and rotation.
 		float theta = Maths::Radians(cameraRotation.m_y);

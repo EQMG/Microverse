@@ -16,9 +16,9 @@ namespace test
 	const float COLOUR_AMPLITUDE = 28.0f;
 	const float COLOUR_PART = 1.0f / (COLOUR_BIOMES.size() - 1);
 
-	MeshChunk::MeshChunk(const float &sideLength, const float &squareSize, const int &vertexCount, const float &textureScale, const float &radius, const Transform &transform) :
+	MeshChunk::MeshChunk(Planet *planet, const float &sideLength, const float &squareSize, const int &vertexCount, const float &textureScale, const Transform &transform) :
 		MeshSimple(sideLength, squareSize, vertexCount, textureScale),
-		m_radius(radius),
+		m_parent(planet),
 		m_worldMatrix(transform.GetWorldMatrix()),
 		m_edgeConditions(EDGE_EAST | EDGE_SOUTH)
 	{
@@ -29,21 +29,43 @@ namespace test
 	{
 	}
 
+	VertexModel *MeshChunk::GetVertex(const uint32_t &col, const uint32_t &row)
+	{
+		float x = ((row * m_squareSize) - m_sideLength) / 2.0f;
+		float z = ((col * m_squareSize) - m_sideLength) / 2.0f;
+
+		Vector3 cartesian = Vector3(m_worldMatrix.Multiply(Vector4(x, 0.0f, z, 1.0f)));
+		cartesian = cartesian.ProjectCubeToSphere(m_parent->GetRadius());
+
+		Vector3 polar = cartesian.CartesianToPolar();
+		polar.m_x = m_parent->GetRadius(cartesian);
+		Vector3 position = polar.PolarToCartesian();
+
+		Vector2 uv = Vector2(
+			((std::atan2(cartesian.m_z / m_parent->GetRadius(), cartesian.m_x / m_parent->GetRadius()) / PI) + 1.0f) / 2.0f,
+			0.5f - (std::asin(cartesian.m_y / m_parent->GetRadius()) / PI)
+		); // Vector2::ZERO
+		Vector3 normal = GetNormal(x, z); // Vector3::ZERO
+		Colour colour = m_parent->GetColour(cartesian); // Colour::WHITE
+		return new VertexModel(position, uv, normal, colour);
+	}
+
 	Vector3 MeshChunk::GetPosition(const float &x, const float &z)
 	{
 		Vector3 cartesian = Vector3(m_worldMatrix.Multiply(Vector4(x, 0.0f, z, 1.0f)));
 
-		if (m_radius == 0.0f)
+		if (m_parent->GetRadius() == 0.0f)
 		{
 			return cartesian;
 		}
 
-		Vector3 polar = cartesian.ProjectCubeToSphere(m_radius).CartesianToPolar();
-		polar.m_x = World::Get()->GetTerrainRadius(m_radius, polar.m_y, polar.m_z);
+		cartesian = cartesian.ProjectCubeToSphere(m_parent->GetRadius());
+		Vector3 polar = cartesian.CartesianToPolar();
+		polar.m_x = m_parent->GetRadius(cartesian);
 		return polar.PolarToCartesian();
 	}
 
-	Vector3 MeshChunk::GetNormal(const float &x, const float &z, const Vector3 &position)
+	Vector3 MeshChunk::GetNormal(const float &x, const float &z)
 	{
 		Vector3 positionL = GetPosition(x - 1.0f, z);
 		Vector3 positionR = GetPosition(x + 1.0f, z);
@@ -52,18 +74,5 @@ namespace test
 
 		Vector3 normal = (positionL - positionR).Cross(positionR - positionD);
 		return normal.Normalize();
-	//	return Vector3::ZERO;
-	}
-
-	Vector3 MeshChunk::GetColour(const Vector3 &position, const Vector3 &normal)
-	{
-		/*Vector3 polar = position.CartesianToPolar();
-		float value = (polar.m_x - m_radius + COLOUR_AMPLITUDE) / (COLOUR_AMPLITUDE * 2.0f);
-		value = Maths::Clamp((value - COLOUR_HALF_SPREAD) * (1.0f / COLOUR_SPREAD), 0.0f, 0.9999f);
-		int firstBiome = static_cast<int>(std::floor(value / COLOUR_PART));
-		float blend = (value - (firstBiome * COLOUR_PART)) / COLOUR_PART;
-		Colour colour = COLOUR_BIOMES.at(firstBiome).Interpolate(COLOUR_BIOMES.at(firstBiome + 1), blend);
-		return colour;*/
-		return Colour::WHITE;
 	}
 }

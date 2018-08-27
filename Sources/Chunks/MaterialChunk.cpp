@@ -2,6 +2,7 @@
 
 #include <Objects/GameObject.hpp>
 #include <Models/VertexModel.hpp>
+#include <Celestial/Planet.hpp>
 
 namespace test
 {
@@ -39,5 +40,6 @@ namespace test
 
 	void MaterialChunk::PushDescriptors(DescriptorsHandler &descriptorSet)
 	{
+		descriptorSet.Push("test", GetGameObject()->GetParent()->GetComponent<Planet>()->test);
 	}
 }

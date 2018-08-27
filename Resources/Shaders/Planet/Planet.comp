@@ -21,13 +21,14 @@ void main()
 
 	vec2 uv = (gl_GlobalInvocationID.xy + vec2(0.5f)) / vec2(WIDTH, HEIGHT);
 
-	float height = ridgedNoise(vec3(uv * object.scale, 0.0f), 10, 1.7f, 0.7f);
+	float height = ridgedNoise(vec3(uv * object.scale, 0.0f), 6, 1.7f, 0.5f);
 	height -= 0.15f;
 	vec2 biome = vec2(1.0f);
 
 	if (height <= 0.0f)
 	{
 		biome = vec2(0.0f, 1.0f);
+		height = -1.0f;
 	}
 	else
 	{

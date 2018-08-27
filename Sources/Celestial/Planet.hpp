@@ -26,8 +26,10 @@ namespace test
 		float m_innerRings; // The ring rule min bounds (Earth radius) += 0.2.
 		float m_outterRings; // The ring rule max bounds (Earth radius) += 0.2.
 
-		Colour *m_heightmap;
+		std::vector<Colour> m_heightmap;
+		uint32_t m_heightmapSize;
 	public:
+		std::shared_ptr<Texture> test;
 		static const float MEDIAN_RADIUS;
 		static const float MEDIAN_DENSITY;
 		static const float MEDIAN_MASS;
@@ -44,6 +46,10 @@ namespace test
 		void Load(LoadedValue *value) override;
 
 		void Write(LoadedValue *destination) override;
+
+		Colour GetColour(const Vector3 &cartesian);
+
+		float GetRadius(const Vector3 &cartesian);
 
 		int GetSeed() const { return m_seed; }
 

@@ -56,7 +56,7 @@ namespace test
 #endif
 		int vertexCount = CalculateVertexCount(m_sideLength, m_squareSize);
 		float textureScale = CalculateTextureScale(m_sideLength);
-		mesh->SetModel(std::make_shared<MeshChunk>(m_sideLength, m_squareSize, vertexCount, textureScale, m_parent->GetRadius(), m_transform));
+		mesh->SetModel(std::make_shared<MeshChunk>(m_parent, m_sideLength, m_squareSize, vertexCount, textureScale, m_transform));
 #if ACID_VERBOSE
 		float debugEnd = Engine::Get()->GetTimeMs();
 
