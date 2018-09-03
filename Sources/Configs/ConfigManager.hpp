@@ -1,20 +1,22 @@
 #pragma once
 
-#include <Files/Config.hpp>
+#include <Files/IFile.hpp>
 
 using namespace acid;
 
-namespace test
+namespace micro
 {
 	class ConfigManager
 	{
 	private:
-		Config m_configAudio;
-		Config m_configGraphics;
+		std::unique_ptr<IFile> m_audio;
+		std::unique_ptr<IFile> m_graphics;
 	public:
 		ConfigManager();
 
 		~ConfigManager();
+
+		void Load();
 
 		void Save();
 	};

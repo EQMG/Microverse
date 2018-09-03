@@ -5,7 +5,7 @@
 #include <Maths/Maths.hpp>
 #include "FpsPlayer.hpp"
 
-namespace test
+namespace micro
 {
 	const float FpsCamera::NEAR_PLANE = 0.1f;
 	const float FpsCamera::FAR_PLANE = 150000.0f;

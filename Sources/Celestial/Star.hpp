@@ -5,7 +5,7 @@
 
 using namespace acid;
 
-namespace test
+namespace micro
 {
 	class Star :
 		public ICelestial
@@ -39,9 +39,9 @@ namespace test
 
 		void Update() override;
 
-		void Load(LoadedValue *value) override;
+		void Decode(const Node &node) override;
 
-		void Write(LoadedValue *destination) override;
+		void Encode(Node &node) const override;
 
 		static Colour CalculateColour(const float &surfaceTemperature);
 

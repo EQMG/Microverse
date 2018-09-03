@@ -8,7 +8,7 @@
 #include <Events/Events.hpp>
 #include "MaterialChunk.hpp"
 
-namespace test
+namespace micro
 {
 	const uint32_t QuadtreeChunk::HIGHEST_LOD = 3;
 	const float QuadtreeChunk::DELAY_RENDER = 0.3f;
@@ -28,7 +28,7 @@ namespace test
 		m_sideLength(sideLength),
 		m_squareSize(squareSize),
 		m_transform(transform),
-		m_children(std::vector<QuadtreeChunk *>()),
+		m_children(std::vector<std::shared_ptr<QuadtreeChunk>>()),
 		m_subdivided(false),
 		m_lastChanged(0.0f)
 	{
@@ -47,14 +47,14 @@ namespace test
 
 		if (mesh == nullptr)
 		{
-			fprintf(stderr, "Lod Behaviour must be attached to a object with a mesh!");
+			Log::Error("Lod Behaviour must be attached to a object with a mesh!");
 			return;
 		}
 
 #if ACID_VERBOSE
 		float debugStart = Engine::Get()->GetTimeMs();
 #endif
-		int vertexCount = CalculateVertexCount(m_sideLength, m_squareSize);
+		uint32_t vertexCount = CalculateVertexCount(m_sideLength, m_squareSize);
 		float textureScale = CalculateTextureScale(m_sideLength);
 		mesh->SetModel(std::make_shared<MeshChunk>(m_parent, m_sideLength, m_squareSize, vertexCount, textureScale, m_transform));
 #if ACID_VERBOSE
@@ -89,11 +89,11 @@ namespace test
 		}
 	}
 
-	void QuadtreeChunk::Load(LoadedValue *value)
+	void QuadtreeChunk::Decode(const Node &node)
 	{
 	}
 
-	void QuadtreeChunk::Write(LoadedValue *destination)
+	void QuadtreeChunk::Encode(Node &node) const
 	{
 	}
 
@@ -120,7 +120,7 @@ namespace test
 		chunkPosition = Vector3(worldMatrix.Multiply(chunkPosition));
 		float distance = std::fabs(chunkPosition.Distance(cameraPosition));
 		float lod = std::floor((-1.618f / m_parent->GetRadius()) * distance + (HIGHEST_LOD + 1));
-		return static_cast<uint32_t>(Maths::Clamp(lod, 0.0f, HIGHEST_LOD));
+		return static_cast<uint32_t>(std::clamp(lod, 0.0f, static_cast<float>(HIGHEST_LOD)));
 	}
 
 	void QuadtreeChunk::SetVisible(const bool &visible, const float &timeout)
@@ -163,11 +163,6 @@ namespace test
 
 	//	printf("Deleting %i children!\n", (int)m_children.size());
 
-		for (auto &child : m_children)
-		{
-			delete child;
-		}
-
 		m_children.clear();
 	}
 
@@ -182,7 +177,7 @@ namespace test
 			for (auto &child : m_children)
 			{
 				child->SetVisible(true, 0.0f);
-				child->GetGameObject()->SetStructure(Scenes::Get()->GetStructure());
+				child->GetGameObject()->SetStructure(Scenes::Get()->GetStructure().get());
 			}
 
 			return;
@@ -213,9 +208,9 @@ namespace test
 		}
 	}
 
-	int QuadtreeChunk::CalculateVertexCount(const float &sideLength, const float &squareSize)
+	uint32_t QuadtreeChunk::CalculateVertexCount(const float &sideLength, const float &squareSize)
 	{
-		return static_cast<int>((2.0f * sideLength) / static_cast<float>(squareSize)) + 1;
+		return static_cast<uint32_t>((2.0f * sideLength) / static_cast<float>(squareSize)) + 1;
 	}
 
 	float QuadtreeChunk::CalculateTextureScale(const float &squareSize)

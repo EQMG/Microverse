@@ -7,7 +7,7 @@
 #include <Helpers/FileSystem.hpp>
 #include "Celestial/Planet.hpp"
 
-namespace test
+namespace micro
 {
 	MaterialGasGiant::MaterialGasGiant(const std::shared_ptr<Texture> &bandLookup, const float &hueOffset, const float &timeScale) :
 		IMaterial(),
@@ -49,16 +49,16 @@ namespace test
 		}*/
 	}
 
-	void MaterialGasGiant::Load(LoadedValue *value)
+	void MaterialGasGiant::Decode(const Node &node)
 	{
-		m_hueOffset = value->GetChild("Hue Offset")->Get<float>();
-		m_timeScale = value->GetChild("Time Scale")->Get<float>();
+		m_hueOffset = node.GetChild<float>("Hue Offset");
+		m_timeScale = node.GetChild<float>("Time Scale");
 	}
 
-	void MaterialGasGiant::Write(LoadedValue *destination)
+	void MaterialGasGiant::Encode(Node &node) const
 	{
-		destination->GetChild("Hue Offset", true)->Set(m_hueOffset);
-		destination->GetChild("Time Scale", true)->Set(m_timeScale);
+		node.SetChild("Hue Offset", m_hueOffset);
+		node.SetChild("Time Scale", m_timeScale);
 	}
 
 	void MaterialGasGiant::PushUniforms(UniformHandler &uniformObject)
@@ -106,7 +106,7 @@ namespace test
 		commandBuffer.Submit();
 #if ACID_VERBOSE
 		float debugEnd = Engine::Get()->GetTimeMs();
-		fprintf(stdout, "Computed gas giant diffuse in %fms\n", debugEnd - debugStart);
+		Log::Out("Computed gas giant diffuse in %fms\n", debugEnd - debugStart);
 #endif
 	}
 

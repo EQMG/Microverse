@@ -4,7 +4,9 @@
 #include <Post/IPostFilter.hpp>
 #include <Maths/Visual/IDriver.hpp>
 
-namespace acid
+using namespace acid;
+
+namespace micro
 {
 	class FilterDamage :
 		public IPostFilter

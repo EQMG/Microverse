@@ -10,7 +10,7 @@
 
 using namespace acid;
 
-namespace test
+namespace micro
 {
 	class QuadtreeChunk :
 		public IComponent
@@ -23,7 +23,7 @@ namespace test
 		float m_squareSize;
 		Transform m_transform;
 
-		std::vector<QuadtreeChunk *> m_children;
+		std::vector<std::shared_ptr<QuadtreeChunk>> m_children;
 		bool m_subdivided;
 		bool m_visible;
 		float m_lastChanged;
@@ -41,9 +41,9 @@ namespace test
 
 		void Update() override;
 
-		void Load(LoadedValue *value) override;
+		void Decode(const Node &node) override;
 
-		void Write(LoadedValue *destination) override;
+		void Encode(Node &node) const override;
 
 		static GameObject *CreateChunk(Planet *parent, const Transform &transform, const uint32_t &lod = 0, const float &sideLength = 100.0f, const float &squareSize = 100.0f, const std::string &namePostfix = "");
 
@@ -57,7 +57,7 @@ namespace test
 
 		void Merge();
 	private:
-		static int CalculateVertexCount(const float &sideLength, const float &squareSize);
+		static uint32_t CalculateVertexCount(const float &sideLength, const float &squareSize);
 
 		static float CalculateTextureScale(const float &squareSize);
 	};

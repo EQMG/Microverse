@@ -3,7 +3,7 @@
 #include <Maths/Visual/DriverConstant.hpp>
 #include "UiNavigation.hpp"
 
-namespace test
+namespace micro
 {
 	UiTab::UiTab(UiObject *parent, UiObject *content, const UiBound &rectangle, const std::string &name, const Colour &colour) :
 		UiObject(parent, rectangle),
@@ -14,11 +14,17 @@ namespace test
 		m_width(m_text->GetRectangle().m_dimensions.m_x * 1.6f),
 		m_soundClick(new Sound("Sounds/Button1.ogg", 0.9f))
 	{
-		this->SetActionLeft([&]()
+		this->SetActionClick([&](MouseButton button) -> bool
 		{
-			dynamic_cast<UiNavigation *>(GetParent())->SwitchTab(m_name);
-			m_soundClick->SetPitch(Maths::Random(0.3f, 0.7f));
-			m_soundClick->Play();
+		    if (button == MOUSE_BUTTON_LEFT)
+		    {
+		        dynamic_cast<UiNavigation *>(GetParent())->SwitchTab(m_name);
+		        m_soundClick->SetPitch(Maths::Random(0.3f, 0.7f));
+		        m_soundClick->Play();
+		        return true;
+		    }
+
+		    return false;
 		});
 		m_content->SetAlphaDriver<DriverConstant>(0.0f);
 	}

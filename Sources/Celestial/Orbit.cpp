@@ -1,10 +1,11 @@
 #include "Orbit.hpp"
-#include "Star.hpp"
 
+#include <Engine/Log.hpp>
 #include <Maths/Maths.hpp>
 #include <Objects/GameObject.hpp>
+#include "Star.hpp"
 
-namespace test
+namespace micro
 {
 	Orbit::Orbit(const float &eccentricity, const float &semiMajorAxis, const float &parentMass, const float &pitch, const float &yaw, const float &roll) :
 		IComponent(),
@@ -19,7 +20,7 @@ namespace test
 		m_yaw(yaw),
 		m_roll(roll)
 	{
-		fprintf(stdout, "Orbit: Eccentricity=%f, Semimajor Axis (AU)=%f, Semiminor Axis (AU)=%f, Periapsis(AU)=%f, Apoapsis(AU)=%f, Period(Days)=%f, "
+		Log::Out("Orbit: Eccentricity=%f, Semimajor Axis (AU)=%f, Semiminor Axis (AU)=%f, Periapsis(AU)=%f, Apoapsis(AU)=%f, Period(Days)=%f, "
 				  "Velocity(m/s)=%f, Pitch(Deg)=%f, Yaw(Deg)=%f, Roll(Deg)=%f\n",
 			m_eccentricity, m_semiMajorAxis, m_semiMinorAxis, m_periapsis, m_apoapsis, m_period,
 			m_velocity, m_pitch, m_yaw, m_roll);
@@ -51,12 +52,11 @@ namespace test
 	//	GetGameObject()->GetTransform().SetPosition(position + (Vector3::FRONT * force));
 	}
 
-	void Orbit::Load(LoadedValue *value)
+	void Orbit::Decode(const Node &node)
 	{
-		// TODO
 	}
 
-	void Orbit::Write(LoadedValue *destination)
+	void Orbit::Encode(Node &node) const
 	{
 	}
 }

@@ -6,7 +6,7 @@
 
 using namespace acid;
 
-namespace test
+namespace micro
 {
 	class ContentExit :
 		public UiObject

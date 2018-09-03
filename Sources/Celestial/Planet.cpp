@@ -12,7 +12,7 @@
 #include "Chunks/MaterialChunk.hpp"
 #include "Star.hpp"
 
-namespace test
+namespace micro
 {
 	const float Planet::MEDIAN_RADIUS = 700.0f; // +- 50.0%
 	const float Planet::MEDIAN_DENSITY = 5510.0f;
@@ -36,7 +36,7 @@ namespace test
 	{
 		float surfaceGravity = Star::G_CONSTANT * m_mass / std::pow(m_radius, 2.0f);
 
-		fprintf(stdout, "Planet: Radius(m)=%f, Density(kg/m^3)=%f, Mass(kg)=%f, Surface Gravity(m/s^2)=%f, Escape Velocity(m/s)=%f\n", m_radius, m_density, m_mass, surfaceGravity, m_escapeVelocity);
+		Log::Out("Planet: Radius(m)=%f, Density(kg/m^3)=%f, Mass(kg)=%f, Surface Gravity(m/s^2)=%f, Escape Velocity(m/s)=%f\n", m_radius, m_density, m_mass, surfaceGravity, m_escapeVelocity);
 	}
 
 	Planet::~Planet()
@@ -77,21 +77,20 @@ namespace test
 	{
 	}
 
-	void Planet::Load(LoadedValue *value)
+	void Planet::Decode(const Node &node)
 	{
-		// TODO
 	}
 
-	void Planet::Write(LoadedValue *destination)
+	void Planet::Encode(Node &node) const
 	{
 	}
 
 	Colour Planet::GetColour(const Vector3 &cartesian)
 	{
-		float u = ((std::atan2(cartesian.m_z / m_radius, cartesian.m_x / m_radius) / PI) + 1.0f) / 2.0f;
-		float v = 0.5f - (std::asin(cartesian.m_y / m_radius) / PI);
+		//float u = ((std::atan2(cartesian.m_z / m_radius, cartesian.m_x / m_radius) / PI) + 1.0f) / 2.0f;
+		//float v = 0.5f - (std::asin(cartesian.m_y / m_radius) / PI);
 
-		return m_heightmap[uint32_t(u * m_heightmapSize) * (m_heightmapSize - 1) + uint32_t(v * m_heightmapSize)];
+		return Colour::CLEAR; //  m_heightmap[uint32_t(u * m_heightmapSize) * (m_heightmapSize - 1) + uint32_t(v * m_heightmapSize)];
 	}
 
 	float Planet::GetRadius(const Vector3 &cartesian)
@@ -154,14 +153,14 @@ namespace test
 			float b = static_cast<float>(pixelOffset[2]) / 255.0f;
 			float a = result->GetComponents() >= 4 ? static_cast<float>(pixelOffset[3]) / 255.0f : 0xff;
 
-			m_heightmap[i] = Colour(r, g, b, a);
+		//	m_heightmap[i] = Colour(r, g, b, a);
 		}
 
 		delete[] pixels;
 
 #if ACID_VERBOSE
 		float debugEnd = Engine::Get()->GetTimeMs();
-		fprintf(stdout, "Computed planet in %fms\n", debugEnd - debugStart);
+		Log::Out("Computed planet in %fms\n", debugEnd - debugStart);
 #endif
 	}
 }

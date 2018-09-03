@@ -15,29 +15,23 @@
 #include "Chunks/MaterialChunk.hpp"
 #include "World/World.hpp"
 #include "Configs/ConfigManager.hpp"
-#include "MainUpdater.hpp"
 #include "MainRenderer.hpp"
 #include "Scenes/FpsPlayer.hpp"
 #include "Scenes/Scene1.hpp"
 
-using namespace test;
+using namespace micro;
 using namespace acid;
 
-//#if (ACID_BUILD_RELEASE && ACID_BUILD_WINDOWS)
-//int CALLBACK WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR pCmdLine, int nCmdShow)
-//#else
 int main(int argc, char **argv)
-//#endif
 {
 	// Registers file search paths.
 	Files::AddSearchPath("Resources/Game");
 	Files::AddSearchPath("Resources/Engine");
 
-	// Creates the engine and updater objects.
-	auto engine = new Engine();
-	engine->SetUpdater(new MainUpdater());
+	// Creates the engine.
+	auto engine = std::make_unique<Engine>();
 
-	auto configManager = new ConfigManager();
+	auto configManager = std::make_unique<ConfigManager>();
 	printf("Working Directory: %s\n", FileSystem::GetWorkingDirectory().c_str());
 
 	// Registers modules.
@@ -62,11 +56,9 @@ int main(int argc, char **argv)
 	Scenes::Get()->SetScene(new Scene1());
 
 	// Runs the game loop.
-	auto exitCode = engine->Run();
-	delete configManager;
-	delete engine;
+	int32_t exitCode = engine->Run();
 
 	// Pauses the console.
-	std::cin.get();
+//	std::cin.get();
 	return exitCode;
 }

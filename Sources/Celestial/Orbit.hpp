@@ -6,7 +6,7 @@
 
 using namespace acid;
 
-namespace test
+namespace micro
 {
 	class Orbit :
 		public IComponent
@@ -34,8 +34,8 @@ namespace test
 
 		void Update() override;
 
-		void Load(LoadedValue *value) override;
+		void Decode(const Node &node) override;
 
-		void Write(LoadedValue *destination) override;
+		void Encode(Node &node) const override;
 	};
 }

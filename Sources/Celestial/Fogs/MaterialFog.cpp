@@ -8,7 +8,7 @@
 #include <Models/Obj/ModelObj.hpp>
 #include "Celestial/ICelestial.hpp"
 
-namespace test
+namespace micro
 {
 	MaterialFog::MaterialFog(const float &thickness) :
 		IMaterial(),
@@ -60,11 +60,11 @@ namespace test
 		GetGameObject()->GetTransform().SetPosition(parent->GetTransform().GetPosition());
 	}
 
-	void MaterialFog::Load(LoadedValue *value)
+	void MaterialFog::Decode(const Node &node)
 	{
 	}
 
-	void MaterialFog::Write(LoadedValue *destination)
+	void MaterialFog::Encode(Node &node) const
 	{
 	}
 

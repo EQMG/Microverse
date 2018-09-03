@@ -3,7 +3,7 @@
 #include <Post/Deferred/RendererDeferred.hpp>
 #include <Shadows/Shadows.hpp>
 
-namespace test
+namespace micro
 {
 	World::World() :
 		IModule(),

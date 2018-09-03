@@ -9,7 +9,7 @@
 
 using namespace acid;
 
-namespace test
+namespace micro
 {
 	class Scene1 :
 		public IScene
@@ -22,7 +22,7 @@ namespace test
 		IButton *m_buttonExit;
 		Sound *m_soundScreenshot;
 
-		Colour *m_primaryColour;
+		Colour m_primaryColour;
 		SelectorJoystick *m_selectorJoystick;
 
 		IButton *m_buttonPause;
@@ -39,9 +39,9 @@ namespace test
 
 		void Update() override;
 
-		bool IsGamePaused() override;
+		bool IsGamePaused() const override;
 
-		Colour *GetUiColour() const override { return m_primaryColour; }
+		Colour GetUiColour() const override { return m_primaryColour; }
 
 		SelectorJoystick *GetSelectorJoystick() const override { return m_selectorJoystick; };
 	private:

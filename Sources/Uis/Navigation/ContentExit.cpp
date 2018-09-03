@@ -1,11 +1,11 @@
 #include "ContentExit.hpp"
 
-namespace test
+namespace micro
 {
 	ContentExit::ContentExit(UiObject *parent) :
 		UiObject(parent, UiBound(Vector2(0.5f, 0.4375f), "Centre", true, false, Vector2(0.8f, 0.7f))),
 		m_background(new Gui(this, GetRectangle(), Texture::Resource("Guis/White.png"))),
-		m_button1(new UiInputButton(m_background, Vector2(0.5f, 0.4375f), "Test Button", JUSTIFY_CENTRE))
+		m_button1(new UiInputButton(m_background, Vector2(0.5f, 0.4375f), "Test Button"))
 	{
 	}
 

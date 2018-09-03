@@ -17,9 +17,9 @@
 #include <Post/Filters/FilterTiltshift.hpp>
 #include "Post/Filters/FilterDamage.hpp"
 
-namespace test
+namespace micro
 {
-	RenderpassCreate *RENDERPASS_0_CREATE = new RenderpassCreate
+	RenderpassCreate RENDERPASS_0_CREATE = RenderpassCreate
 	{
 		4096, 4096, // width, height
 		{
@@ -29,7 +29,7 @@ namespace test
 			SubpassType(0, {0})
 		} // subpasses
 	};
-	RenderpassCreate *RENDERPASS_1_CREATE = new RenderpassCreate
+	RenderpassCreate RENDERPASS_1_CREATE = RenderpassCreate
 	{
 		0, 0, // width, height
 		{
@@ -61,7 +61,7 @@ namespace test
 	//	AddRenderer<FilterFxaa>(GraphicsStage(1, 2));
 	//	AddRenderer<FilterLensflare>(GraphicsStage(1, 2));
 	//	AddRenderer<FilterTiltshift>(GraphicsStage(1, 2));
-	//	AddRenderer<FilterDamage>(GraphicsStage(1, 2));
+		AddRenderer<FilterDamage>(GraphicsStage(1, 2));
 	//	AddRenderer<FilterGrain>(GraphicsStage(1, 2));
 		AddRenderer<RendererGuis>(GraphicsStage(1, 2));
 		AddRenderer<RendererFonts>(GraphicsStage(1, 2));
@@ -77,8 +77,9 @@ namespace test
 
 	void MainRenderer::Update()
 	{
-		RENDERPASS_0_CREATE->SetWidth(Shadows::Get()->GetShadowSize());
-		RENDERPASS_0_CREATE->SetHeight(Shadows::Get()->GetShadowSize());
+		auto &renderpassCreate0 = Renderer::Get()->GetRenderStage(0)->GetRenderpassCreate();
+		renderpassCreate0.SetWidth(Shadows::Get()->GetShadowSize());
+		renderpassCreate0.SetHeight(Shadows::Get()->GetShadowSize());
 
 		/*auto filterDamage = GetRenderer<FilterDamage>();
 

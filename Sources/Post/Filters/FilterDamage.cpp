@@ -2,7 +2,7 @@
 
 #include <Maths/Visual/DriverConstant.hpp>
 
-namespace acid
+namespace micro
 {
 	FilterDamage::FilterDamage(const GraphicsStage &graphicsStage) :
 		IPostFilter(graphicsStage, {"Shaders/Filters/Default.vert", "Shaders/Filters/Damage.frag"}, {}),
@@ -13,6 +13,8 @@ namespace acid
 		m_softnessDriver(std::make_shared<DriverConstant>(0.0f)),
 		m_softness(0.0f)
 	{
+		m_radius = 0.1f;
+		m_colour = Colour::RED;
 	}
 
 	FilterDamage::~FilterDamage()

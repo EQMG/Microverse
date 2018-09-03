@@ -2,7 +2,7 @@
 
 #include "World/World.hpp"
 
-namespace test
+namespace micro
 {
 	const std::array<Colour, 4> COLOUR_BIOMES =
 	{
@@ -16,7 +16,7 @@ namespace test
 	const float COLOUR_AMPLITUDE = 28.0f;
 	const float COLOUR_PART = 1.0f / (COLOUR_BIOMES.size() - 1);
 
-	MeshChunk::MeshChunk(Planet *planet, const float &sideLength, const float &squareSize, const int &vertexCount, const float &textureScale, const Transform &transform) :
+	MeshChunk::MeshChunk(Planet *planet, const float &sideLength, const float &squareSize, const uint32_t &vertexCount, const float &textureScale, const Transform &transform) :
 		MeshSimple(sideLength, squareSize, vertexCount, textureScale),
 		m_parent(planet),
 		m_worldMatrix(transform.GetWorldMatrix()),

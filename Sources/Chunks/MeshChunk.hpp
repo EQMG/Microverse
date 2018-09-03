@@ -9,7 +9,7 @@
 
 using namespace acid;
 
-namespace test
+namespace micro
 {
 	enum EdgeFlagBits
 	{
@@ -30,7 +30,7 @@ namespace test
 		Matrix4 m_worldMatrix;
 		EdgeFlags m_edgeConditions;
 	public:
-		MeshChunk(Planet *parent, const float &sideLength, const float &squareSize, const int &vertexCount, const float &textureScale, const Transform &transform);
+		MeshChunk(Planet *parent, const float &sideLength, const float &squareSize, const uint32_t &vertexCount, const float &textureScale, const Transform &transform);
 
 		~MeshChunk();
 

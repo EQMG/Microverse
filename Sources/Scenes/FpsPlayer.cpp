@@ -10,7 +10,7 @@
 #include <Scenes/Scenes.hpp>
 #include <World/World.hpp>
 
-namespace test
+namespace micro
 {
 	static const float WALK_SPEED = 10.0f; // 3.1f
 	static const float RUN_SPEED = 25.0f; // 5.7f

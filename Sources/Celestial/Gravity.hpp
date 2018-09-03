@@ -5,13 +5,13 @@
 
 using namespace acid;
 
-namespace test
+namespace micro
 {
 	class Gravity :
 		public IComponent
 	{
 	private:
-		ICelestial *m_influence;
+		std::shared_ptr<ICelestial> m_influence;
 	public:
 		Gravity();
 
@@ -21,10 +21,10 @@ namespace test
 
 		void Update() override;
 
-		void Load(LoadedValue *value) override;
+		void Decode(const Node &node) override;
 
-		void Write(LoadedValue *destination) override;
+		void Encode(Node &node) const override;
 
-		ICelestial *GetStrongestInfluence() const { return m_influence; }
+		std::shared_ptr<ICelestial> GetStrongestInfluence() const { return m_influence; }
 	};
 }

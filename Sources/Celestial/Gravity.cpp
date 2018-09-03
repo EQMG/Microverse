@@ -6,7 +6,7 @@
 #include "Gravity.hpp"
 #include "Star.hpp"
 
-namespace test
+namespace micro
 {
 	Gravity::Gravity() :
 		IComponent(),
@@ -56,11 +56,11 @@ namespace test
 		rigidbody->SetGravity(forcesSum);
 	}
 
-	void Gravity::Load(LoadedValue *value)
+	void Gravity::Decode(const Node &node)
 	{
 	}
 
-	void Gravity::Write(LoadedValue *destination)
+	void Gravity::Encode(Node &node) const
 	{
 	}
 }

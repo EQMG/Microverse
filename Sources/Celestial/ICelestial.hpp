@@ -5,7 +5,7 @@
 
 using namespace acid;
 
-namespace test
+namespace micro
 {
 	class ICelestial :
 		public IComponent
@@ -24,9 +24,9 @@ namespace test
 
 		virtual void Update() override = 0;
 
-		virtual void Load(LoadedValue *value) override = 0;
+		virtual void Decode(const Node &node) override = 0;
 
-		virtual void Write(LoadedValue *destination) override = 0;
+		virtual void Encode(Node &node) const override = 0;
 
 		virtual float GetRadius() const = 0;
 

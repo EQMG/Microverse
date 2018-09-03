@@ -5,7 +5,7 @@
 #include <Models/Shapes/ModelSphere.hpp>
 #include <Post/Filters/FilterLensflare.hpp>
 
-namespace test
+namespace micro
 {
 	const float Star::MEDIAN_RADIUS = 2000.0f; // (Originally 8000m) +- 37.5%
 	const float Star::MEDIAN_DENSITY = 1410.0f;
@@ -28,7 +28,7 @@ namespace test
 		m_habitableMin(std::sqrt(m_solarLuminosity / 1.11f)),
 		m_habitableMax(std::sqrt(m_solarLuminosity / 0.53f))
 	{
-		fprintf(stdout, "Star: Radius(m)=%f, Density(kg/m^3)=%f, Mass(kg)=%f, Escape Velocity(m/s)=%f, Temperature(K)=%f, Surface Colour=%s, "
+		Log::Out("Star: Radius(m)=%f, Density(kg/m^3)=%f, Mass(kg)=%f, Escape Velocity(m/s)=%f, Temperature(K)=%f, Surface Colour=%s, "
 				  "Planet Inner Limit(au)=%f, Planet Outer Limit(au)=%f, Planet Frost Line(au)=%f, Habitable Min(au)=%f, Habitable Max(au)=%f\n",
 				  m_radius, m_density, m_mass, m_escapeVelocity, m_surfaceTemperature, m_surfaceColour.GetHex().c_str(),
 			m_planetInnerLimit, m_planetOuterLimit, m_planetFrostLine, m_habitableMin, m_habitableMax);
@@ -59,18 +59,17 @@ namespace test
 		}
 	}
 
-	void Star::Load(LoadedValue *value)
+	void Star::Decode(const Node &node)
 	{
-		// TODO
 	}
 
-	void Star::Write(LoadedValue *destination)
+	void Star::Encode(Node &node) const
 	{
 	}
-	
+
 	Colour Star::CalculateColour(const float &surfaceTemperature)
 	{
-		float temperature = Maths::Clamp(surfaceTemperature, 1000.0f, 40000.0f) / 100.0f;
+		float temperature = std::clamp(surfaceTemperature, 1000.0f, 40000.0f) / 100.0f;
 		float red;
 		float green;
 		float blue;
@@ -83,20 +82,20 @@ namespace test
 		{
 			red = temperature - 60.0f;
 			red = 329.698727446f * std::pow(red, -0.1332047592f);
-			red = Maths::Clamp(red, 0.0f, 255.0f);
+			red = std::clamp(red, 0.0f, 255.0f);
 		}
 
 		if (temperature <= 66.0f)
 		{
 			green = temperature;
 			green = 99.4708025861f * std::log(green) - 161.1195681661f;
-			green = Maths::Clamp(green, 0.0f, 255.0f);
+			green = std::clamp(green, 0.0f, 255.0f);
 		}
 		else
 		{
 			green = temperature - 60.0f;
 			green = 288.1221695283f * std::pow(green, -0.0755148492f);
-			green = Maths::Clamp(green, 0.0f, 255.0f);
+			green = std::clamp(green, 0.0f, 255.0f);
 		}
 
 		if (temperature >= 66.0f)
@@ -113,7 +112,7 @@ namespace test
 			{
 				blue = temperature - 10.0f;
 				blue = 138.5177312231f * std::log(blue) - 305.0447927307f;
-				blue = Maths::Clamp(blue, 0.0f, 255.0f);
+				blue = std::clamp(blue, 0.0f, 255.0f);
 			}
 		}
 

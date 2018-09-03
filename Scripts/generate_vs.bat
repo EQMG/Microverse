@@ -1,8 +1,8 @@
 cd ../
 mkdir Build
 cd Build
-cmake .. -G "Visual Studio 15 2017 Win64" -DCMAKE_BUILD_TYPE=Debug -DBUILD_SHARED_LIBS=OFF
+cmake .. -G "Visual Studio 15 2017 Win64" -DCMAKE_BUILD_TYPE=Debug
 mkdir Sources\Resources
 pause
-cmake --build .
+cmake --build . --config Debug
 pause

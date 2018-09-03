@@ -7,7 +7,7 @@
 #include <Models/Shapes/ModelDisk.hpp>
 #include "Celestial/ICelestial.hpp"
 
-namespace test
+namespace micro
 {
 	MaterialRing::MaterialRing(const float &innerScale, const float &outerScale) :
 		IMaterial(),
@@ -62,11 +62,11 @@ namespace test
 		GetGameObject()->GetTransform().SetPosition(parent->GetTransform().GetPosition());
 	}
 
-	void MaterialRing::Load(LoadedValue *value)
+	void MaterialRing::Decode(const Node &node)
 	{
 	}
 
-	void MaterialRing::Write(LoadedValue *destination)
+	void MaterialRing::Encode(Node &node) const
 	{
 	}
 

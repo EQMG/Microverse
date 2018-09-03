@@ -6,7 +6,7 @@
 
 using namespace acid;
 
-namespace test
+namespace micro
 {
 	class MaterialRing :
 		public IMaterial
@@ -28,9 +28,9 @@ namespace test
 
 		void Update() override;
 
-		void Load(LoadedValue *value) override;
+		void Decode(const Node &node) override;
 
-		void Write(LoadedValue *destination) override;
+		void Encode(Node &node) const override;
 
 		void PushUniforms(UniformHandler &uniformObject) override;
 

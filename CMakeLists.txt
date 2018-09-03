@@ -1,9 +1,16 @@
 cmake_minimum_required (VERSION 3.1)
 project (Microverse)
 
+set(MICROVERSE_VERSION "0.0.5")
+
 # Options
-option(BUILD_SHARED_LIBS "Build Shared Libraries" ON)
-option(MICROVERSE_INSTALL "Generate installation target" ON)
+if(MSVC)
+	option(BUILD_SHARED_LIBS "Build Shared Libraries" OFF)
+else()
+	option(BUILD_SHARED_LIBS "Build Shared Libraries" ON)
+endif()
+
+option(MICROVERSE_INSTALL "Generate installation target" OFF)
 
 set(LIB_TYPE STATIC)
 
@@ -23,7 +30,7 @@ elseif("${CMAKE_BUILD_TYPE}" STREQUAL "RelWithDebInfo")
 endif()
 
 if(WIN32)
-	add_definitions(-DACID_WSI_WIN32)
+	add_definitions(-DACID_BUILD_WINDOWS)
 elseif(UNIX AND NOT APPLE)
 	add_definitions(-DACID_BUILD_LINUX)
 elseif(UNIX AND APPLE)
@@ -45,8 +52,10 @@ endif()
 
 if(MSVC)
 	add_definitions(-DACID_BUILD_MSVC)
+	add_definitions(-DNOMINMAX)
 	add_definitions(-D_SCL_SECURE_NO_WARNINGS)
 	add_definitions(-D_CRT_SECURE_NO_WARNINGS)
+	add_definitions(-D_ENABLE_EXTENDED_ALIGNED_STORAGE)
 	set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /DWIN32 /D_WINDOWS /std:c++17 /INCREMENTAL:NO /Oi /Ot /GT /GF /GS- /fp:fast /fp:except- /MP /W3 /wd4251")
 	set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} /Od /Ob0 /RTC1 /MDd /DEBUG")
 	set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} /Ox /Ob2 /MD")
@@ -55,6 +64,7 @@ if(MSVC)
 	if(CMAKE_SIZEOF_VOID_P EQUAL 8)
 		set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} /ZI")
 		set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} /OPT:ICF")
+		set(CMAKE_CXX_FLAGS_RELWITHDEBINFO "${CMAKE_CXX_FLAGS_RELWITHDEBINFO} /OPT:ICF")
 	else()
 		set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /arch:SSE2")
 		set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} /Zi")

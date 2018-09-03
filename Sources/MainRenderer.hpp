@@ -4,7 +4,7 @@
 
 using namespace acid;
 
-namespace test
+namespace micro
 {
 	class MainRenderer :
 		public IManagerRender

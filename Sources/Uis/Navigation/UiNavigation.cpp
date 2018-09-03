@@ -5,7 +5,7 @@
 #include <Events/EventTime.hpp>
 #include "ContentExit.hpp"
 
-namespace test
+namespace micro
 {
 	const std::vector<std::pair<std::string, Colour>> TABS =
 	{

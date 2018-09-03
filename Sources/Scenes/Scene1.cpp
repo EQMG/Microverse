@@ -29,7 +29,7 @@
 #include "FpsPlayer.hpp"
 #include "World/World.hpp"
 
-namespace test
+namespace micro
 {
 	static const float UI_SLIDE_TIME = 0.2f;
 
@@ -41,8 +41,8 @@ namespace test
 		m_buttonScreenshot(new ButtonKeyboard({KEY_F12})),
 		m_buttonExit(new ButtonKeyboard({KEY_DELETE})),
 		m_soundScreenshot(new Sound("Sounds/Screenshot.ogg")),
-		m_primaryColour(new Colour("#e74c3c")),
-		m_selectorJoystick(new SelectorJoystick(JOYSTICK_1, 0, 1, 0, 1)),
+		m_primaryColour(Colour("#e74c3c")),
+		m_selectorJoystick(new SelectorJoystick(JOYSTICK_1, 0, 1, {0, 1})),
 		m_buttonPause((new ButtonCompound({
 			new ButtonKeyboard({KEY_ESCAPE}),
 			new ButtonJoystick(JOYSTICK_1, {7})
@@ -64,7 +64,6 @@ namespace test
 		delete m_buttonScreenshot;
 		delete m_buttonExit;
 
-		delete m_primaryColour;
 		delete m_selectorJoystick;
 
 		delete m_buttonPause;
@@ -226,7 +225,7 @@ namespace test
 		}
 	}
 
-	bool Scene1::IsGamePaused()
+	bool Scene1::IsGamePaused() const
 	{
 		return m_uiStartLogo->IsStarting() || m_uiNavigation->GetAlpha() != 0.0f;
 	}

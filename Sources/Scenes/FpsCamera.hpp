@@ -7,7 +7,7 @@
 
 using namespace acid;
 
-namespace test
+namespace micro
 {
 	class FpsCamera :
 		public ICamera

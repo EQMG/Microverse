@@ -4,7 +4,7 @@
 #include <Models/VertexModel.hpp>
 #include <Celestial/Planet.hpp>
 
-namespace test
+namespace micro
 {
 	MaterialChunk::MaterialChunk() :
 		IMaterial(),
@@ -25,11 +25,11 @@ namespace test
 	{
 	}
 
-	void MaterialChunk::Load(LoadedValue *value)
+	void MaterialChunk::Decode(const Node &node)
 	{
 	}
 
-	void MaterialChunk::Write(LoadedValue *destination)
+	void MaterialChunk::Encode(Node &node) const
 	{
 	}
 
