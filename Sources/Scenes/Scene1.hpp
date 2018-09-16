@@ -2,6 +2,8 @@
 
 #include <Audio/Sound.hpp>
 #include <Inputs/IButton.hpp>
+#include <Inputs/ButtonMouse.hpp>
+#include <Inputs/ButtonKeyboard.hpp>
 #include <Scenes/IScene.hpp>
 #include <Uis/UiStartLogo.hpp>
 #include "Uis/OverlayDebug.hpp"
@@ -15,35 +17,25 @@ namespace micro
 		public IScene
 	{
 	private:
-		IButton *m_buttonSpawnSphere;
-		IButton *m_buttonFullscreen;
-		IButton *m_buttonCaptureMouse;
-		IButton *m_buttonScreenshot;
-		IButton *m_buttonExit;
-		Sound *m_soundScreenshot;
+		ButtonMouse m_buttonSpawnSphere;
+		ButtonKeyboard m_buttonFullscreen;
+		ButtonKeyboard m_buttonCaptureMouse;
+		ButtonKeyboard m_buttonScreenshot;
+		ButtonKeyboard m_buttonPause;
+		ButtonKeyboard m_buttonExit;
+		Sound m_soundScreenshot;
 
-		Colour m_primaryColour;
-		SelectorJoystick *m_selectorJoystick;
-
-		IButton *m_buttonPause;
-
-		UiStartLogo *m_uiStartLogo;
-		OverlayDebug *m_overlayDebug;
-		UiNavigation *m_uiNavigation;
+		std::unique_ptr<UiStartLogo> m_uiStartLogo;
+		std::unique_ptr<OverlayDebug> m_overlayDebug;
+		std::unique_ptr<UiNavigation> m_uiNavigation;
 	public:
 		Scene1();
-
-		~Scene1();
 
 		void Start() override;
 
 		void Update() override;
 
-		bool IsGamePaused() const override;
-
-		Colour GetUiColour() const override { return m_primaryColour; }
-
-		SelectorJoystick *GetSelectorJoystick() const override { return m_selectorJoystick; };
+		bool IsPaused() const override;
 	private:
 		void TogglePause();
 	};

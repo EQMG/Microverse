@@ -31,12 +31,11 @@ out gl_PerVertex
 void main() 
 {
 	vec4 worldPosition = object.transform * vec4(inPosition, 1.0f);
-	vec4 worldNormal = object.transform * vec4(inNormal, 0.0f);
 
 	gl_Position = scene.projection * scene.view * worldPosition;
 
 	outWorldPos = worldPosition.xyz;
 	outUv = inUv;
-	outNormal = worldNormal.xyz;
+	outNormal = inNormal;
 	outTangent = inTangent;
 }

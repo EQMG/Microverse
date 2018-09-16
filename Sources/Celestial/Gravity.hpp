@@ -11,20 +11,18 @@ namespace micro
 		public IComponent
 	{
 	private:
-		std::shared_ptr<ICelestial> m_influence;
+		ICelestial *m_influence;
 	public:
 		Gravity();
-
-		~Gravity();
 
 		void Start() override;
 
 		void Update() override;
 
-		void Decode(const Node &node) override;
+		void Decode(const Metadata &metadata) override;
 
-		void Encode(Node &node) const override;
+		void Encode(Metadata &metadata) const override;
 
-		std::shared_ptr<ICelestial> GetStrongestInfluence() const { return m_influence; }
+		ICelestial *GetStrongestInfluence() const { return m_influence; }
 	};
 }

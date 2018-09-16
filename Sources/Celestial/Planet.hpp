@@ -37,15 +37,13 @@ namespace micro
 
 		Planet(const int &seed = 0, const float &radius = MEDIAN_RADIUS, const float &density = MEDIAN_DENSITY, const float &axialTilt = 0.0f);
 
-		~Planet();
-
 		void Start() override;
 
 		void Update() override;
 
-		void Decode(const Node &node) override;
+		void Decode(const Metadata &metadata) override;
 
-		void Encode(Node &node) const override;
+		void Encode(Metadata &metadata) const override;
 
 		Colour GetColour(const Vector3 &cartesian);
 

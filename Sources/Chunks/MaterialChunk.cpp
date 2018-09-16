@@ -8,28 +8,25 @@ namespace micro
 {
 	MaterialChunk::MaterialChunk() :
 		IMaterial(),
-		m_material(PipelineMaterial::Resource({1, 0}, PipelineCreate({"Shaders/Chunks/Chunk.vert", "Shaders/Chunks/Chunk.frag"},
-			VertexModel::GetVertexInput(), PIPELINE_MODE_MRT, VK_POLYGON_MODE_FILL, VK_CULL_MODE_BACK_BIT, {})))
-	{
-	}
-
-	MaterialChunk::~MaterialChunk()
+		m_material(nullptr)
 	{
 	}
 
 	void MaterialChunk::Start()
 	{
+		m_material = PipelineMaterial::Resource({1, 0}, PipelineCreate({"Shaders/Chunks/Chunk.vert", "Shaders/Chunks/Chunk.frag"},
+			{VertexModel::GetVertexInput()}, PIPELINE_MODE_MRT, PIPELINE_DEPTH_READ_WRITE, VK_POLYGON_MODE_FILL, VK_CULL_MODE_BACK_BIT, {}));
 	}
 
 	void MaterialChunk::Update()
 	{
 	}
 
-	void MaterialChunk::Decode(const Node &node)
+	void MaterialChunk::Decode(const Metadata &metadata)
 	{
 	}
 
-	void MaterialChunk::Encode(Node &node) const
+	void MaterialChunk::Encode(Metadata &metadata) const
 	{
 	}
 

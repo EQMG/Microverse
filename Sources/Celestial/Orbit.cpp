@@ -8,7 +8,6 @@
 namespace micro
 {
 	Orbit::Orbit(const float &eccentricity, const float &semiMajorAxis, const float &parentMass, const float &pitch, const float &yaw, const float &roll) :
-		IComponent(),
 		m_eccentricity(eccentricity),
 		m_semiMajorAxis(semiMajorAxis),
 		m_semiMinorAxis(semiMajorAxis * std::sqrt(1.0f - std::pow(eccentricity, 2.0f))),
@@ -24,10 +23,6 @@ namespace micro
 				  "Velocity(m/s)=%f, Pitch(Deg)=%f, Yaw(Deg)=%f, Roll(Deg)=%f\n",
 			m_eccentricity, m_semiMajorAxis, m_semiMinorAxis, m_periapsis, m_apoapsis, m_period,
 			m_velocity, m_pitch, m_yaw, m_roll);
-	}
-
-	Orbit::~Orbit()
-	{
 	}
 
 	void Orbit::Start()
@@ -52,11 +47,11 @@ namespace micro
 	//	GetGameObject()->GetTransform().SetPosition(position + (Vector3::FRONT * force));
 	}
 
-	void Orbit::Decode(const Node &node)
+	void Orbit::Decode(const Metadata &metadata)
 	{
 	}
 
-	void Orbit::Encode(Node &node) const
+	void Orbit::Encode(Metadata &metadata) const
 	{
 	}
 }

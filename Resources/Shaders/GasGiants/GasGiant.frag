@@ -21,12 +21,10 @@ layout(location = 3) out vec4 outMaterial;
 
 void main() 
 {
-	vec3 unitNormal = normalize(inNormal);
-
 	vec4 diffuse = texture(samplerAlbedo, inUv);
 
 	outPosition = vec4(inWorldPos, 1.0);
 	outDiffuse = diffuse;
-	outNormal = vec4(unitNormal, 1.0f);
+	outNormal = vec4(normalize(inNormal), 1.0f);
 	outMaterial = vec4(0.0f, 1.0f, 0.0f, 1.0f);
 }

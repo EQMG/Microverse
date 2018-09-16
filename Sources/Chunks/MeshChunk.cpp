@@ -29,7 +29,7 @@ namespace micro
 	{
 	}
 
-	VertexModel *MeshChunk::GetVertex(const uint32_t &col, const uint32_t &row)
+	VertexModel MeshChunk::GetVertex(const uint32_t &col, const uint32_t &row)
 	{
 		float x = ((row * m_squareSize) - m_sideLength) / 2.0f;
 		float z = ((col * m_squareSize) - m_sideLength) / 2.0f;
@@ -47,7 +47,7 @@ namespace micro
 		); // Vector2::ZERO
 		Vector3 normal = GetNormal(x, z); // Vector3::ZERO
 		Colour colour = m_parent->GetColour(cartesian); // Colour::WHITE
-		return new VertexModel(position, uv, normal, colour);
+		return VertexModel(position, uv, normal, colour);
 	}
 
 	Vector3 MeshChunk::GetPosition(const float &x, const float &z)

@@ -28,14 +28,12 @@ namespace micro
 	public:
 		Orbit(const float &eccentricity = 0.0f, const float &semiMajorAxis = 1.0f, const float &parentMass = Star::MEDIAN_MASS, const float &pitch = 0.0f, const float &yaw = 0.0f, const float &roll = 0.0f);
 
-		~Orbit();
-
 		void Start() override;
 
 		void Update() override;
 
-		void Decode(const Node &node) override;
+		void Decode(const Metadata &metadata) override;
 
-		void Encode(Node &node) const override;
+		void Encode(Metadata &metadata) const override;
 	};
 }

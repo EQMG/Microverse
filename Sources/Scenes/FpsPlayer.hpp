@@ -1,36 +1,40 @@
 #pragma once
 
-#include <Objects/IBehaviour.hpp>
+#include <Objects/IComponent.hpp>
 #include <Objects/GameObject.hpp>
-#include <Inputs/IAxis.hpp>
-#include <Inputs/IButton.hpp>
+#include <Inputs/AxisCompound.hpp>
+#include <Inputs/ButtonCompound.hpp>
 
 using namespace acid;
 
 namespace micro
 {
 	class FpsPlayer :
-		public IBehaviour
+		public IComponent
 	{
 	private:
-		Vector3 *m_velocity;
+		Vector3 m_velocity;
 		bool m_jumping;
 		bool m_noclipEnabled;
 
-		IAxis *m_inputForward;
-		IAxis *m_inputStrafe;
-		IButton *m_inputSprint;
-		IButton *m_inputJump;
-		IButton *m_inputCrouch;
-		IButton *m_toggleNoclip;
+		AxisCompound m_inputForward;
+		AxisCompound m_inputStrafe;
+		ButtonCompound m_inputSprint;
+		ButtonCompound m_inputJump;
+		ButtonCompound m_inputCrouch;
+		ButtonCompound m_toggleNoclip;
 
-		Vector3 *m_amountMove;
-		Vector3 *m_amountRotate;
+		Vector3 m_amountMove;
+		Vector3 m_amountRotate;
 	public:
 		FpsPlayer();
 
-		~FpsPlayer();
+		void Start() override;
 
 		void Update() override;
+
+		void Decode(const Metadata &metadata) override;
+
+		void Encode(Metadata &metadata) const override;
 	};
 }

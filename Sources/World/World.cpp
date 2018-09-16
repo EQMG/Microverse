@@ -2,17 +2,13 @@
 
 #include <Post/Deferred/RendererDeferred.hpp>
 #include <Shadows/Shadows.hpp>
+#include <Renderer/Renderer.hpp>
 
 namespace micro
 {
 	World::World() :
-		IModule(),
 		m_fog(Fog(Colour::BLACK, 0.0f, 2.0f, -10000.0f, -1000.0f)),
 		m_lightDirection(Vector3())
-	{
-	}
-
-	World::~World()
 	{
 	}
 
@@ -20,7 +16,7 @@ namespace micro
 	{
 		m_lightDirection = Vector3(0.0124f, 0.992f, 0.124f);
 
-		auto deferred = Renderer::Get()->GetManager()->GetRenderer<RendererDeferred>();
+		auto deferred = Renderer::Get()->GetRenderer<RendererDeferred>();
 
 		if (deferred != nullptr)
 		{

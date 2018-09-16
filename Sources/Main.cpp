@@ -57,6 +57,7 @@ int main(int argc, char **argv)
 
 	// Runs the game loop.
 	int32_t exitCode = engine->Run();
+	configManager->Save();
 
 	// Pauses the console.
 //	std::cin.get();

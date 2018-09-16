@@ -12,7 +12,7 @@ namespace micro
 	public:
 		MainRenderer();
 
-		~MainRenderer();
+		void Start() override;
 
 		void Update() override;
 	};

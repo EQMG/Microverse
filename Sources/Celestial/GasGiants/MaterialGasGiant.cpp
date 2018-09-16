@@ -10,25 +10,22 @@
 namespace micro
 {
 	MaterialGasGiant::MaterialGasGiant(const std::shared_ptr<Texture> &bandLookup, const float &hueOffset, const float &timeScale) :
-		IMaterial(),
-		m_material(PipelineMaterial::Resource({1, 0}, PipelineCreate({"Shaders/GasGiants/GasGiant.vert", "Shaders/GasGiants/GasGiant.frag"},
-			VertexModel::GetVertexInput(), PIPELINE_MODE_MRT, VK_POLYGON_MODE_FILL, VK_CULL_MODE_BACK_BIT, {}))),
 		m_bandLookup(bandLookup),
 		m_radius(0.0f),
 		m_hueOffset(hueOffset),
 		m_timeScale(timeScale),
 		m_diffuseCompute(Compute(ComputeCreate("Shaders/GasGiants/GasGiant.comp", 3072, 3072, 32, {}))),
 		m_diffuseTexture(std::make_shared<Texture>(3072, 3072)),
-		m_diffuseUpdate(Timer(Maths::Random(16.0f, 20.0f)))
-	{
-	}
-
-	MaterialGasGiant::~MaterialGasGiant()
+		m_diffuseUpdate(Timer(Maths::Random(16.0f, 20.0f))),
+		m_material(nullptr)
 	{
 	}
 
 	void MaterialGasGiant::Start()
 	{
+		m_material = PipelineMaterial::Resource({1, 0}, PipelineCreate({"Shaders/GasGiants/GasGiant.vert", "Shaders/GasGiants/GasGiant.frag"},
+			{VertexModel::GetVertexInput()}, PIPELINE_MODE_MRT, PIPELINE_DEPTH_READ_WRITE, VK_POLYGON_MODE_FILL, VK_CULL_MODE_BACK_BIT, {}));
+
 		auto planet = GetGameObject()->GetComponent<Planet>(true);
 
 		if (planet != nullptr)
@@ -49,16 +46,16 @@ namespace micro
 		}*/
 	}
 
-	void MaterialGasGiant::Decode(const Node &node)
+	void MaterialGasGiant::Decode(const Metadata &metadata)
 	{
-		m_hueOffset = node.GetChild<float>("Hue Offset");
-		m_timeScale = node.GetChild<float>("Time Scale");
+		m_hueOffset = metadata.GetChild<float>("Hue Offset");
+		m_timeScale = metadata.GetChild<float>("Time Scale");
 	}
 
-	void MaterialGasGiant::Encode(Node &node) const
+	void MaterialGasGiant::Encode(Metadata &metadata) const
 	{
-		node.SetChild("Hue Offset", m_hueOffset);
-		node.SetChild("Time Scale", m_timeScale);
+		metadata.SetChild("Hue Offset", m_hueOffset);
+		metadata.SetChild("Time Scale", m_timeScale);
 	}
 
 	void MaterialGasGiant::PushUniforms(UniformHandler &uniformObject)

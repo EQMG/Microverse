@@ -20,7 +20,6 @@ namespace micro
 	const float Planet::SQUARE_RADIUS_RATIO = 0.2f; // 0.2 or 0.4;
 
 	Planet::Planet(const int &seed, const float &radius, const float &density, const float &axialTilt) :
-		ICelestial(),
 		m_seed(seed),
 		m_radius(radius),
 		m_density(density),
@@ -37,10 +36,6 @@ namespace micro
 		float surfaceGravity = Star::G_CONSTANT * m_mass / std::pow(m_radius, 2.0f);
 
 		Log::Out("Planet: Radius(m)=%f, Density(kg/m^3)=%f, Mass(kg)=%f, Surface Gravity(m/s^2)=%f, Escape Velocity(m/s)=%f\n", m_radius, m_density, m_mass, surfaceGravity, m_escapeVelocity);
-	}
-
-	Planet::~Planet()
-	{
 	}
 
 	void Planet::Start()
@@ -77,11 +72,11 @@ namespace micro
 	{
 	}
 
-	void Planet::Decode(const Node &node)
+	void Planet::Decode(const Metadata &metadata)
 	{
 	}
 
-	void Planet::Encode(Node &node) const
+	void Planet::Encode(Metadata &metadata) const
 	{
 	}
 

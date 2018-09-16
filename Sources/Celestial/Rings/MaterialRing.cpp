@@ -10,24 +10,21 @@
 namespace micro
 {
 	MaterialRing::MaterialRing(const float &innerScale, const float &outerScale) :
-		IMaterial(),
-		m_material(PipelineMaterial::Resource({1, 1}, PipelineCreate({"Shaders/Rings/Ring.vert", "Shaders/Rings/Ring.frag"},
-			VertexModel::GetVertexInput(), PIPELINE_MODE_POLYGON, VK_POLYGON_MODE_FILL, VK_CULL_MODE_NONE, {}))),
 		m_ringLookup(Texture::Resource("RingLookup.png")),
 		m_innerScale(innerScale),
 		m_outerScale(outerScale),
 		m_planetRadius(700.0f),
 		m_innerRadius(1000.0f),
-		m_outerRadius(1300.0f)
-	{
-	}
-
-	MaterialRing::~MaterialRing()
+		m_outerRadius(1300.0f),
+		m_material(nullptr)
 	{
 	}
 
 	void MaterialRing::Start()
 	{
+		m_material= PipelineMaterial::Resource({1, 1}, PipelineCreate({"Shaders/Rings/Ring.vert", "Shaders/Rings/Ring.frag"},
+			{VertexModel::GetVertexInput()}, PIPELINE_MODE_POLYGON, PIPELINE_DEPTH_READ, VK_POLYGON_MODE_FILL, VK_CULL_MODE_NONE, {}));
+
 		auto parent = GetGameObject()->GetParent();
 
 		if (parent != nullptr)
@@ -62,11 +59,11 @@ namespace micro
 		GetGameObject()->GetTransform().SetPosition(parent->GetTransform().GetPosition());
 	}
 
-	void MaterialRing::Decode(const Node &node)
+	void MaterialRing::Decode(const Metadata &metadata)
 	{
 	}
 
-	void MaterialRing::Encode(Node &node) const
+	void MaterialRing::Encode(Metadata &metadata) const
 	{
 	}
 

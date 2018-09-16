@@ -3,6 +3,7 @@
 #include <Maths/Maths.hpp>
 #include <Meshes/Mesh.hpp>
 #include <Models/Shapes/ModelSphere.hpp>
+#include <Renderer/Renderer.hpp>
 #include <Post/Filters/FilterLensflare.hpp>
 
 namespace micro
@@ -14,7 +15,6 @@ namespace micro
 	const float Star::G_CONSTANT = 7.08398363e-7f;
 
 	Star::Star(const float &radius, const float &density) :
-		ICelestial(),
 		m_radius(radius),
 		m_density(density),
 		m_mass(m_density * (4.0f / 3.0f) * PI * std::pow(m_radius, 3.0f)),
@@ -34,10 +34,6 @@ namespace micro
 			m_planetInnerLimit, m_planetOuterLimit, m_planetFrostLine, m_habitableMin, m_habitableMax);
 	}
 
-	Star::~Star()
-	{
-	}
-
 	void Star::Start()
 	{
 		auto mesh = GetGameObject()->GetComponent<Mesh>();
@@ -50,7 +46,7 @@ namespace micro
 
 	void Star::Update()
 	{
-		auto filterLensflare = Renderer::Get()->GetManager()->GetRenderer<FilterLensflare>();
+		auto filterLensflare = Renderer::Get()->GetRenderer<FilterLensflare>();
 
 		if (filterLensflare != nullptr)
 		{
@@ -59,11 +55,11 @@ namespace micro
 		}
 	}
 
-	void Star::Decode(const Node &node)
+	void Star::Decode(const Metadata &metadata)
 	{
 	}
 
-	void Star::Encode(Node &node) const
+	void Star::Encode(Metadata &metadata) const
 	{
 	}
 

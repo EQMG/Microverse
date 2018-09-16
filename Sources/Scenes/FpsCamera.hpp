@@ -52,17 +52,14 @@ namespace micro
 
 		float m_sensitivity;
 		MouseButton m_reangleButton;
-		AxisJoystick *m_joystickVertical;
-		AxisJoystick *m_joystickHorizontal;
+		AxisJoystick m_joystickVertical;
+		AxisJoystick m_joystickHorizontal;
 
 		bool m_paused;
 	public:
 		FpsCamera();
 
-		~FpsCamera();
-
 		void Update() override;
-
 	private:
 		void CalculateHorizontalAngle();
 

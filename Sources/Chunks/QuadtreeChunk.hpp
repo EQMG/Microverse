@@ -23,7 +23,7 @@ namespace micro
 		float m_squareSize;
 		Transform m_transform;
 
-		std::vector<std::shared_ptr<QuadtreeChunk>> m_children;
+		std::vector<QuadtreeChunk *> m_children;
 		bool m_subdivided;
 		bool m_visible;
 		float m_lastChanged;
@@ -35,23 +35,19 @@ namespace micro
 
 		QuadtreeChunk(Planet *parent = nullptr, const uint32_t &lod = 0, const float &sideLength = 200.0f, const float &squareSize = 4.0f, const Transform &transform = Transform());
 
-		~QuadtreeChunk();
-
 		void Start() override;
 
 		void Update() override;
 
-		void Decode(const Node &node) override;
+		void Decode(const Metadata &metadata) override;
 
-		void Encode(Node &node) const override;
+		void Encode(Metadata &metadata) const override;
 
 		static GameObject *CreateChunk(Planet *parent, const Transform &transform, const uint32_t &lod = 0, const float &sideLength = 100.0f, const float &squareSize = 100.0f, const std::string &namePostfix = "");
 
 		uint32_t CalculateLod();
 
 		void SetVisible(const bool &visible, const float &timeout);
-
-		void DeleteChildren();
 
 		void Subdivide();
 

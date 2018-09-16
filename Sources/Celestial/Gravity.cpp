@@ -9,12 +9,7 @@
 namespace micro
 {
 	Gravity::Gravity() :
-		IComponent(),
 		m_influence(nullptr)
-	{
-	}
-
-	Gravity::~Gravity()
 	{
 	}
 
@@ -32,7 +27,7 @@ namespace micro
 		}
 
 		Vector3 position = GetGameObject()->GetTransform().GetPosition();
-		auto celestialList = Scenes::Get()->GetStructure()->QueryComponents<ICelestial>(); // TODO: Only select on component type insert.
+		auto celestialList = Scenes::Get()->GetStructure()->QueryComponents<ICelestial>(); // TODO: Only re-query on component type insert.
 		m_influence = nullptr;
 
 		Vector3 forcesSum = Vector3();
@@ -56,11 +51,11 @@ namespace micro
 		rigidbody->SetGravity(forcesSum);
 	}
 
-	void Gravity::Decode(const Node &node)
+	void Gravity::Decode(const Metadata &metadata)
 	{
 	}
 
-	void Gravity::Encode(Node &node) const
+	void Gravity::Encode(Metadata &metadata) const
 	{
 	}
 }

@@ -25,20 +25,9 @@ namespace micro
 		/// Gets this engine instance.
 		/// </summary>
 		/// <returns> The current module instance. </returns>
-		static std::shared_ptr<World> Get()
-		{
-			return Engine::Get()->GetModule<World>();
-		}
+		static World *Get() { return Engine::Get()->GetModule<World>(); }
 
-		/// <summary>
-		/// Creates a new worlds module.
-		/// </summary>
 		World();
-
-		/// <summary>
-		/// Deconstructor for the worlds module.
-		/// </summary>
-		~World();
 
 		void Update() override;
 

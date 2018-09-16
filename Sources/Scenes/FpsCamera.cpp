@@ -42,23 +42,17 @@ namespace micro
 		m_targetRotationAngle(m_angleAroundPlayer),
 		m_sensitivity(0.6f),
 		m_reangleButton(MOUSE_BUTTON_LEFT),
-		m_joystickVertical(new AxisJoystick(JOYSTICK_1, {3}, true)),
-		m_joystickHorizontal(new AxisJoystick(JOYSTICK_1, {2})),
+		m_joystickVertical(AxisJoystick(JOYSTICK_1, {3}, true)),
+		m_joystickHorizontal(AxisJoystick(JOYSTICK_1, {2})),
 		m_paused(false)
 	{
-	}
-
-	FpsCamera::~FpsCamera()
-	{
-		delete m_joystickVertical;
-		delete m_joystickHorizontal;
 	}
 
 	void FpsCamera::Update()
 	{
 		float delta = std::min(1.0f / 60.0f, Engine::Get()->GetDelta());
 
-		const bool newPaused = Scenes::Get()->IsGamePaused();
+		const bool newPaused = Scenes::Get()->IsPaused();
 
 		if (m_paused != newPaused)
 		{
@@ -99,9 +93,9 @@ namespace micro
 
 		if (!m_paused)
 		{
-			if (Maths::Deadband(0.05f, m_joystickHorizontal->GetAmount()) != 0.0f)
+			if (Maths::Deadband(0.05f, m_joystickHorizontal.GetAmount()) != 0.0f)
 			{
-				angleChange = m_joystickHorizontal->GetAmount() * INFLUENCE_OF_JOYSTICK_DX * m_sensitivity;
+				angleChange = m_joystickHorizontal.GetAmount() * INFLUENCE_OF_JOYSTICK_DX * m_sensitivity;
 			}
 			else if (Mouse::Get()->IsCursorDisabled() || Mouse::Get()->GetButton(m_reangleButton))
 			{
@@ -136,9 +130,9 @@ namespace micro
 
 		if (!m_paused)
 		{
-			if (Maths::Deadband(0.05f, m_joystickVertical->GetAmount()) != 0.0f)
+			if (Maths::Deadband(0.05f, m_joystickVertical.GetAmount()) != 0.0f)
 			{
-				angleChange = m_joystickVertical->GetAmount() * INFLUENCE_OF_JOYSTICK_DY * m_sensitivity;
+				angleChange = m_joystickVertical.GetAmount() * INFLUENCE_OF_JOYSTICK_DY * m_sensitivity;
 			}
 			else if (Mouse::Get()->IsCursorDisabled() || Mouse::Get()->GetButton(m_reangleButton))
 			{

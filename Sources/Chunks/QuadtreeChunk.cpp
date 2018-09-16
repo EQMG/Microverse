@@ -22,21 +22,15 @@ namespace micro
 	};
 
 	QuadtreeChunk::QuadtreeChunk(Planet *parent, const uint32_t &lod, const float &sideLength, const float &squareSize, const Transform &transform) :
-		IComponent(),
 		m_parent(parent),
 		m_lod(lod),
 		m_sideLength(sideLength),
 		m_squareSize(squareSize),
 		m_transform(transform),
-		m_children(std::vector<std::shared_ptr<QuadtreeChunk>>()),
+		m_children(std::vector<QuadtreeChunk *>()),
 		m_subdivided(false),
 		m_lastChanged(0.0f)
 	{
-	}
-
-	QuadtreeChunk::~QuadtreeChunk()
-	{
-		DeleteChildren();
 	}
 
 	void QuadtreeChunk::Start()
@@ -73,7 +67,7 @@ namespace micro
 
 		if (!m_subdivided && !m_children.empty() && Engine::Get()->GetTime() - m_lastChanged > DELAY_PURGE)
 		{
-			DeleteChildren();
+			m_children.clear();
 			return;
 		}
 
@@ -89,11 +83,11 @@ namespace micro
 		}
 	}
 
-	void QuadtreeChunk::Decode(const Node &node)
+	void QuadtreeChunk::Decode(const Metadata &metadata)
 	{
 	}
 
-	void QuadtreeChunk::Encode(Node &node) const
+	void QuadtreeChunk::Encode(Metadata &metadata) const
 	{
 	}
 
@@ -139,7 +133,7 @@ namespace micro
 			return;
 		}
 
-		Events::Get()->AddEvent<EventTime>(timeout, false, [&](){
+		Events::Get()->AddEvent<EventTime>(timeout, [&](){
 			if (m_visible != visible)
 			{
 				return;
@@ -151,19 +145,7 @@ namespace micro
 			{
 				meshRender->SetEnabled(m_visible);
 			}
-		});
-	}
-
-	void QuadtreeChunk::DeleteChildren()
-	{
-		if (m_children.empty())
-		{
-			return;
-		}
-
-	//	printf("Deleting %i children!\n", (int)m_children.size());
-
-		m_children.clear();
+		}, false);
 	}
 
 	void QuadtreeChunk::Subdivide()
@@ -177,7 +159,7 @@ namespace micro
 			for (auto &child : m_children)
 			{
 				child->SetVisible(true, 0.0f);
-				child->GetGameObject()->SetStructure(Scenes::Get()->GetStructure().get());
+				child->GetGameObject()->SetStructure(Scenes::Get()->GetStructure());
 			}
 
 			return;

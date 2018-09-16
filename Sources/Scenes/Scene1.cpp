@@ -13,6 +13,7 @@
 #include <Meshes/MeshRender.hpp>
 #include <Models/Shapes/ModelSphere.hpp>
 #include <Physics/ColliderConvexHull.hpp>
+#include <Uis/Uis.hpp>
 #include <Physics/ColliderSphere.hpp>
 #include <Scenes/Scenes.hpp>
 #include <Shadows/ShadowRender.hpp>
@@ -34,42 +35,21 @@ namespace micro
 	static const float UI_SLIDE_TIME = 0.2f;
 
 	Scene1::Scene1() :
-		IScene(new FpsCamera()),
-		m_buttonSpawnSphere(new ButtonMouse({MOUSE_BUTTON_1})),
-		m_buttonFullscreen(new ButtonKeyboard({KEY_F11})),
-		m_buttonCaptureMouse(new ButtonKeyboard({KEY_M})),
-		m_buttonScreenshot(new ButtonKeyboard({KEY_F12})),
-		m_buttonExit(new ButtonKeyboard({KEY_DELETE})),
-		m_soundScreenshot(new Sound("Sounds/Screenshot.ogg")),
-		m_primaryColour(Colour("#e74c3c")),
-		m_selectorJoystick(new SelectorJoystick(JOYSTICK_1, 0, 1, {0, 1})),
-		m_buttonPause((new ButtonCompound({
-			new ButtonKeyboard({KEY_ESCAPE}),
-			new ButtonJoystick(JOYSTICK_1, {7})
-		}))),
-		m_uiStartLogo(new UiStartLogo(Uis::Get()->GetContainer())),
-		m_overlayDebug(new OverlayDebug(Uis::Get()->GetContainer())),
-		m_uiNavigation(new UiNavigation(Uis::Get()->GetContainer()))
+		IScene(new FpsCamera(), new SelectorJoystick(JOYSTICK_1, 0, 1, {0, 1})),
+		m_buttonSpawnSphere(ButtonMouse({MOUSE_BUTTON_1})),
+		m_buttonFullscreen(ButtonKeyboard({KEY_F11})),
+		m_buttonCaptureMouse(ButtonKeyboard({KEY_M, KEY_ESCAPE})),
+		m_buttonScreenshot(ButtonKeyboard({KEY_F12})),
+		m_buttonPause(ButtonKeyboard({KEY_ESCAPE})),
+		m_buttonExit(ButtonKeyboard({KEY_DELETE})),
+		m_soundScreenshot(Sound("Sounds/Screenshot.ogg")),
+		m_uiStartLogo(std::make_unique<UiStartLogo>(Uis::Get()->GetContainer())),
+		m_overlayDebug(std::make_unique<OverlayDebug>(Uis::Get()->GetContainer())),
+		m_uiNavigation(std::make_unique<UiNavigation>(Uis::Get()->GetContainer()))
 	{
 		m_uiStartLogo->SetAlphaDriver<DriverConstant>(1.0f);
 		m_overlayDebug->SetAlphaDriver<DriverConstant>(0.0f);
 		m_uiNavigation->SetAlphaDriver<DriverConstant>(0.0f);
-	}
-
-	Scene1::~Scene1()
-	{
-		delete m_buttonSpawnSphere;
-		delete m_buttonFullscreen;
-		delete m_buttonCaptureMouse;
-		delete m_buttonScreenshot;
-		delete m_buttonExit;
-
-		delete m_selectorJoystick;
-
-		delete m_buttonPause;
-		delete m_uiStartLogo;
-		delete m_overlayDebug;
-		delete m_uiNavigation;
 	}
 
 	void Scene1::Start()
@@ -173,7 +153,7 @@ namespace micro
 
 	void Scene1::Update()
 	{
-		if (m_buttonSpawnSphere->WasDown() && !IsGamePaused())
+		if (m_buttonSpawnSphere.WasDown() && !IsPaused())
 		{
 			Vector3 cameraPosition = Scenes::Get()->GetCamera()->GetPosition();
 			Vector3 cameraRotation = Scenes::Get()->GetCamera()->GetRotation();
@@ -187,31 +167,31 @@ namespace micro
 			rigidbody->AddForce<Force>((cameraRotation.ToQuaternion() * Vector3::FRONT).Normalize() * Vector3(-1.0f, 1.0f, -1.0f) * 15.0f, 2.0f);
 		}
 
-		if (m_buttonFullscreen->WasDown())
+		if (m_buttonFullscreen.WasDown())
 		{
 			Display::Get()->SetFullscreen(!Display::Get()->IsFullscreen());
 		}
 
-		if (m_buttonCaptureMouse->WasDown())
+		if (m_buttonCaptureMouse.WasDown())
 		{
 			//	Scenes::Get()->SetScene(new Scene2());
 			Mouse::Get()->SetCursorHidden(!Mouse::Get()->IsCursorDisabled());
 		}
 
-		if (m_buttonScreenshot->WasDown())
+		if (m_buttonScreenshot.WasDown())
 		{
 			std::string filename = "Screenshots/" + Engine::Get()->GetDateTime() + ".png";
 
-			m_soundScreenshot->Play();
+			m_soundScreenshot.Play();
 			Renderer::Get()->CaptureScreenshot(filename);
 		}
 
-		if (m_buttonExit->WasDown())
+		if (m_buttonExit.WasDown())
 		{
 			Engine::Get()->RequestClose(false);
 		}
 
-		if (m_buttonPause->WasDown())
+		if (m_buttonPause.WasDown())
 		{
 			TogglePause();
 		}
@@ -225,7 +205,7 @@ namespace micro
 		}
 	}
 
-	bool Scene1::IsGamePaused() const
+	bool Scene1::IsPaused() const
 	{
 		return m_uiStartLogo->IsStarting() || m_uiNavigation->GetAlpha() != 0.0f;
 	}
@@ -237,7 +217,7 @@ namespace micro
 			return;
 		}
 
-		if (IsGamePaused())
+		if (IsPaused())
 		{
 			m_uiNavigation->SetAlphaDriver<DriverSlide>(m_uiNavigation->GetAlpha(), 0.0f, UI_SLIDE_TIME);
 		}

@@ -34,7 +34,7 @@ namespace micro
 
 		~MeshChunk();
 
-		VertexModel *GetVertex(const uint32_t &col, const uint32_t &row) override;
+		VertexModel GetVertex(const uint32_t &col, const uint32_t &row) override;
 	private:
 		Vector3 GetPosition(const float &x, const float &z);
 

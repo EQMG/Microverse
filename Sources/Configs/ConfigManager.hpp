@@ -14,8 +14,6 @@ namespace micro
 	public:
 		ConfigManager();
 
-		~ConfigManager();
-
 		void Load();
 
 		void Save();

@@ -19,7 +19,7 @@
 
 namespace micro
 {
-	RenderpassCreate RENDERPASS_0_CREATE = RenderpassCreate
+	const RenderpassCreate RENDERPASS_0_CREATE = RenderpassCreate
 	{
 		4096, 4096, // width, height
 		{
@@ -29,21 +29,20 @@ namespace micro
 			SubpassType(0, {0})
 		} // subpasses
 	};
-	RenderpassCreate RENDERPASS_1_CREATE = RenderpassCreate
+	const RenderpassCreate RENDERPASS_1_CREATE = RenderpassCreate
 	{
 		0, 0, // width, height
 		{
-			Attachment(0, ATTACHMENT_DEPTH, VK_FORMAT_D32_SFLOAT_S8_UINT, true), // depth
+			Attachment(0, ATTACHMENT_DEPTH, VK_FORMAT_D32_SFLOAT_S8_UINT, false), // depth
 			Attachment(1, ATTACHMENT_SWAPCHAIN), // swapchain
-			Attachment(2, ATTACHMENT_IMAGE, VK_FORMAT_R16G16B16A16_SFLOAT, true), // positions (world-space)
-			Attachment(3, ATTACHMENT_IMAGE, VK_FORMAT_R8G8B8A8_UNORM, true), // diffuse
-			Attachment(4, ATTACHMENT_IMAGE, VK_FORMAT_R16G16B16A16_SFLOAT, true), // normals (world-space)
-			Attachment(5, ATTACHMENT_IMAGE, VK_FORMAT_R8G8B8A8_UNORM, true), // materials
-			Attachment(6, ATTACHMENT_IMAGE, VK_FORMAT_R8G8B8A8_UNORM) // resolved
+			Attachment(2, ATTACHMENT_IMAGE, VK_FORMAT_R8G8B8A8_UNORM, false), // diffuse
+			Attachment(3, ATTACHMENT_IMAGE, VK_FORMAT_R16G16B16A16_SFLOAT, false), // normals
+			Attachment(4, ATTACHMENT_IMAGE, VK_FORMAT_R8G8B8A8_UNORM, false), // materials
+			Attachment(5, ATTACHMENT_IMAGE, VK_FORMAT_R8G8B8A8_UNORM) // resolved
 		}, // images
 		{
-			SubpassType(0, {0, 2, 3, 4, 5}),
-			SubpassType(1, {0, 6}),
+			SubpassType(0, {0, 2, 3, 4}),
+			SubpassType(1, {0, 5}),
 			SubpassType(2, {1})
 		} // subpasses
 	};
@@ -51,28 +50,24 @@ namespace micro
 	MainRenderer::MainRenderer() :
 		IManagerRender({RENDERPASS_0_CREATE, RENDERPASS_1_CREATE})
 	{
-	//	AddRenderer<RendererShadows>(GraphicsStage(0, 0));
-	
-		AddRenderer<RendererMeshes>(GraphicsStage(1, 0));
-		AddRenderer<RendererDeferred>(GraphicsStage(1, 1));
-		AddRenderer<RendererMeshes>(GraphicsStage(1, 1), SORT_BACK);
-	//	AddRenderer<RendererParticles>(GraphicsStage(1, 1));
-		AddRenderer<FilterDefault>(GraphicsStage(1, 2));
-	//	AddRenderer<FilterFxaa>(GraphicsStage(1, 2));
-	//	AddRenderer<FilterLensflare>(GraphicsStage(1, 2));
-	//	AddRenderer<FilterTiltshift>(GraphicsStage(1, 2));
-		AddRenderer<FilterDamage>(GraphicsStage(1, 2));
-	//	AddRenderer<FilterGrain>(GraphicsStage(1, 2));
-		AddRenderer<RendererGuis>(GraphicsStage(1, 2));
-		AddRenderer<RendererFonts>(GraphicsStage(1, 2));
-
-#ifdef ACID_BUILD_MACOS
-		GetRenderer<FilterFxaa>()->SetEnabled(false);
-#endif
 	}
 
-	MainRenderer::~MainRenderer()
+	void MainRenderer::Start()
 	{
+	//	Renderer::Get()->AddRenderer<RendererShadows>(GraphicsStage(0, 0));
+	
+		Renderer::Get()->AddRenderer<RendererMeshes>(GraphicsStage(1, 0));
+		Renderer::Get()->AddRenderer<RendererDeferred>(GraphicsStage(1, 1));
+		Renderer::Get()->AddRenderer<RendererMeshes>(GraphicsStage(1, 1), SORT_BACK);
+	//	Renderer::Get()->AddRenderer<RendererParticles>(GraphicsStage(1, 1));
+		Renderer::Get()->AddRenderer<FilterDefault>(GraphicsStage(1, 2));
+	//	Renderer::Get()->AddRenderer<FilterFxaa>(GraphicsStage(1, 2));
+	//	Renderer::Get()->AddRenderer<FilterLensflare>(GraphicsStage(1, 2));
+	//	Renderer::Get()->AddRenderer<FilterTiltshift>(GraphicsStage(1, 2));
+		Renderer::Get()->AddRenderer<FilterDamage>(GraphicsStage(1, 2));
+	//	Renderer::Get()->AddRenderer<FilterGrain>(GraphicsStage(1, 2));
+		Renderer::Get()->AddRenderer<RendererGuis>(GraphicsStage(1, 2));
+		Renderer::Get()->AddRenderer<RendererFonts>(GraphicsStage(1, 2));
 	}
 
 	void MainRenderer::Update()

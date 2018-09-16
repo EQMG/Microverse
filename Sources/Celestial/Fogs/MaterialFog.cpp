@@ -11,21 +11,18 @@
 namespace micro
 {
 	MaterialFog::MaterialFog(const float &thickness) :
-		IMaterial(),
-		m_material(PipelineMaterial::Resource({1, 1}, PipelineCreate({"Shaders/Fogs/Fog.vert", "Shaders/Fogs/Fog.frag"},
-		    VertexModel::GetVertexInput(), PIPELINE_MODE_POLYGON, VK_POLYGON_MODE_FILL, VK_CULL_MODE_FRONT_BIT, {}))),
 		m_thickness(thickness),
 		m_innerRadius(0.0f),
-		m_outerRadius(0.0f)
-	{
-	}
-
-	MaterialFog::~MaterialFog()
+		m_outerRadius(0.0f),
+		m_material(nullptr)
 	{
 	}
 
 	void MaterialFog::Start()
 	{
+		m_material = PipelineMaterial::Resource({1, 1}, PipelineCreate({"Shaders/Fogs/Fog.vert", "Shaders/Fogs/Fog.frag"},
+			{VertexModel::GetVertexInput()}, PIPELINE_MODE_POLYGON, PIPELINE_DEPTH_READ_WRITE, VK_POLYGON_MODE_FILL, VK_CULL_MODE_FRONT_BIT, {}));
+
 		auto parent = GetGameObject()->GetParent();
 
 		if (parent != nullptr)
@@ -60,11 +57,11 @@ namespace micro
 		GetGameObject()->GetTransform().SetPosition(parent->GetTransform().GetPosition());
 	}
 
-	void MaterialFog::Decode(const Node &node)
+	void MaterialFog::Decode(const Metadata &metadata)
 	{
 	}
 
-	void MaterialFog::Encode(Node &node) const
+	void MaterialFog::Encode(Metadata &metadata) const
 	{
 	}
 
