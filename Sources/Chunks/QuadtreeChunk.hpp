@@ -26,11 +26,11 @@ namespace micro
 		std::vector<QuadtreeChunk *> m_children;
 		bool m_subdivided;
 		bool m_visible;
-		float m_lastChanged;
+		Time m_lastChanged;
 	public:
 		static const uint32_t HIGHEST_LOD;
-		static const float DELAY_RENDER;
-		static const float DELAY_PURGE;
+		static const Time DELAY_RENDER;
+		static const Time DELAY_PURGE;
 		static const std::vector<Vector3> OFFSETS;
 
 		QuadtreeChunk(Planet *parent = nullptr, const uint32_t &lod = 0, const float &sideLength = 200.0f, const float &squareSize = 4.0f, const Transform &transform = Transform());
@@ -47,7 +47,7 @@ namespace micro
 
 		uint32_t CalculateLod();
 
-		void SetVisible(const bool &visible, const float &timeout);
+		void SetVisible(const bool &visible, const Time &timeout);
 
 		void Subdivide();
 

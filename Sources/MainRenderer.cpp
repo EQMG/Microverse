@@ -21,24 +21,23 @@ namespace micro
 {
 	const RenderpassCreate RENDERPASS_0_CREATE = RenderpassCreate
 	{
-		4096, 4096, // width, height
 		{
-			Attachment(0, ATTACHMENT_IMAGE, VK_FORMAT_R8_UNORM) // shadows
+			Attachment(0, "shadows", ATTACHMENT_TYPE_IMAGE, VK_FORMAT_R8_UNORM)
 		}, // images
 		{
 			SubpassType(0, {0})
-		} // subpasses
+		}, // subpasses
+		4096, 4096 // width, height
 	};
 	const RenderpassCreate RENDERPASS_1_CREATE = RenderpassCreate
 	{
-		0, 0, // width, height
 		{
-			Attachment(0, ATTACHMENT_DEPTH, VK_FORMAT_D32_SFLOAT_S8_UINT, false), // depth
-			Attachment(1, ATTACHMENT_SWAPCHAIN), // swapchain
-			Attachment(2, ATTACHMENT_IMAGE, VK_FORMAT_R8G8B8A8_UNORM, false), // diffuse
-			Attachment(3, ATTACHMENT_IMAGE, VK_FORMAT_R16G16B16A16_SFLOAT, false), // normals
-			Attachment(4, ATTACHMENT_IMAGE, VK_FORMAT_R8G8B8A8_UNORM, false), // materials
-			Attachment(5, ATTACHMENT_IMAGE, VK_FORMAT_R8G8B8A8_UNORM) // resolved
+			Attachment(0, "depth", ATTACHMENT_TYPE_DEPTH, VK_FORMAT_D32_SFLOAT_S8_UINT, false),
+			Attachment(1, "swapchain", ATTACHMENT_TYPE_SWAPCHAIN),
+			Attachment(2, "diffuse", ATTACHMENT_TYPE_IMAGE, VK_FORMAT_R8G8B8A8_UNORM, false),
+			Attachment(3, "normals", ATTACHMENT_TYPE_IMAGE, VK_FORMAT_R16G16B16A16_SFLOAT, false),
+			Attachment(4, "materials", ATTACHMENT_TYPE_IMAGE, VK_FORMAT_R8G8B8A8_UNORM, false),
+			Attachment(5, "resolved", ATTACHMENT_TYPE_IMAGE, VK_FORMAT_R8G8B8A8_UNORM)
 		}, // images
 		{
 			SubpassType(0, {0, 2, 3, 4}),
@@ -57,9 +56,11 @@ namespace micro
 	//	Renderer::Get()->AddRenderer<RendererShadows>(GraphicsStage(0, 0));
 	
 		Renderer::Get()->AddRenderer<RendererMeshes>(GraphicsStage(1, 0));
-		Renderer::Get()->AddRenderer<RendererDeferred>(GraphicsStage(1, 1));
-		Renderer::Get()->AddRenderer<RendererMeshes>(GraphicsStage(1, 1), SORT_BACK);
+
+		Renderer::Get()->AddRenderer<RendererDeferred>(GraphicsStage(1, 1), DEFERRED_SIMPLE);
+		Renderer::Get()->AddRenderer<RendererMeshes>(GraphicsStage(1, 1), MESH_SORT_BACK);
 	//	Renderer::Get()->AddRenderer<RendererParticles>(GraphicsStage(1, 1));
+
 		Renderer::Get()->AddRenderer<FilterDefault>(GraphicsStage(1, 2));
 	//	Renderer::Get()->AddRenderer<FilterFxaa>(GraphicsStage(1, 2));
 	//	Renderer::Get()->AddRenderer<FilterLensflare>(GraphicsStage(1, 2));

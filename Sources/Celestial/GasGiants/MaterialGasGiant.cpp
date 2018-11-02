@@ -16,7 +16,7 @@ namespace micro
 		m_timeScale(timeScale),
 		m_diffuseCompute(Compute(ComputeCreate("Shaders/GasGiants/GasGiant.comp", 3072, 3072, 32, {}))),
 		m_diffuseTexture(std::make_shared<Texture>(3072, 3072)),
-		m_diffuseUpdate(Timer(Maths::Random(16.0f, 20.0f))),
+		m_diffuseUpdate(Timer(Time::Seconds(Maths::Random(16.0f, 20.0f)))),
 		m_material(nullptr)
 	{
 	}
@@ -73,8 +73,9 @@ namespace micro
 	void MaterialGasGiant::UpdateDiffuse()
 	{
 #if ACID_VERBOSE
-		float debugStart = Engine::Get()->GetTimeMs();
+		auto debugStart = Engine::GetTime();
 #endif
+
 		CommandBuffer commandBuffer = CommandBuffer(true, VK_QUEUE_COMPUTE_BIT);
 
 		// Bind the pipeline.
@@ -101,9 +102,10 @@ namespace micro
 
 		commandBuffer.End();
 		commandBuffer.Submit();
+
 #if ACID_VERBOSE
-		float debugEnd = Engine::Get()->GetTimeMs();
-		Log::Out("Computed gas giant diffuse in %fms\n", debugEnd - debugStart);
+		auto debugEnd = Engine::GetTime();
+		Log::Out("Computed gas giant diffuse in %ims\n", (debugEnd - debugStart).AsMilliseconds());
 #endif
 	}
 

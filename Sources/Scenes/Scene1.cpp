@@ -32,7 +32,7 @@
 
 namespace micro
 {
-	static const float UI_SLIDE_TIME = 0.2f;
+	static const Time UI_SLIDE_TIME = Time::Seconds(0.2f);
 
 	Scene1::Scene1() :
 		IScene(new FpsCamera(), new SelectorJoystick(JOYSTICK_1, 0, 1, {0, 1})),
@@ -95,12 +95,12 @@ namespace micro
 		planet1->AddComponent<Orbit>();
 		planet1->AddComponent<Mesh>();*/
 
-		GameObject *planet2 = new GameObject(Transform(Vector3(0.0f, 0.0f, 10000.0f))); // One moon
-		planet2->SetName("Planet2");
-		planet2->SetParent(star1);
-		planet2->AddComponent<Planet>(1244, 560.0f);
-		planet2->AddComponent<Orbit>();
-		planet2->AddComponent<Mesh>();
+//		GameObject *planet2 = new GameObject(Transform(Vector3(0.0f, 0.0f, 10000.0f))); // One moon
+//		planet2->SetName("Planet2");
+//		planet2->SetParent(star1);
+//		planet2->AddComponent<Planet>(1244, 560.0f);
+//		planet2->AddComponent<Orbit>();
+//		planet2->AddComponent<Mesh>();
 
 //		GameObject *fog2 = new GameObject(Transform());
 //		fog2->SetName("Planet2_Fog");
@@ -164,7 +164,7 @@ namespace micro
 			sphere->AddComponent<Gravity>();
 			sphere->AddComponent<MaterialDefault>(Colour::WHITE, nullptr, 0.0f, 1.0f);
 			sphere->AddComponent<MeshRender>();
-			rigidbody->AddForce<Force>((cameraRotation.ToQuaternion() * Vector3::FRONT).Normalize() * Vector3(-1.0f, 1.0f, -1.0f) * 15.0f, 2.0f);
+			rigidbody->AddForce<Force>((cameraRotation.ToQuaternion() * Vector3::FRONT).Normalize() * Vector3(-1.0f, 1.0f, -1.0f) * 15.0f, Time::Seconds(2.0f));
 		}
 
 		if (m_buttonFullscreen.WasDown())

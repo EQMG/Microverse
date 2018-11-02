@@ -9,11 +9,10 @@ namespace micro
 {
 	OverlayDebug::OverlayDebug(UiObject *parent) :
 		UiObject(parent, UiBound(Vector2(0.5f, 0.5f), "Centre", true, true, Vector2(1.0f, 1.0f))),
-		m_textInfo(CreateStatus("Build: d0.0.1", 0.002f, 0.002f, JUSTIFY_LEFT)),
-		m_textFps(CreateStatus("FPS: 0", 0.002f, 0.022f, JUSTIFY_LEFT)),
-		m_textUps(CreateStatus("UPS: 0", 0.002f, 0.042f, JUSTIFY_LEFT)),
-		m_textPosition(CreateStatus("POSITION: 0.0, 0.0, 0.0", 0.002f, 0.062f, JUSTIFY_LEFT)),
-		m_timerUpdate(Timer(0.333f))
+		m_textFps(CreateStatus("FPS: 0", 0.002f, 0.002f, TEXT_JUSTIFY_LEFT)),
+		m_textUps(CreateStatus("UPS: 0", 0.002f, 0.022f, TEXT_JUSTIFY_LEFT)),
+		m_textPosition(CreateStatus("POSITION: 0.0, 0.0, 0.0", 0.002f, 0.042f, TEXT_JUSTIFY_LEFT)),
+		m_timerUpdate(Timer(Time::Seconds(0.333f)))
 	{
 	}
 
@@ -31,8 +30,8 @@ namespace micro
 				                          String::To(static_cast<int>(cameraPosition.m_z)));
 			}
 
-			m_textFps->SetString("FPS: " + String::To(static_cast<int>(1.0f / Engine::Get()->GetDeltaRender())));
-			m_textUps->SetString("UPS: " + String::To(static_cast<int>(1.0f / Engine::Get()->GetDelta())));
+			m_textFps->SetString("FPS: " + String::To(static_cast<int>(1.0f / Engine::Get()->GetDeltaRender().AsSeconds())));
+			m_textUps->SetString("UPS: " + String::To(static_cast<int>(1.0f / Engine::Get()->GetDelta().AsSeconds())));
 		}
 	}
 

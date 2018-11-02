@@ -98,7 +98,7 @@ namespace micro
 	void Planet::GenerateHeightmap()
 	{
 #if ACID_VERBOSE
-		float debugStart = Engine::Get()->GetTimeMs();
+		auto debugStart = Engine::GetTime();
 #endif
 		auto result = std::make_shared<Texture>(m_heightmapSize, m_heightmapSize);
 
@@ -154,8 +154,8 @@ namespace micro
 		delete[] pixels;
 
 #if ACID_VERBOSE
-		float debugEnd = Engine::Get()->GetTimeMs();
-		Log::Out("Computed planet in %fms\n", debugEnd - debugStart);
+		auto debugEnd = Engine::GetTime();
+		Log::Out("Computed planet in %ims\n", (debugEnd - debugStart).AsMilliseconds());
 #endif
 	}
 }

@@ -23,7 +23,7 @@ namespace micro
 
 	void FilterDamage::Render(const CommandBuffer &commandBuffer, const Vector4 &clipPlane, const ICamera &camera)
 	{
-		float delta = Engine::Get()->GetDeltaRender();
+		auto delta = Engine::Get()->GetDeltaRender();
 		m_radius = m_radiusDriver->Update(delta);
 		m_softness = m_softnessDriver->Update(delta);
 

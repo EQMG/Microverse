@@ -25,6 +25,7 @@ using namespace acid;
 int main(int argc, char **argv)
 {
 	// Registers file search paths.
+	Files::SetBaseDirectory(argv[0]);
 	Files::AddSearchPath("Resources/Game");
 	Files::AddSearchPath("Resources/Engine");
 
@@ -32,10 +33,10 @@ int main(int argc, char **argv)
 	auto engine = std::make_unique<Engine>();
 
 	auto configManager = std::make_unique<ConfigManager>();
-	printf("Working Directory: %s\n", FileSystem::GetWorkingDirectory().c_str());
+	Log::Out("Working Directory: %s\n", FileSystem::GetWorkingDirectory().c_str());
 
 	// Registers modules.
-	Engine::Get()->RegisterModule<World>(UPDATE_NORMAL);
+	Engine::Get()->RegisterModule<World>(MODULE_UPDATE_NORMAL);
 
 	// Registers components.
 	Scenes::Get()->RegisterComponent<FpsPlayer>("FpsPlayer");

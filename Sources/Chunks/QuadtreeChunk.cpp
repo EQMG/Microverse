@@ -11,8 +11,8 @@
 namespace micro
 {
 	const uint32_t QuadtreeChunk::HIGHEST_LOD = 3;
-	const float QuadtreeChunk::DELAY_RENDER = 0.3f;
-	const float QuadtreeChunk::DELAY_PURGE = 6.0f;
+	const Time QuadtreeChunk::DELAY_RENDER = Time::Seconds(0.3f);
+	const Time QuadtreeChunk::DELAY_PURGE = Time::Seconds(6.0f);
 	const std::vector<Vector3> QuadtreeChunk::OFFSETS =
 	{
 		Vector3(1.0f, 0.0f, 1.0f),
@@ -29,7 +29,7 @@ namespace micro
 		m_transform(transform),
 		m_children(std::vector<QuadtreeChunk *>()),
 		m_subdivided(false),
-		m_lastChanged(0.0f)
+		m_lastChanged(Time::ZERO)
 	{
 	}
 
@@ -46,17 +46,17 @@ namespace micro
 		}
 
 #if ACID_VERBOSE
-		float debugStart = Engine::Get()->GetTimeMs();
+		auto debugStart = Engine::Get()->GetTime();
 #endif
 		uint32_t vertexCount = CalculateVertexCount(m_sideLength, m_squareSize);
 		float textureScale = CalculateTextureScale(m_sideLength);
 		mesh->SetModel(std::make_shared<MeshChunk>(m_parent, m_sideLength, m_squareSize, vertexCount, textureScale, m_transform));
 #if ACID_VERBOSE
-		float debugEnd = Engine::Get()->GetTimeMs();
+		auto debugEnd = Engine::Get()->GetTime();
 
-		if (debugEnd - debugStart > 10.0f)
+		if ((debugEnd - debugStart).AsMilliseconds() > 10.0f)
 		{
-			printf("Terrain built in %fms\n", debugEnd - debugStart);
+			Log::Out("Terrain built in %ims\n", (debugEnd - debugStart).AsMilliseconds());
 		}
 #endif
 	}
@@ -117,11 +117,11 @@ namespace micro
 		return static_cast<uint32_t>(std::clamp(lod, 0.0f, static_cast<float>(HIGHEST_LOD)));
 	}
 
-	void QuadtreeChunk::SetVisible(const bool &visible, const float &timeout)
+	void QuadtreeChunk::SetVisible(const bool &visible, const Time &timeout)
 	{
 		m_visible = visible;
 
-		if (timeout == 0.0f)
+		if (timeout == Time::ZERO)
 		{
 			auto meshRender = GetGameObject()->GetComponent<MeshRender>(true);
 
@@ -158,7 +158,7 @@ namespace micro
 		{
 			for (auto &child : m_children)
 			{
-				child->SetVisible(true, 0.0f);
+				child->SetVisible(true, Time::ZERO);
 				child->GetGameObject()->SetStructure(Scenes::Get()->GetStructure());
 			}
 
@@ -179,14 +179,14 @@ namespace micro
 	void QuadtreeChunk::Merge()
 	{
 		m_subdivided = false;
-		m_lastChanged = Engine::Get()->GetTime();
-		SetVisible(true, 0.0f);
+		m_lastChanged = Engine::GetTime();
+		SetVisible(true, Time::ZERO);
 
 		for (auto &child : m_children)
 		{
 			child->Merge();
-			child->SetVisible(false, 0.0f);
-			child->GetGameObject()->StructureRemove();
+			child->SetVisible(false, Time::ZERO);
+			child->GetGameObject()->SetRemoved(true);
 		}
 	}
 

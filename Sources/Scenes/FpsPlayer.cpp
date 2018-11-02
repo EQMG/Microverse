@@ -64,7 +64,7 @@ namespace micro
 	void FpsPlayer::Update()
 	{
 		// Gets the delta and limits the lowest UPS to 20 (any less and the game is unplayable).
-		float delta = std::min(Engine::Get()->GetDelta(), 1.0f / 20.0f);
+		float delta = std::min(1.0f / 20.0f, Engine::Get()->GetDelta().AsSeconds());
 
 		Vector3 targetVelocity = Vector3(0.0f, m_noclipEnabled ? 0.0f : GRAVITY, 0.0f);
 
@@ -112,7 +112,7 @@ namespace micro
 				targetVelocity *= 0.0f;
 				m_jumping = false;
 				m_noclipEnabled = !m_noclipEnabled;
-				printf("Player Noclip: %s\n", m_noclipEnabled ? "true" : "false");
+				Log::Out("Player Noclip: %s\n", m_noclipEnabled ? "true" : "false");
 			}
 		}
 

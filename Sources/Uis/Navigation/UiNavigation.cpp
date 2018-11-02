@@ -31,8 +31,8 @@ namespace micro
 		m_barBackground->SetScissor(Vector4(0.0f, 0.0f, 1.0f, 0.125f));
 		m_barBackground->SetColourOffset(Colour("#2969B0"));
 
-		m_barTitle = std::make_unique<Text>(this, UiBound(Vector2(0.01f, 0.985f), "LeftCentre", false), 3.5f, "Microverse", FontType::Resource("Fonts/ProximaNova", "Bold"), JUSTIFY_LEFT, 1.0f, 0.001f);
-		m_barCreatedBy = std::make_unique<Text>(this, UiBound(Vector2(0.02f, 0.915f), "LeftCentre", false), 1.1f, "Created By: Equilibrium Games", FontType::Resource("Fonts/ProximaNova", "Light"), JUSTIFY_LEFT, 1.0f, 0.0013f);
+		m_barTitle = std::make_unique<Text>(this, UiBound(Vector2(0.01f, 0.985f), "LeftCentre", false), 3.5f, "Microverse", FontType::Resource("Fonts/ProximaNova", "Bold"), TEXT_JUSTIFY_LEFT, 1.0f, 0.001f);
+		m_barCreatedBy = std::make_unique<Text>(this, UiBound(Vector2(0.02f, 0.915f), "LeftCentre", false), 1.1f, "Created By: Equilibrium Games", FontType::Resource("Fonts/ProximaNova", "Light"), TEXT_JUSTIFY_LEFT, 1.0f, 0.0013f);
 
 		m_tabPuck = std::make_unique<Gui>(this, UiBound(Vector2(0.0f, 0.875f), "BottomLeft", false, true, Vector2(0.0f, 0.01f)), Texture::Resource("Guis/White.png"));
 		m_tabPuck->SetColourOffset(Colour("#386AB5"));
@@ -100,17 +100,17 @@ namespace micro
 					continue;
 				}
 
-				m_driverTarget = std::make_unique<DriverSlide>(0.0f, 1.0f, 0.4f);
+				m_driverTarget = std::make_unique<DriverSlide>(0.0f, 1.0f, Time::Seconds(0.4f));
 				m_targetTab = tab.get();
 
 				if (m_currentTab != nullptr)
 				{
-					m_currentTab->GetContent()->SetAlphaDriver<DriverSlide>(1.0f, 0.0f, 0.1f);
+					m_currentTab->GetContent()->SetAlphaDriver<DriverSlide>(1.0f, 0.0f, Time::Seconds(0.1f));
 				}
 
-				Events::Get()->AddEvent<EventTime>(0.32f, [&]()
+				Events::Get()->AddEvent<EventTime>(Time::Seconds(0.32f), [&]()
 				{
-					m_targetTab->GetContent()->SetAlphaDriver<DriverSlide>(0.0f, 1.0f, 0.1f);
+					m_targetTab->GetContent()->SetAlphaDriver<DriverSlide>(0.0f, 1.0f, Time::Seconds(0.1f));
 				}, false);
 			}
 		}
