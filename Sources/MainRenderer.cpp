@@ -61,12 +61,12 @@ namespace micro
 		Renderer::Get()->AddRenderer<RendererMeshes>(GraphicsStage(1, 1), MESH_SORT_BACK);
 	//	Renderer::Get()->AddRenderer<RendererParticles>(GraphicsStage(1, 1));
 
-		Renderer::Get()->AddRenderer<FilterDefault>(GraphicsStage(1, 2));
 	//	Renderer::Get()->AddRenderer<FilterFxaa>(GraphicsStage(1, 2));
 	//	Renderer::Get()->AddRenderer<FilterLensflare>(GraphicsStage(1, 2));
 	//	Renderer::Get()->AddRenderer<FilterTiltshift>(GraphicsStage(1, 2));
 		Renderer::Get()->AddRenderer<FilterDamage>(GraphicsStage(1, 2));
 	//	Renderer::Get()->AddRenderer<FilterGrain>(GraphicsStage(1, 2));
+		Renderer::Get()->AddRenderer<FilterDefault>(GraphicsStage(1, 2), true);
 		Renderer::Get()->AddRenderer<RendererGuis>(GraphicsStage(1, 2));
 		Renderer::Get()->AddRenderer<RendererFonts>(GraphicsStage(1, 2));
 	}

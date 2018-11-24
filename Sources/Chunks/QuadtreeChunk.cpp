@@ -35,7 +35,7 @@ namespace micro
 
 	void QuadtreeChunk::Start()
 	{
-		m_lastChanged = Engine::Get()->GetTime();
+		m_lastChanged = Engine::GetTime();
 
 		auto mesh = GetGameObject()->GetComponent<Mesh>(true);
 
@@ -46,13 +46,13 @@ namespace micro
 		}
 
 #if ACID_VERBOSE
-		auto debugStart = Engine::Get()->GetTime();
+		auto debugStart = Engine::GetTime();
 #endif
 		uint32_t vertexCount = CalculateVertexCount(m_sideLength, m_squareSize);
 		float textureScale = CalculateTextureScale(m_sideLength);
 		mesh->SetModel(std::make_shared<MeshChunk>(m_parent, m_sideLength, m_squareSize, vertexCount, textureScale, m_transform));
 #if ACID_VERBOSE
-		auto debugEnd = Engine::Get()->GetTime();
+		auto debugEnd = Engine::GetTime();
 
 		if ((debugEnd - debugStart).AsMilliseconds() > 10.0f)
 		{
@@ -65,7 +65,7 @@ namespace micro
 	{
 		GetGameObject()->SetTransform(m_parent->GetGameObject()->GetTransform());
 
-		if (!m_subdivided && !m_children.empty() && Engine::Get()->GetTime() - m_lastChanged > DELAY_PURGE)
+		if (!m_subdivided && !m_children.empty() && Engine::GetTime() - m_lastChanged > DELAY_PURGE)
 		{
 			m_children.clear();
 			return;
@@ -151,7 +151,7 @@ namespace micro
 	void QuadtreeChunk::Subdivide()
 	{
 		m_subdivided = true;
-		m_lastChanged = Engine::Get()->GetTime();
+		m_lastChanged = Engine::GetTime();
 		SetVisible(false, DELAY_RENDER);
 
 		if (!m_children.empty())
