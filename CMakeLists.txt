@@ -1,113 +1,20 @@
-cmake_minimum_required (VERSION 3.1)
-project (Microverse)
+# 3.8.0 required for cxx_std_17
+cmake_minimum_required(VERSION 3.8.0 FATAL_ERROR)
+project(Microverse VERSION 0.10.8 LANGUAGES C CXX)
 
-set(MICROVERSE_VERSION "0.0.5")
+# Sets the install directories defined by GNU
+include(GNUInstallDirs)
+#set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/${CMAKE_INSTALL_LIBDIR})
+#set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/${CMAKE_INSTALL_LIBDIR})
+#set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/${CMAKE_INSTALL_BINDIR})
 
-# Options
-if(MSVC)
-	option(BUILD_SHARED_LIBS "Build Shared Libraries" OFF)
+# Looks for a appropriate threads package for this platform
+find_package(Acid QUIET)
+if(NOT ACID_FOUND)
+	add_subdirectory(${PROJECT_SOURCE_DIR}/Libraries/Acid)
 else()
-	option(BUILD_SHARED_LIBS "Build Shared Libraries" ON)
+	set(ACID_FOUND true)
 endif()
 
-option(MICROVERSE_INSTALL "Generate installation target" OFF)
-
-set(LIB_TYPE STATIC)
-
-if(BUILD_SHARED_LIBS)
-	set(LIB_TYPE SHARED)
-endif()
-
-# Preprocessor
-if("${CMAKE_BUILD_TYPE}" STREQUAL "Debug")
-	add_definitions(-DACID_VERBOSE)
-	add_definitions(-DACID_BUILD_DEBUG)
-elseif("${CMAKE_BUILD_TYPE}" STREQUAL "Release")
-	add_definitions(-DACID_BUILD_RELEASE)
-elseif("${CMAKE_BUILD_TYPE}" STREQUAL "RelWithDebInfo")
-	add_definitions(-DACID_VERBOSE)
-	add_definitions(-DACID_BUILD_RELEASE)
-endif()
-
-if(WIN32)
-	add_definitions(-DACID_BUILD_WINDOWS)
-elseif(UNIX AND NOT APPLE)
-	add_definitions(-DACID_BUILD_LINUX)
-elseif(UNIX AND APPLE)
-	add_definitions(-DACID_BUILD_MACOS)
-endif()
-
-if(CMAKE_SIZEOF_VOID_P EQUAL 8)
-	add_definitions(-DACID_BUILD_64BIT)
-elseif(CMAKE_SIZEOF_VOID_P EQUAL 4)
-	add_definitions(-DACID_BUILD_32BIT)
-endif()
-
-# Compiler Options
-set(CMAKE_CXX_STANDARD 17)
-set(CMAKE_CXX_EXTENSIONS ON)
-set(CMAKE_CXX_STANDARD_REQUIRED ON)
-set(CMAKE_C_STANDARD 11)
-set(CMAKE_C_STANDARD_REQUIRED ON)
-set(CMAKE_WINDOWS_EXPORT_ALL_SYMBOLS ON)
-set(CMAKE_DEBUG_POSTFIX "" CACHE STRING "Adds a postfix for debug-built libraries.")
-
-if(WIN32)
-	add_definitions(-DWIN32_LEAN_AND_MEAN)
-	add_definitions(-DNOMINMAX)
-	set(CMAKE_SHARED_LIBRARY_PREFIX "")
-endif()
-
-if(MSVC)
-	add_definitions(-DACID_BUILD_MSVC)
-	add_definitions(-DNOMINMAX)
-	add_definitions(-D_SCL_SECURE_NO_WARNINGS)
-	add_definitions(-D_CRT_SECURE_NO_WARNINGS)
-	add_definitions(-D_ENABLE_EXTENDED_ALIGNED_STORAGE)
-	set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /DWIN32 /D_WINDOWS /std:c++17 /INCREMENTAL:NO /Oi /Ot /GT /GF /GS- /fp:fast /fp:except- /MP /W3 /wd4251")
-	set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} /Od /Ob0 /RTC1 /MDd /DEBUG")
-	set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} /Ox /Ob2 /MD")
-	set(CMAKE_CXX_FLAGS_RELWITHDEBINFO "${CMAKE_CXX_FLAGS_RELWITHDEBINFO} /Od /Ob2 /MDd /DEBUG")
-
-	if(CMAKE_SIZEOF_VOID_P EQUAL 8)
-		set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} /ZI")
-		set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} /OPT:ICF")
-		set(CMAKE_CXX_FLAGS_RELWITHDEBINFO "${CMAKE_CXX_FLAGS_RELWITHDEBINFO} /OPT:ICF")
-	else()
-		set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /arch:SSE2")
-		set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} /Zi")
-	endif()
-elseif(CMAKE_CXX_COMPILER_ID MATCHES "Clang")
-	add_definitions(-DACID_BUILD_CLANG)
-	set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++1z -Wall -msse3 -mfpmath=sse") # -Wextra -Werror -pedantic
-	set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -g -O0 -DDEBUG")
-	set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} -O2 -DNDEBUG -Wno-unused-variable")
-	set(CMAKE_CXX_FLAGS_RELWITHDEBINFO "${CMAKE_CXX_FLAGS_RELWITHDEBINFO} -O2 -g")
-elseif(CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
-	add_definitions(-DACID_BUILD_GNU)
-	add_definitions(-D__USE_MINGW_ANSI_STDIO=0)
-	set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++17 -Wall -mavx -msse3 -mfpmath=sse") # -Wextra -Werror -pedantic
-	set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -g -O0 -DDEBUG")
-	set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} -O2 -s -DNDEBUG -Wno-unused-variable")
-	set(CMAKE_CXX_FLAGS_RELWITHDEBINFO "${CMAKE_CXX_FLAGS_RELWITHDEBINFO} -O2 -g")
-endif()
-
-# Output Directories
-if(CMAKE_SIZEOF_VOID_P EQUAL 8)
-	set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${PROJECT_SOURCE_DIR}/Build/${CMAKE_BUILD_TYPE}/Lib)
-	set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${PROJECT_SOURCE_DIR}/Build/${CMAKE_BUILD_TYPE}/Bin)
-elseif(CMAKE_SIZEOF_VOID_P EQUAL 4)
-	set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${PROJECT_SOURCE_DIR}/Build/${CMAKE_BUILD_TYPE}/Lib32)
-	set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${PROJECT_SOURCE_DIR}/Build/${CMAKE_BUILD_TYPE}/Bin32)
-endif()
-	
-set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_ARCHIVE_OUTPUT_DIRECTORY})
-set(CMAKE_INSTALL_LIBDIR ${CMAKE_LIBRARY_OUTPUT_DIRECTORY})
-set(CMAKE_INSTALL_BINDIR ${CMAKE_RUNTIME_OUTPUT_DIRECTORY})
-set(CMAKE_INSTALL_INCLUDEDIR ${PROJECT_SOURCE_DIR}/Build/${CMAKE_BUILD_TYPE}/include)
-	
-# Dependencies
-include(Libraries/FindAcid.cmake)
-
-# Sources
+# Microverse sources directory
 add_subdirectory(Sources)
