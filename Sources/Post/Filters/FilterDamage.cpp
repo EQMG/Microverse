@@ -4,24 +4,15 @@
 
 namespace micro
 {
-	FilterDamage::FilterDamage(const GraphicsStage &graphicsStage) :
-		IPostFilter(graphicsStage, {"Shaders/Filters/Default.vert", "Shaders/Filters/Damage.frag"}, {}),
-		m_uniformScene(UniformHandler()),
-		m_colour(Colour(0.0f, 0.0f, 0.0f, 0.0f)),
-		m_radiusDriver(std::make_shared<DriverConstant>(0.0f)),
-		m_radius(0.0f),
-		m_softnessDriver(std::make_shared<DriverConstant>(0.0f)),
-		m_softness(0.0f)
-	{
-		m_radius = 0.1f;
-		m_colour = Colour::RED;
-	}
-
-	FilterDamage::~FilterDamage()
+	FilterDamage::FilterDamage(const Pipeline::Stage &pipelineStage) :
+		PostFilter{pipelineStage, {"Shaders/Filters/Default.vert", "Shaders/Filters/Damage.frag"}},
+		m_colour{Colour::Red},
+		m_radiusDriver{std::make_unique<DriverConstant<float>>(0.0f)},
+		m_softnessDriver{std::make_unique<DriverConstant<float>>(0.0f)}
 	{
 	}
 
-	void FilterDamage::Render(const CommandBuffer &commandBuffer, const Vector4 &clipPlane, const ICamera &camera)
+	void FilterDamage::Render(const CommandBuffer &commandBuffer)
 	{
 		auto delta = Engine::Get()->GetDeltaRender();
 		m_radius = m_radiusDriver->Update(delta);
@@ -33,25 +24,25 @@ namespace micro
 		}
 
 		// Updates uniforms.
-		m_uniformScene.Push("colour", m_colour);
-		m_uniformScene.Push("radius", m_radius);
-		m_uniformScene.Push("softness", m_softness);
+		m_pushScene.Push("colour", m_colour);
+		m_pushScene.Push("radius", m_radius);
+		m_pushScene.Push("softness", m_softness);
 
 		// Updates descriptors.
-		m_descriptorSet.Push("UboScene", &m_uniformScene);
-		m_descriptorSet.Push("writeColour", m_pipeline.GetTexture(5));
-		m_descriptorSet.Push("samplerColour", m_pipeline.GetTexture(5));
-		bool updateSuccess = m_descriptorSet.Update(m_pipeline);
+		m_descriptorSet.Push("PushScene", m_pushScene);
+		PushConditional("writeColour", "samplerColour", "resolved", "diffuse");
 
-		if (!updateSuccess)
+		if (!m_descriptorSet.Update(m_pipeline))
 		{
 			return;
 		}
 
-		// Draws the object.
+		// Binds the pipeline.
 		m_pipeline.BindPipeline(commandBuffer);
 
-		m_descriptorSet.BindDescriptor(commandBuffer);
-		m_model->CmdRender(commandBuffer);
+		// Draws the object.
+		m_descriptorSet.BindDescriptor(commandBuffer, m_pipeline);
+		m_pushScene.BindPush(commandBuffer, m_pipeline);
+		vkCmdDraw(commandBuffer, 3, 1, 0, 0);
 	}
 }

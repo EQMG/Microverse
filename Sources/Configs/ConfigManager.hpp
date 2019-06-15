@@ -1,21 +1,24 @@
 #pragma once
 
-#include <Files/IFile.hpp>
+#include <Files/File.hpp>
+#include <Helpers/Delegate.hpp>
 
 using namespace acid;
 
 namespace micro
 {
-	class ConfigManager
-	{
-	private:
-		std::unique_ptr<IFile> m_audio;
-		std::unique_ptr<IFile> m_graphics;
-	public:
-		ConfigManager();
+class ConfigManager :
+	public Observer
+{
+public:
+	ConfigManager();
 
-		void Load();
+	void Load();
 
-		void Save();
-	};
+	void Save() const;
+
+private:
+	File m_audio;
+	File m_graphics;
+};
 }

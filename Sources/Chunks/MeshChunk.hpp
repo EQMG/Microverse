@@ -13,31 +13,31 @@ namespace micro
 {
 	enum EdgeFlagBits
 	{
-		EDGE_NONE = 0,
-		EDGE_NORTH = 1,
-		EDGE_EAST = 2,
-		EDGE_SOUTH = 4,
-		EDGE_WEST = 8
+		None = 0,
+		North = 1,
+		East = 2,
+		South = 4,
+		West = 8
 	};
 	typedef uint32_t EdgeFlags;
 
 	class MeshChunk :
 		public MeshSimple
 	{
+	public:
+		MeshChunk(Planet *parent, const float &sideLength, const float &squareSize, const uint32_t &vertexCount, const float &textureScale, const Transform &transform);
+
+		VertexDefault GetVertex(const uint32_t &col, const uint32_t &row) override;
 	private:
+		Vector3f GetPosition(const float &x, const float &z);
+
+		Vector3f GetNormal(const float &x, const float &z);
+
+		Vector3f ProjectCubeToSphere(const Vector3f &source, const float &radius);
+
 		Planet *m_parent;
 
 		Matrix4 m_worldMatrix;
 		EdgeFlags m_edgeConditions;
-	public:
-		MeshChunk(Planet *parent, const float &sideLength, const float &squareSize, const uint32_t &vertexCount, const float &textureScale, const Transform &transform);
-
-		~MeshChunk();
-
-		VertexModel GetVertex(const uint32_t &col, const uint32_t &row) override;
-	private:
-		Vector3 GetPosition(const float &x, const float &z);
-
-		Vector3 GetNormal(const float &x, const float &z);
 	};
 }

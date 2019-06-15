@@ -1,15 +1,15 @@
 #include "MainRenderer.hpp"
 
 #include <Scenes/Scenes.hpp>
-#include <Renderer/Renderer.hpp>
+#include <Graphics/Graphics.hpp>
 #include <Maths/Visual/DriverConstant.hpp>
 #include <Maths/Visual/DriverSinwave.hpp>
-#include <Meshes/RendererMeshes.hpp>
-#include <Fonts/RendererFonts.hpp>
-#include <Guis/RendererGuis.hpp>
-#include <Particles/RendererParticles.hpp>
-#include <Shadows/RendererShadows.hpp>
-#include <Post/Deferred/RendererDeferred.hpp>
+#include <Meshes/SubrenderMeshes.hpp>
+#include <Fonts/SubrenderFonts.hpp>
+#include <Guis/SubrenderGuis.hpp>
+#include <Particles/SubrenderParticles.hpp>
+#include <Shadows/SubrenderShadows.hpp>
+#include <Post/Deferred/SubrenderDeferred.hpp>
 #include <Post/Filters/FilterDefault.hpp>
 #include <Post/Filters/FilterFxaa.hpp>
 #include <Post/Filters/FilterGrain.hpp>
@@ -19,71 +19,66 @@
 
 namespace micro
 {
-	const RenderpassCreate RENDERPASS_0_CREATE = RenderpassCreate
+	MainRenderer::MainRenderer()
 	{
-		{
-			Attachment(0, "shadows", ATTACHMENT_TYPE_IMAGE, VK_FORMAT_R8_UNORM)
-		}, // images
-		{
-			SubpassType(0, {0})
-		}, // subpasses
-		4096, 4096 // width, height
-	};
-	const RenderpassCreate RENDERPASS_1_CREATE = RenderpassCreate
-	{
-		{
-			Attachment(0, "depth", ATTACHMENT_TYPE_DEPTH, VK_FORMAT_D32_SFLOAT_S8_UINT, false),
-			Attachment(1, "swapchain", ATTACHMENT_TYPE_SWAPCHAIN),
-			Attachment(2, "diffuse", ATTACHMENT_TYPE_IMAGE, VK_FORMAT_R8G8B8A8_UNORM, false),
-			Attachment(3, "normals", ATTACHMENT_TYPE_IMAGE, VK_FORMAT_R16G16B16A16_SFLOAT, false),
-			Attachment(4, "materials", ATTACHMENT_TYPE_IMAGE, VK_FORMAT_R8G8B8A8_UNORM, false),
-			Attachment(5, "resolved", ATTACHMENT_TYPE_IMAGE, VK_FORMAT_R8G8B8A8_UNORM)
-		}, // images
-		{
-			SubpassType(0, {0, 2, 3, 4}),
-			SubpassType(1, {0, 5}),
-			SubpassType(2, {1})
-		} // subpasses
-	};
-
-	MainRenderer::MainRenderer() :
-		IManagerRender({RENDERPASS_0_CREATE, RENDERPASS_1_CREATE})
-	{
-	}
-
-	void MainRenderer::Start()
-	{
-	//	Renderer::Get()->AddRenderer<RendererShadows>(GraphicsStage(0, 0));
+		std::vector<std::unique_ptr<RenderStage>> renderStages;
 	
-		Renderer::Get()->AddRenderer<RendererMeshes>(GraphicsStage(1, 0));
+		std::vector<Attachment> renderpassAttachments0{ 
+			{0, "shadows", Attachment::Type::Image, false, VK_FORMAT_R8_UNORM}
+		};
+		std::vector<SubpassType> renderpassSubpasses0{ 
+			{0, {0}}
+		};
+		renderStages.emplace_back(std::make_unique<RenderStage>(renderpassAttachments0, renderpassSubpasses0, Viewport{{4096, 4096}}));
 
-		Renderer::Get()->AddRenderer<RendererDeferred>(GraphicsStage(1, 1), DEFERRED_SIMPLE);
-		Renderer::Get()->AddRenderer<RendererMeshes>(GraphicsStage(1, 1), MESH_SORT_BACK);
-	//	Renderer::Get()->AddRenderer<RendererParticles>(GraphicsStage(1, 1));
+		std::vector<Attachment> renderpassAttachments1 { 
+			{0, "depth", Attachment::Type::Depth, false},
+			{1, "swapchain", Attachment::Type::Swapchain},
+			{2, "position", Attachment::Type::Image, false, VK_FORMAT_R16G16B16A16_SFLOAT},
+			{3, "diffuse", Attachment::Type::Image, false, VK_FORMAT_R8G8B8A8_UNORM},
+			{4, "normal", Attachment::Type::Image, false, VK_FORMAT_R16G16B16A16_SFLOAT},
+			{5, "material", Attachment::Type::Image, false, VK_FORMAT_R8G8B8A8_UNORM},
+			{6, "resolved", Attachment::Type::Image, false, VK_FORMAT_R8G8B8A8_UNORM}
+		};
+		std::vector<SubpassType> renderpassSubpasses1{ 
+			{0, {0, 2, 3, 4, 5}},
+			{1, {0, 6}},
+			{2, {0, 1}}
+		};
+		renderStages.emplace_back(std::make_unique<RenderStage>(renderpassAttachments1, renderpassSubpasses1));
+		Graphics::Get()->SetRenderStages(std::move(renderStages));
 
-	//	Renderer::Get()->AddRenderer<FilterFxaa>(GraphicsStage(1, 2));
-	//	Renderer::Get()->AddRenderer<FilterLensflare>(GraphicsStage(1, 2));
-	//	Renderer::Get()->AddRenderer<FilterTiltshift>(GraphicsStage(1, 2));
-		Renderer::Get()->AddRenderer<FilterDamage>(GraphicsStage(1, 2));
-	//	Renderer::Get()->AddRenderer<FilterGrain>(GraphicsStage(1, 2));
-		Renderer::Get()->AddRenderer<FilterDefault>(GraphicsStage(1, 2), true);
-		Renderer::Get()->AddRenderer<RendererGuis>(GraphicsStage(1, 2));
-		Renderer::Get()->AddRenderer<RendererFonts>(GraphicsStage(1, 2));
+		Graphics::Get()->ClearSubrenders();
+
+		//Graphics::Get()->AddSubrender<SubrenderShadows>({0, 0});
+
+		Graphics::Get()->AddSubrender<SubrenderMeshes>({1, 0});
+
+		Graphics::Get()->AddSubrender<SubrenderDeferred>({1, 1});
+		Graphics::Get()->AddSubrender<SubrenderMeshes>({1, 1}, SubrenderMeshes::Sort::Back);
+		//Graphics::Get()->AddSubrender<SubrenderParticles>({1, 1});
+
+		//Graphics::Get()->AddSubrender<FilterFxaa>({1, 2});
+		//Graphics::Get()->AddSubrender<FilterLensflare>({1, 2});
+		//Graphics::Get()->AddSubrender<FilterTiltshift>({1, 2});
+		Graphics::Get()->AddSubrender<FilterDamage>({1, 2});
+		//Graphics::Get()->AddSubrender<FilterGrain>({1, 2});
+		Graphics::Get()->AddSubrender<FilterDefault>({1, 2}, true);
+		//Graphics::Get()->AddSubrender<RendererGizmos>({1, 2});
+		Graphics::Get()->AddSubrender<SubrenderGuis>({1, 2});
+		Graphics::Get()->AddSubrender<SubrenderFonts>({1, 2});
 	}
 
 	void MainRenderer::Update()
 	{
-		auto &renderpassCreate0 = Renderer::Get()->GetRenderStage(0)->GetRenderpassCreate();
-		renderpassCreate0.SetWidth(Shadows::Get()->GetShadowSize());
-		renderpassCreate0.SetHeight(Shadows::Get()->GetShadowSize());
+		//auto renderpassCreate0 = Renderer::Get()->GetRenderStage(0);
+		//renderpassCreate0->GetViewport().SetSize(Shadows::Get()->GetShadowSize());
 
-		/*auto filterDamage = GetRenderer<FilterDamage>();
-
-		if (filterDamage != nullptr)
+		/*if (auto filterDamage{Graphics::Get()->GetSubrender<FilterDamage>()}; filterDamage != nullptr)
 		{
-			filterDamage->SetColour(Colour::RED);
-			filterDamage->SetRadiusDriver<DriverConstant>(0.55f);
-			filterDamage->SetSoftnessDriver<DriverSinwave>(0.25f, 0.35f, 2.0f);
+			filterDamage->SetColour(Colour::Red);
+			filterDamage->SetRadiusDriver<DriverConstant<float>>(0.55f);
+			filterDamage->SetSoftnessDriver<DriverSinwave<float>>(0.25f, 0.35f, 2.0f);
 		}*/
 	}
 }

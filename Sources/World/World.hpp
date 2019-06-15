@@ -1,7 +1,7 @@
 #pragma once
 
 #include <Engine/Engine.hpp>
-#include <Noise/Noise.hpp>
+#include <Maths/Noise/Noise.hpp>
 #include <Maths/Visual/DriverLinear.hpp>
 #include <Maths/Vector3.hpp>
 #include <Maths/Colour.hpp>
@@ -15,11 +15,8 @@ namespace micro
 	/// A module used for managing the world.
 	/// </summary>
 	class World :
-		public IModule
+		public Module
 	{
-	private:
-		Fog m_fog;
-		Vector3 m_lightDirection;
 	public:
 		/// <summary>
 		/// Gets this engine instance.
@@ -33,6 +30,9 @@ namespace micro
 
 		Fog GetFog() const { return m_fog; }
 
-		Vector3 GetLightDirection() const { return m_lightDirection; }
+		Vector3f GetLightDirection() const { return m_lightDirection; }
+	private:
+		Fog m_fog;
+		Vector3f m_lightDirection;
 	};
 }

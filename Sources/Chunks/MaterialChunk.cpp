@@ -1,42 +1,42 @@
 #include "MaterialChunk.hpp"
 
-#include <Objects/GameObject.hpp>
-#include <Models/VertexModel.hpp>
-#include <Celestial/Planet.hpp>
+#include <Scenes/Entity.hpp>
+#include <Models/VertexDefault.hpp>
+#include "Celestial/Planet.hpp"
 
 namespace micro
 {
-	MaterialChunk::MaterialChunk() :
-		IMaterial(),
-		m_material(nullptr)
+	MaterialChunk::MaterialChunk()
 	{
 	}
 
 	void MaterialChunk::Start()
 	{
-		m_material = PipelineMaterial::Resource({1, 0}, PipelineCreate({"Shaders/Chunks/Chunk.vert", "Shaders/Chunks/Chunk.frag"},
-			{VertexModel::GetVertexInput()}, PIPELINE_MODE_MRT, PIPELINE_DEPTH_READ_WRITE, VK_POLYGON_MODE_FILL, VK_CULL_MODE_BACK_BIT, {}));
+		m_pipelineMaterial = PipelineMaterial::Create({1, 0}, {{"Shaders/Chunks/Chunk.vert", "Shaders/Chunks/Chunk.frag"}, {VertexDefault::GetVertexInput()}, {}, 
+			PipelineGraphics::Mode::Mrt, PipelineGraphics::Depth::ReadWrite, VK_PRIMITIVE_TOPOLOGY_TRIANGLE_LIST, VK_POLYGON_MODE_FILL, VK_CULL_MODE_BACK_BIT});
 	}
 
 	void MaterialChunk::Update()
 	{
 	}
 
-	void MaterialChunk::Decode(const Metadata &metadata)
-	{
-	}
-
-	void MaterialChunk::Encode(Metadata &metadata) const
-	{
-	}
-
 	void MaterialChunk::PushUniforms(UniformHandler &uniformObject)
 	{
-		uniformObject.Push("transform", GetGameObject()->GetTransform().GetWorldMatrix());
+		uniformObject.Push("transform", GetParent()->GetWorldMatrix());
 	}
 
 	void MaterialChunk::PushDescriptors(DescriptorsHandler &descriptorSet)
 	{
-		descriptorSet.Push("test", GetGameObject()->GetParent()->GetComponent<Planet>()->test);
+		descriptorSet.Push("test", GetParent()->GetParent()->GetComponent<Planet>()->test);
+	}
+
+	const Metadata &operator>>(const Metadata &metadata, MaterialChunk &material)
+	{
+		return metadata;
+	}
+
+	Metadata &operator<<(Metadata &metadata, const MaterialChunk &material)
+	{;
+		return metadata;
 	}
 }

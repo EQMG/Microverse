@@ -1,17 +1,14 @@
 #pragma once
 
-#include <Maths/Colour.hpp>
-#include <Materials/IMaterial.hpp>
+#include <Materials/Material.hpp>
 
 using namespace acid;
 
 namespace micro
 {
 	class MaterialChunk :
-		public IMaterial
+		public Material
 	{
-	private:
-		std::shared_ptr<PipelineMaterial> m_material;
 	public:
 		MaterialChunk();
 
@@ -19,14 +16,12 @@ namespace micro
 
 		void Update() override;
 
-		void Decode(const Metadata &metadata) override;
-
-		void Encode(Metadata &metadata) const override;
-
 		void PushUniforms(UniformHandler &uniformObject) override;
 
 		void PushDescriptors(DescriptorsHandler &descriptorSet) override;
 
-		std::shared_ptr<PipelineMaterial> GetMaterialPipeline() const override { return m_material; }
+		friend const Metadata &operator>>(const Metadata &metadata, MaterialChunk &material);
+
+		friend Metadata &operator<<(Metadata &metadata, const MaterialChunk &material);
 	};
 }

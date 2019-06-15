@@ -1,59 +1,63 @@
 #include "ConfigManager.hpp"
 
-#include <Display/Display.hpp>
-#include <Helpers/FileSystem.hpp>
-#include <Files/Json/FileJson.hpp>
-#include <Events/Events.hpp>
-#include <Events/EventTime.hpp>
+#include <Serialized/Yaml/Yaml.hpp>
+#include <Devices/Window.hpp>
+#include <Graphics/Graphics.hpp>
 #include <Audio/Audio.hpp>
+#include <Timers/Timers.hpp>
 
 namespace micro
 {
-	ConfigManager::ConfigManager() :
-		m_audio(std::make_unique<FileJson>("Configs/Audio.json")),
-		m_graphics(std::make_unique<FileJson>("Configs/Graphics.json"))
+ConfigManager::ConfigManager() :
+	m_audio{"Configs/Audio.yaml", std::make_unique<Yaml>()},
+	m_graphics{"Configs/Graphics.yaml", std::make_unique<Yaml>()}
+{
+	Load();
+	Timers::Get()->Every(160s, [this]()
 	{
-		Load();
+		Save();
+	}, this);
+}
 
-		Events::Get()->AddEvent<EventTime>(Time::Seconds(2.5f), [&]() -> void
-		{
-			Save();
-		}, false);
-	}
+void ConfigManager::Load()
+{
+	m_audio.Load();
+	auto audioData{m_audio.GetMetadata()};
+	Audio::Get()->SetGain(Audio::Type::Master, audioData->GetChildDefault<float>("Master Volume", 1.0f));
+	Audio::Get()->SetGain(Audio::Type::General, audioData->GetChildDefault<float>("General Volume", 1.0f));
+	Audio::Get()->SetGain(Audio::Type::Effect, audioData->GetChildDefault<float>("Effect Volume", 1.0f));
+	Audio::Get()->SetGain(Audio::Type::Music, audioData->GetChildDefault<float>("Music Volume", 1.0f));
 
-	void ConfigManager::Load()
-	{
-		m_audio->Load();
-		auto audioData = m_audio->GetParent();
-		Audio::Get()->SetMasterGain(audioData->GetChild<float>("Master Volume", 1.0f));
-		Audio::Get()->SetTypeGain(SOUND_TYPE_GENERAL, audioData->GetChild<float>("General Volume", 1.0f));
-		Audio::Get()->SetTypeGain(SOUND_TYPE_EFFECT, audioData->GetChild<float>("Effect Volume", 1.0f));
-		Audio::Get()->SetTypeGain(SOUND_TYPE_MUSIC, audioData->GetChild<float>("Music Volume", 1.0f));
+	m_graphics.Load();
+	auto graphicsData{m_graphics.GetMetadata()};
+	//Renderer::Get()->SetAntialiasing(graphicsData->GetChildDefault<bool>("Antialiasing", true));
+	Window::Get()->SetSize(graphicsData->GetChildDefault<Vector2f>("Size", Vector2i{-1}));
+	Window::Get()->SetPosition(graphicsData->GetChildDefault<Vector2f>("Position", Vector2i{-1}));
+	Window::Get()->SetBorderless(graphicsData->GetChildDefault<bool>("Borderless", false));
+	Window::Get()->SetResizable(graphicsData->GetChildDefault<bool>("Resizable", true));
+	Window::Get()->SetFloating(graphicsData->GetChildDefault<bool>("Floating", false));
+	Window::Get()->SetFullscreen(graphicsData->GetChildDefault<bool>("Fullscreen", false));
+	Engine::Get()->SetFpsLimit(graphicsData->GetChildDefault<float>("FPS Limit", 0.0f));
+}
 
-		m_graphics->Load();
-		auto graphicsData = m_graphics->GetParent();
-		Display::Get()->SetWidth(graphicsData->GetChild<uint32_t>("Display Width", 1080));
-		Display::Get()->SetHeight(graphicsData->GetChild<uint32_t>("Display Height", 720));
-		Engine::Get()->SetFpsLimit(graphicsData->GetChild<float>("Fps Limit", 0.0f));
-		Display::Get()->SetAntialiasing(graphicsData->GetChild<bool>("Is Antialiasing", true));
-		Display::Get()->SetAntialiasing(graphicsData->GetChild<bool>("Is Fullscreen", false));
-	}
+void ConfigManager::Save() const
+{
+	auto audioData{m_audio.GetMetadata()};
+	audioData->SetChild<float>("Master Volume", Audio::Get()->GetGain(Audio::Type::Master));
+	audioData->SetChild<float>("General Volume", Audio::Get()->GetGain(Audio::Type::General));
+	audioData->SetChild<float>("Effect Volume", Audio::Get()->GetGain(Audio::Type::Effect));
+	audioData->SetChild<float>("Music Volume", Audio::Get()->GetGain(Audio::Type::Music));
+	m_audio.Write();
 
-	void ConfigManager::Save()
-	{
-		auto audioData = m_audio->GetParent();
-		audioData->SetChild<float>("Master Volume", Audio::Get()->GetMasterGain());
-		audioData->SetChild<float>("General Volume", Audio::Get()->GetTypeGain(SOUND_TYPE_GENERAL));
-		audioData->SetChild<float>("Effect Volume", Audio::Get()->GetTypeGain(SOUND_TYPE_EFFECT));
-		audioData->SetChild<float>("Music Volume", Audio::Get()->GetTypeGain(SOUND_TYPE_MUSIC));
-		m_audio->Save();
-
-		auto graphicsData = m_graphics->GetParent();
-		graphicsData->SetChild<uint32_t>("Display Width", Display::Get()->GetWidth());
-		graphicsData->SetChild<uint32_t>("Display Height", Display::Get()->GetHeight());
-		graphicsData->SetChild<float>("Fps Limit", Engine::Get()->GetFpsLimit());
-		graphicsData->SetChild<bool>("Is Antialiasing", Display::Get()->IsAntialiasing());
-		graphicsData->SetChild<bool>("Is Fullscreen", Display::Get()->IsAntialiasing());
-		m_graphics->Save();
-	}
+	auto graphicsData{m_graphics.GetMetadata()};
+	//graphicsData->SetChild<bool>("Antialiasing", Renderer::Get()->IsAntialiasing());
+	graphicsData->SetChild<Vector2f>("Size", Window::Get()->GetSize(false));
+	graphicsData->SetChild<Vector2f>("Position", Window::Get()->GetPosition());
+	graphicsData->SetChild<bool>("Borderless", Window::Get()->IsBorderless());
+	graphicsData->SetChild<bool>("Resizable", Window::Get()->IsResizable());
+	graphicsData->SetChild<bool>("Floating", Window::Get()->IsFloating());
+	graphicsData->SetChild<bool>("Fullscreen", Window::Get()->IsFullscreen());
+	graphicsData->SetChild<float>("FPS Limit", Engine::Get()->GetFpsLimit());
+	m_graphics.Write();
+}
 }

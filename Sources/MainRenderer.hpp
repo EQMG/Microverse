@@ -1,18 +1,16 @@
 #pragma once
 
-#include <Renderer/IManagerRender.hpp>
+#include <Graphics/Renderer.hpp>
 
 using namespace acid;
 
 namespace micro
 {
 	class MainRenderer :
-		public IManagerRender
+		public Renderer
 	{
 	public:
 		MainRenderer();
-
-		void Start() override;
 
 		void Update() override;
 	};

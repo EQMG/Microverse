@@ -1,49 +1,41 @@
 #pragma once
 
 #include <Maths/Colour.hpp>
-#include <Post/IPostFilter.hpp>
-#include <Maths/Visual/IDriver.hpp>
+#include <Post/PostFilter.hpp>
+#include <Maths/Visual/Driver.hpp>
 
 using namespace acid;
 
 namespace micro
 {
 	class FilterDamage :
-		public IPostFilter
+		public PostFilter
 	{
-	private:
-		UniformHandler m_uniformScene;
-
-		Colour m_colour;
-
-		std::shared_ptr<IDriver> m_radiusDriver;
-		float m_radius;
-
-		std::shared_ptr<IDriver> m_softnessDriver;
-		float m_softness;
 	public:
-		FilterDamage(const GraphicsStage &graphicsStage);
+		explicit FilterDamage(const Pipeline::Stage &pipelineStage);
 
-		~FilterDamage();
+		void Render(const CommandBuffer &commandBuffer) override;
 
-		void Render(const CommandBuffer &commandBuffer, const Vector4 &clipPlane, const ICamera &camera) override;
-
-		Colour GetColour() const { return m_colour; }
+		const Colour &GetColour() const { return m_colour; }
 
 		void SetColour(const Colour &colour) { m_colour = colour; }
 
-		void SetRadiusDriver(std::shared_ptr<IDriver> radiusDriver) { m_radiusDriver = radiusDriver; }
+		void SetRadiusDriver(std::unique_ptr<Driver<float>> &&radiusDriver) { m_radiusDriver = std::move(radiusDriver); }
 
-		template<typename T, typename... Args>
-		void SetRadiusDriver(Args &&... args) { SetRadiusDriver(std::make_shared<T>(std::forward<Args>(args)...)); }
+		const float &GetRadius() const { return m_radius; }
 
-		float GetRadius() const { return m_radius; }
+		void SetSoftnessDriver(std::unique_ptr<Driver<float>> &&softnessDriver) { m_softnessDriver = std::move(softnessDriver); }
 
-		void SetSoftnessDriver(std::shared_ptr<IDriver> softnessDriver) { m_softnessDriver = softnessDriver; }
+		const float &GetSoftness() const { return m_softness; }
+	private:
+		PushHandler m_pushScene;
 
-		template<typename T, typename... Args>
-		void SetSoftnessDriver(Args &&... args) { SetSoftnessDriver(std::make_shared<T>(std::forward<Args>(args)...)); }
+		Colour m_colour;
 
-		float GetSoftness() const { return m_softness; }
+		std::unique_ptr<Driver<float>> m_radiusDriver;
+		float m_radius{};
+
+		std::unique_ptr<Driver<float>> m_softnessDriver;
+		float m_softness{};
 	};
 }

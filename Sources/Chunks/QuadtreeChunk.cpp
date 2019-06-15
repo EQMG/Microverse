@@ -4,40 +4,34 @@
 #include <Maths/Maths.hpp>
 #include <Meshes/Mesh.hpp>
 #include <Meshes/MeshRender.hpp>
-#include <Events/EventTime.hpp>
-#include <Events/Events.hpp>
 #include "MaterialChunk.hpp"
 
 namespace micro
 {
-	const uint32_t QuadtreeChunk::HIGHEST_LOD = 3;
-	const Time QuadtreeChunk::DELAY_RENDER = Time::Seconds(0.3f);
-	const Time QuadtreeChunk::DELAY_PURGE = Time::Seconds(6.0f);
-	const std::vector<Vector3> QuadtreeChunk::OFFSETS =
-	{
-		Vector3(1.0f, 0.0f, 1.0f),
-		Vector3(1.0f, 0.0f, -1.0f),
-		Vector3(-1.0f, 0.0f, -1.0f),
-		Vector3(-1.0f, 0.0f, 1.0f)
+	const uint32_t QuadtreeChunk::HIGHEST_LOD{3};
+	const Time QuadtreeChunk::DELAY_RENDER{0.3s};
+	const Time QuadtreeChunk::DELAY_PURGE{6.0s};
+	const std::vector<Vector3f> QuadtreeChunk::OFFSETS{
+		{1.0f, 0.0f, 1.0f},
+		{1.0f, 0.0f, -1.0f},
+		{-1.0f, 0.0f, -1.0f},
+		{-1.0f, 0.0f, 1.0f}
 	};
 
 	QuadtreeChunk::QuadtreeChunk(Planet *parent, const uint32_t &lod, const float &sideLength, const float &squareSize, const Transform &transform) :
-		m_parent(parent),
-		m_lod(lod),
-		m_sideLength(sideLength),
-		m_squareSize(squareSize),
-		m_transform(transform),
-		m_children(std::vector<QuadtreeChunk *>()),
-		m_subdivided(false),
-		m_lastChanged(Time::ZERO)
+		m_parent{parent},
+		m_lod{lod},
+		m_sideLength{sideLength},
+		m_squareSize{squareSize},
+		m_transform{transform}
 	{
 	}
 
 	void QuadtreeChunk::Start()
 	{
-		m_lastChanged = Engine::GetTime();
+		m_lastChanged = Time::Now();
 
-		auto mesh = GetGameObject()->GetComponent<Mesh>(true);
+		auto mesh = GetParent()->GetComponent<Mesh>(true);
 
 		if (mesh == nullptr)
 		{
@@ -45,25 +39,26 @@ namespace micro
 			return;
 		}
 
-#if ACID_VERBOSE
-		auto debugStart = Engine::GetTime();
+#if defined(ACID_VERBOSE)
+		auto debugStart{Time::Now()};
 #endif
-		uint32_t vertexCount = CalculateVertexCount(m_sideLength, m_squareSize);
-		float textureScale = CalculateTextureScale(m_sideLength);
+		auto vertexCount{CalculateVertexCount(m_sideLength, m_squareSize)};
+		auto textureScale{CalculateTextureScale(m_sideLength)};
 		mesh->SetModel(std::make_shared<MeshChunk>(m_parent, m_sideLength, m_squareSize, vertexCount, textureScale, m_transform));
-#if ACID_VERBOSE
-		auto debugEnd = Engine::GetTime();
+
+#if defined(ACID_VERBOSE)
+		auto debugEnd{Time::Now()};
 
 		if ((debugEnd - debugStart).AsMilliseconds() > 10.0f)
 		{
-			Log::Out("Terrain built in %ims\n", (debugEnd - debugStart).AsMilliseconds());
+			Log::Out("Terrain built in %.3fms\n", (debugEnd - debugStart).AsMilliseconds<float>());
 		}
 #endif
 	}
 
 	void QuadtreeChunk::Update()
 	{
-		GetGameObject()->SetTransform(m_parent->GetGameObject()->GetTransform());
+		GetParent()->SetLocalTransform(m_parent->GetParent()->GetTransform());
 
 		if (!m_subdivided && !m_children.empty() && Engine::GetTime() - m_lastChanged > DELAY_PURGE)
 		{
@@ -83,15 +78,7 @@ namespace micro
 		}
 	}
 
-	void QuadtreeChunk::Decode(const Metadata &metadata)
-	{
-	}
-
-	void QuadtreeChunk::Encode(Metadata &metadata) const
-	{
-	}
-
-	GameObject *QuadtreeChunk::CreateChunk(Planet *parent, const Transform &transform, const uint32_t &lod, const float &sideLength, const float &squareSize, const std::string &namePostfix)
+	Entity *QuadtreeChunk::CreateChunk(Planet *parent, const Transform &transform, const uint32_t &lod, const float &sideLength, const float &squareSize, const std::string &namePostfix)
 	{
 		GameObject *terrainChunk = new GameObject(Transform());
 		terrainChunk->SetName(parent->GetGameObject()->GetName() + "_" + namePostfix);
