@@ -1,7 +1,5 @@
 #pragma once
 
-#include <array>
-#include <memory>
 #include <Scenes/Component.hpp>
 #include <Scenes/Entity.hpp>
 #include <Models/Model.hpp>
@@ -17,12 +15,12 @@ namespace micro
 		public Component
 	{
 	public:
-		static const uint32_t HIGHEST_LOD;
-		static const Time DELAY_RENDER;
-		static const Time DELAY_PURGE;
-		static const std::vector<Vector3f> OFFSETS;
+		static const uint32_t HighestLod;
+		static const Time DelayRender;
+		static const Time DelayPurge;
+		static const std::vector<Vector3f> Offsets;
 
-		QuadtreeChunk(Planet *parent = nullptr, const uint32_t &lod = 0, const float &sideLength = 200.0f, const float &squareSize = 4.0f, const Transform &transform = Transform());
+		explicit QuadtreeChunk(Planet *parent = nullptr, const uint32_t &lod = 0, const float &sideLength = 200.0f, const float &squareSize = 4.0f, const Transform &transform = Transform());
 
 		void Start() override;
 
@@ -37,6 +35,11 @@ namespace micro
 		void Subdivide();
 
 		void Merge();
+
+		friend const Metadata &operator>>(const Metadata &metadata, QuadtreeChunk &quadtreeChunk);
+
+		friend Metadata &operator<<(Metadata &metadata, const QuadtreeChunk &quadtreeChunk);
+
 	private:
 		static uint32_t CalculateVertexCount(const float &sideLength, const float &squareSize);
 

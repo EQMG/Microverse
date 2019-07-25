@@ -27,7 +27,6 @@ namespace micro
 
 	void MaterialChunk::PushDescriptors(DescriptorsHandler &descriptorSet)
 	{
-		descriptorSet.Push("test", GetParent()->GetParent()->GetComponent<Planet>()->test);
 	}
 
 	const Metadata &operator>>(const Metadata &metadata, MaterialChunk &material)

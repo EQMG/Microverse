@@ -7,9 +7,9 @@
 #include <Graphics/Graphics.hpp>
 #include <Scenes/Scenes.hpp>
 #include <Timers/Timers.hpp>
-#include "Celestial/Fogs/MaterialFog.hpp"
-#include "Celestial/GasGiants/MaterialGasGiant.hpp"
-#include "Celestial/Rings/MaterialRing.hpp"
+//#include "Celestial/Fogs/MaterialFog.hpp"
+//#include "Celestial/GasGiants/MaterialGasGiant.hpp"
+//#include "Celestial/Rings/MaterialRing.hpp"
 #include "Celestial/Gravity.hpp"
 #include "Celestial/Planet.hpp"
 #include "Celestial/Star.hpp"
@@ -17,7 +17,6 @@
 #include "Chunks/MaterialChunk.hpp"
 #include "World/World.hpp"
 #include "MainRenderer.hpp"
-#include "Scenes/PlayerFps.hpp"
 #include "Scenes/Scene1.hpp"
 #include "World/World.hpp"
 #include "Resources/Resources.hpp"
@@ -55,23 +54,6 @@ MainGame::MainGame() :
 	// Loads configs from a config manager.
 	m_configs = std::make_unique<ConfigManager>();
 
-	Log::Out("Current DateTime: %s\n", Time::GetDateTime());
-
-	Timers::Get()->Once(0.333s, []()
-	{
-		Log::Out("Timer Hello World!\n");
-	});
-	Timers::Get()->Every(4s, []()
-	{
-		Log::Out("Timer Every Tick: %i fps\n", Engine::Get()->GetFps());
-	});
-	Timers::Get()->Repeat(2s, 3, []()
-	{
-		static uint32_t i = 0;
-		Log::Out("Timer Repeat Tick #%i\n", i);
-		i++;
-	});
-
 	m_buttonFullscreen.OnButton().Add([this](InputAction action, BitMask<InputMod> mods)
 	{
 		if (action == InputAction::Press)
@@ -103,13 +85,12 @@ MainGame::MainGame() :
 
 	// Registers components.
 	auto &componentRegister{Scenes::Get()->GetComponentRegister()};
-	componentRegister.Add<PlayerFps>("PlayerFps");
 	componentRegister.Add<Gravity>("Gravity");
 	componentRegister.Add<Planet>("Planet");
 	componentRegister.Add<Star>("Star");
-	componentRegister.Add<MaterialFog>("MaterialFog");
-	componentRegister.Add<MaterialGasGiant>("MaterialGasGiant");
-	componentRegister.Add<MaterialRing>("MaterialRing");
+	//componentRegister.Add<MaterialFog>("MaterialFog");
+	//componentRegister.Add<MaterialGasGiant>("MaterialGasGiant");
+	//componentRegister.Add<MaterialRing>("MaterialRing");
 	componentRegister.Add<QuadtreeChunk>("QuadtreeChunk");
 	componentRegister.Add<MaterialChunk>("MaterialChunk");
 

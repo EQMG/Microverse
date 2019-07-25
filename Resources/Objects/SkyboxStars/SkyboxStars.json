@@ -1,14 +1,31 @@
 {
   "Mesh": {
-	"Model": "Sphere_10_10_1.0"
+    "model": {
+      "type": "ModelCube",
+      "extents": {
+        "x": 1.0,
+        "y": 1.0,
+        "z": 1.0
+      }
+    }
   },
   "MaterialSkybox": {
-	"Cubemap Texture": "Objects/SkyboxStars",
-	"Cubemap Suffix": ".png",
-	"Sky Colour": "#000000"
+    "image": {
+      "filename": "Objects/SkyboxStars",
+      "fileSuffix": ".png",
+      "fileSides": [
+        "Right", "Left", "Top", "Bottom", "Back", "Front"
+      ],
+      "filter": 1,
+      "addressMode": 2,
+      "anisotropic": true,
+      "mipmap": true
+    },
+    "baseColour": "#FFFFFF"
   },
   "SkyboxCycle": {
-	"Enable Fog": false
+    "enableFog": false,
+    "enableRotation": false
   },
   "MeshRender": {
   }

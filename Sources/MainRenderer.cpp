@@ -55,7 +55,7 @@ namespace micro
 		Graphics::Get()->AddSubrender<SubrenderMeshes>({1, 0});
 
 		Graphics::Get()->AddSubrender<SubrenderDeferred>({1, 1});
-		Graphics::Get()->AddSubrender<SubrenderMeshes>({1, 1}, SubrenderMeshes::Sort::Back);
+		//Graphics::Get()->AddSubrender<SubrenderMeshes>({1, 1}, SubrenderMeshes::Sort::Back);
 		//Graphics::Get()->AddSubrender<SubrenderParticles>({1, 1});
 
 		//Graphics::Get()->AddSubrender<FilterFxaa>({1, 2});

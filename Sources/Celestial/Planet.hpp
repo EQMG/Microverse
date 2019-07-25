@@ -2,18 +2,46 @@
 
 #include <memory>
 #include <Maths/Colour.hpp>
-#include <Textures/Texture.hpp>
-#include "ICelestial.hpp"
+#include <Graphics/Images/Image2d.hpp>
+#include "Celestial.hpp"
 
 using namespace acid;
 
 namespace micro
 {
 	class Planet :
-		public ICelestial
+		public Celestial
 	{
+	public:
+		static const float MedianRadius;
+		static const float MedianDensity;
+		static const float MedianMass;
+		static const float SquareRadiusRatio;
+
+		explicit Planet(const std::optional<uint64_t> &seed = std::nullopt, const float &radius = MedianRadius, const float &density = MedianDensity, const float &axialTilt = 0.0f);
+
+		void Start() override;
+
+		void Update() override;
+
+		Colour GetColour(const Vector3f &cartesian);
+
+		float GetRadius(const Vector3f &cartesian);
+
+		const std::optional<uint64_t> &GetSeed() const { return m_seed; }
+
+		const float &GetRadius() const override { return m_radius; }
+
+		const float &GetMass() const override { return m_mass; }
+
+		const float &GetDensity() const { return m_density; }
+
+		friend const Metadata &operator>>(const Metadata &metadata, Planet &planet);
+
+		friend Metadata &operator<<(Metadata &metadata, const Planet &planet);
+
 	private:
-		int m_seed; // The seed used to generate this planet.
+		std::optional<uint64_t> m_seed; // The seed used to generate this planet.
 		float m_radius; // The planets radius (m).
 		float m_density; // The planets density (kg/m^3).
 		float m_mass; // The planets mass (kg).
@@ -28,35 +56,5 @@ namespace micro
 
 		std::vector<Colour> m_heightmap;
 		uint32_t m_heightmapSize;
-	public:
-		std::shared_ptr<Texture> test;
-		static const float MEDIAN_RADIUS;
-		static const float MEDIAN_DENSITY;
-		static const float MEDIAN_MASS;
-		static const float SQUARE_RADIUS_RATIO;
-
-		Planet(const int &seed = 0, const float &radius = MEDIAN_RADIUS, const float &density = MEDIAN_DENSITY, const float &axialTilt = 0.0f);
-
-		void Start() override;
-
-		void Update() override;
-
-		void Decode(const Metadata &metadata) override;
-
-		void Encode(Metadata &metadata) const override;
-
-		Colour GetColour(const Vector3 &cartesian);
-
-		float GetRadius(const Vector3 &cartesian);
-
-		int GetSeed() const { return m_seed; }
-
-		float GetRadius() const { return m_radius; }
-
-		float GetMass() const { return m_mass; }
-
-		float GetDensity() const { return m_density; }
-	private:
-		void GenerateHeightmap();
 	};
 }

@@ -1,17 +1,15 @@
 #pragma once
 
-#include <Objects/IComponent.hpp>
-#include "ICelestial.hpp"
+#include <Scenes/Component.hpp>
+#include "Celestial.hpp"
 
 using namespace acid;
 
 namespace micro
 {
 	class Gravity :
-		public IComponent
+		public Component
 	{
-	private:
-		ICelestial *m_influence;
 	public:
 		Gravity();
 
@@ -19,10 +17,12 @@ namespace micro
 
 		void Update() override;
 
-		void Decode(const Metadata &metadata) override;
+		Celestial *GetStrongestInfluence() const { return m_influence; }
 
-		void Encode(Metadata &metadata) const override;
+		friend const Metadata &operator>>(const Metadata &metadata, Gravity &gravity);
 
-		ICelestial *GetStrongestInfluence() const { return m_influence; }
+		friend Metadata &operator<<(Metadata &metadata, const Gravity &gravity);
+	private:
+		Celestial *m_influence{};
 	};
 }

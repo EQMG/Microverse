@@ -5,10 +5,10 @@
 namespace micro
 {
 	const std::array<Colour, 4> COLOUR_BIOMES{
-		"#6e3529",
-		"#934838",
-		"#9e402c",
-		"#656565"
+		Colour{"#6e3529"},
+		Colour{"#934838"},
+		Colour{"#9e402c"},
+		Colour{"#656565"}
 	};
 	const float COLOUR_SPREAD{0.76f};
 	const float COLOUR_HALF_SPREAD{COLOUR_SPREAD / 2.0f};
@@ -30,7 +30,7 @@ namespace micro
 		auto z{((col * m_squareSize) - m_sideLength) / 2.0f};
 
 		Vector3f cartesian{m_worldMatrix.Multiply({x, 0.0f, z, 1.0f})};
-		cartesian = ProjectCubeToSphere(cartesian, m_parent->GetRadius());
+		cartesian = Celestial::ProjectCubeToSphere(cartesian, m_parent->GetRadius());
 
 		auto polar{cartesian.CartesianToPolar()};
 		polar.m_x = m_parent->GetRadius(cartesian);
@@ -53,7 +53,7 @@ namespace micro
 			return cartesian;
 		}
 
-		cartesian = ProjectCubeToSphere(cartesian, m_parent->GetRadius());
+		cartesian = Celestial::ProjectCubeToSphere(cartesian, m_parent->GetRadius());
 		auto polar{cartesian.CartesianToPolar()};
 		polar.m_x = m_parent->GetRadius(cartesian);
 		return polar.PolarToCartesian();
@@ -68,22 +68,5 @@ namespace micro
 
 		auto normal{(positionL - positionR).Cross(positionR - positionD)};
 		return normal.Normalize();
-	}
-
-	Vector3f MeshChunk::ProjectCubeToSphere(const Vector3f &source, const float &radius)
-	{
-		if (radius == 0.0f)
-		{
-			return source;
-		}
-
-		Vector3 cube{source / radius};
-		auto dx{cube.m_x * cube.m_x};
-		auto dy{cube.m_y * cube.m_y};
-		auto dz{cube.m_z * cube.m_z};
-		auto sx{cube.m_x * std::sqrt(1.0f - (dy / 2.0f) - (dz / 2.0f) + (dy * dz / 3.0f))};
-		auto sy{cube.m_y * std::sqrt(1.0f - (dz / 2.0f) - (dx / 2.0f) + (dz * dx / 3.0f))};
-		auto sz{cube.m_z * std::sqrt(1.0f - (dx / 2.0f) - (dy / 2.0f) + (dx * dy / 3.0f))};
-		return {sx * radius, sy * radius, sz * radius};
 	}
 }

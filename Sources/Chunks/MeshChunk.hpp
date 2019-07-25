@@ -33,8 +33,6 @@ namespace micro
 
 		Vector3f GetNormal(const float &x, const float &z);
 
-		Vector3f ProjectCubeToSphere(const Vector3f &source, const float &radius);
-
 		Planet *m_parent;
 
 		Matrix4 m_worldMatrix;

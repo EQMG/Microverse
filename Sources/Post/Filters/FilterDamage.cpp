@@ -5,7 +5,7 @@
 namespace micro
 {
 	FilterDamage::FilterDamage(const Pipeline::Stage &pipelineStage) :
-		PostFilter{pipelineStage, {"Shaders/Filters/Default.vert", "Shaders/Filters/Damage.frag"}},
+		PostFilter{pipelineStage, {"Shaders/Post/Default.vert", "Shaders/Post/Damage.frag"}},
 		m_colour{Colour::Red},
 		m_radiusDriver{std::make_unique<DriverConstant<float>>(0.0f)},
 		m_softnessDriver{std::make_unique<DriverConstant<float>>(0.0f)}
@@ -14,7 +14,7 @@ namespace micro
 
 	void FilterDamage::Render(const CommandBuffer &commandBuffer)
 	{
-		auto delta = Engine::Get()->GetDeltaRender();
+		auto delta{Engine::Get()->GetDeltaRender()};
 		m_radius = m_radiusDriver->Update(delta);
 		m_softness = m_softnessDriver->Update(delta);
 

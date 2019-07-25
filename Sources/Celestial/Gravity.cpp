@@ -1,15 +1,13 @@
-#include "Planet.hpp"
+#include "Gravity.hpp"
 
-#include <Objects/GameObject.hpp>
+#include <Scenes/Entity.hpp>
 #include <Physics/Rigidbody.hpp>
 #include <Scenes/Scenes.hpp>
-#include "Gravity.hpp"
 #include "Star.hpp"
 
 namespace micro
 {
-	Gravity::Gravity() :
-		m_influence(nullptr)
+	Gravity::Gravity()
 	{
 	}
 
@@ -19,25 +17,25 @@ namespace micro
 
 	void Gravity::Update()
 	{
-		auto rigidbody = GetGameObject()->GetComponent<Rigidbody>();
+		auto rigidbody{GetParent()->GetComponent<Rigidbody>()};
 
 		if (rigidbody == nullptr)
 		{
 			return;
 		}
 
-		Vector3 position = GetGameObject()->GetTransform().GetPosition();
-		auto celestialList = Scenes::Get()->GetStructure()->QueryComponents<ICelestial>(); // TODO: Only re-query on component type insert.
+		auto position{GetParent()->GetWorldTransform().GetPosition()};
+		auto celestialList{Scenes::Get()->GetStructure()->QueryComponents<Celestial>()}; // TODO: Only re-query on component type insert.
 		m_influence = nullptr;
 
-		Vector3 forcesSum = Vector3();
-		Vector3 strongest = Vector3();
+		Vector3f forcesSum;
+		Vector3f strongest;
 
 		for (auto &celestial : celestialList)
 		{
-			Vector3 celestialPosition = celestial->GetGameObject()->GetTransform().GetPosition();
-			float force = (Star::G_CONSTANT * rigidbody->GetMass() * celestial->GetMass()) / celestialPosition.DistanceSquared(position);
-			Vector3 vector = force * (celestialPosition - position).Normalize();
+			auto celestialPosition{celestial->GetParent()->GetWorldTransform().GetPosition()};
+			auto force{(Star::GConstant * rigidbody->GetMass() * celestial->GetMass()) / celestialPosition.DistanceSquared(position)};
+			auto vector{force * (celestialPosition - position).Normalize()};
 
 			if (vector.LengthSquared() > strongest.LengthSquared())
 			{
@@ -51,11 +49,13 @@ namespace micro
 		rigidbody->SetGravity(forcesSum);
 	}
 
-	void Gravity::Decode(const Metadata &metadata)
+	const Metadata &operator>>(const Metadata &metadata, Gravity &gravity)
 	{
+		return metadata;
 	}
 
-	void Gravity::Encode(Metadata &metadata) const
+	Metadata &operator<<(Metadata &metadata, const Gravity &gravity)
 	{
+		return metadata;
 	}
 }

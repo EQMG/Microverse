@@ -1,17 +1,16 @@
 #include "QuadtreeChunk.hpp"
 
 #include <Scenes/Scenes.hpp>
-#include <Maths/Maths.hpp>
 #include <Meshes/Mesh.hpp>
 #include <Meshes/MeshRender.hpp>
 #include "MaterialChunk.hpp"
 
 namespace micro
 {
-	const uint32_t QuadtreeChunk::HIGHEST_LOD{3};
-	const Time QuadtreeChunk::DELAY_RENDER{0.3s};
-	const Time QuadtreeChunk::DELAY_PURGE{6.0s};
-	const std::vector<Vector3f> QuadtreeChunk::OFFSETS{
+	const uint32_t QuadtreeChunk::HighestLod{3};
+	const Time QuadtreeChunk::DelayRender{0.3s};
+	const Time QuadtreeChunk::DelayPurge{6.0s};
+	const std::vector<Vector3f> QuadtreeChunk::Offsets{
 		{1.0f, 0.0f, 1.0f},
 		{1.0f, 0.0f, -1.0f},
 		{-1.0f, 0.0f, -1.0f},
@@ -58,9 +57,9 @@ namespace micro
 
 	void QuadtreeChunk::Update()
 	{
-		GetParent()->SetLocalTransform(m_parent->GetParent()->GetTransform());
+		GetParent()->SetLocalTransform(m_parent->GetParent()->GetLocalTransform());
 
-		if (!m_subdivided && !m_children.empty() && Engine::GetTime() - m_lastChanged > DELAY_PURGE)
+		if (!m_subdivided && !m_children.empty() && Time::Now() - m_lastChanged > DelayPurge)
 		{
 			m_children.clear();
 			return;
@@ -80,39 +79,37 @@ namespace micro
 
 	Entity *QuadtreeChunk::CreateChunk(Planet *parent, const Transform &transform, const uint32_t &lod, const float &sideLength, const float &squareSize, const std::string &namePostfix)
 	{
-		GameObject *terrainChunk = new GameObject(Transform());
-		terrainChunk->SetName(parent->GetGameObject()->GetName() + "_" + namePostfix);
-		terrainChunk->SetParent(parent->GetGameObject());
+		auto terrainChunk{Scenes::Get()->GetStructure()->CreateEntity({})};
+		terrainChunk->SetName(parent->GetParent()->GetName() + "_" + namePostfix);
+		terrainChunk->SetParent(parent->GetParent());
 		terrainChunk->AddComponent<Mesh>();
 		terrainChunk->AddComponent<QuadtreeChunk>(parent, lod, sideLength, squareSize, transform);
-	//	terrainChunk->AddComponent<ColliderConvexHull>(transform.GetPosition());
-	//	terrainChunk->AddComponent<Rigidbody>(0.0f);
+		//terrainChunk->AddComponent<ColliderConvexHull>(transform.GetPosition());
+		//terrainChunk->AddComponent<Rigidbody>(0.0f);
 		terrainChunk->AddComponent<MaterialChunk>();
 		terrainChunk->AddComponent<MeshRender>();
-	//	terrainChunk->AddComponent<ShadowRender>();
+		//terrainChunk->AddComponent<ShadowRender>();
 		return terrainChunk;
 	}
 
 	uint32_t QuadtreeChunk::CalculateLod()
 	{
-		Vector3 cameraPosition = Scenes::Get()->GetCamera()->GetPosition();
-		Matrix4 worldMatrix = GetGameObject()->GetTransform().GetWorldMatrix();
-		Vector3 chunkPosition = m_transform.GetPosition().ProjectCubeToSphere(m_parent->GetRadius());
-		chunkPosition = Vector3(worldMatrix.Multiply(chunkPosition));
-		float distance = std::fabs(chunkPosition.Distance(cameraPosition));
-		float lod = std::floor((-1.618f / m_parent->GetRadius()) * distance + (HIGHEST_LOD + 1));
-		return static_cast<uint32_t>(std::clamp(lod, 0.0f, static_cast<float>(HIGHEST_LOD)));
+		auto cameraPosition{Scenes::Get()->GetCamera()->GetPosition()};
+		auto worldMatrix{GetParent()->GetWorldMatrix()};
+		auto chunkPosition{Celestial::ProjectCubeToSphere(m_transform.GetPosition(), m_parent->GetRadius())};
+		chunkPosition = {worldMatrix.Multiply(Vector4f{chunkPosition, 1.0f})};
+		auto distance{std::fabs(chunkPosition.Distance(cameraPosition))};
+		auto lod{std::floor((-1.618f / m_parent->GetRadius()) * distance + (HighestLod + 1))};
+		return static_cast<uint32_t>(std::clamp(lod, 0.0f, static_cast<float>(HighestLod)));
 	}
 
 	void QuadtreeChunk::SetVisible(const bool &visible, const Time &timeout)
 	{
 		m_visible = visible;
 
-		if (timeout == Time::ZERO)
+		if (timeout == 0s)
 		{
-			auto meshRender = GetGameObject()->GetComponent<MeshRender>(true);
-
-			if (meshRender != nullptr)
+			if (auto meshRender = GetParent()->GetComponent<MeshRender>(true); meshRender != nullptr)
 			{
 				meshRender->SetEnabled(m_visible);
 			}
@@ -120,7 +117,7 @@ namespace micro
 			return;
 		}
 
-		Events::Get()->AddEvent<EventTime>(timeout, [&](){
+		/*Events::Get()->AddEvent<EventTime>(timeout, [&](){
 			if (m_visible != visible)
 			{
 				return;
@@ -132,49 +129,58 @@ namespace micro
 			{
 				meshRender->SetEnabled(m_visible);
 			}
-		}, false);
+		}, false);*/
 	}
 
 	void QuadtreeChunk::Subdivide()
 	{
 		m_subdivided = true;
-		m_lastChanged = Engine::GetTime();
-		SetVisible(false, DELAY_RENDER);
+		m_lastChanged = Time::Now();
+		SetVisible(false, DelayRender);
 
 		if (!m_children.empty())
 		{
 			for (auto &child : m_children)
 			{
-				child->SetVisible(true, Time::ZERO);
-				child->GetGameObject()->SetStructure(Scenes::Get()->GetStructure());
+				child->SetVisible(true, 0s);
 			}
 
 			return;
 		}
 
-		for (auto &offset : OFFSETS)
+		for (const auto &offset : Offsets)
 		{
-			Vector3 childOffset = offset.Rotate(m_transform.GetRotation());
+			/*Vector3f childOffset = offset.Rotate(m_transform.GetRotation());
 			childOffset *= 0.25f * m_sideLength;
-			Transform childTransform = Transform(m_transform.GetPosition() + childOffset, m_transform.GetRotation(), m_transform.GetScaling());
+			Transform childTransform = Transform(m_transform.GetPosition() + childOffset, m_transform.GetRotation(), m_transform.GetScale());
 
-			GameObject *child = CreateChunk(m_parent, childTransform, m_lod + 1, m_sideLength / 2.0f, m_squareSize / 2.0f, offset.ToString());
-			m_children.emplace_back(child->GetComponent<QuadtreeChunk>());
+			auto child{CreateChunk(m_parent, childTransform, m_lod + 1, m_sideLength / 2.0f, m_squareSize / 2.0f, offset.ToString())};
+			m_children.emplace_back(child->GetComponent<QuadtreeChunk>());*/
 		}
 	}
 
 	void QuadtreeChunk::Merge()
 	{
 		m_subdivided = false;
-		m_lastChanged = Engine::GetTime();
-		SetVisible(true, Time::ZERO);
+		m_lastChanged = Time::Now();
+		SetVisible(true, 0s);
 
 		for (auto &child : m_children)
 		{
 			child->Merge();
-			child->SetVisible(false, Time::ZERO);
-			child->GetGameObject()->SetRemoved(true);
+			child->SetVisible(false, 0s);
+			child->GetParent()->SetRemoved(true);
 		}
+	}
+
+	const Metadata &operator>>(const Metadata &metadata, QuadtreeChunk &quadtreeChunk)
+	{
+		return metadata;
+	}
+
+	Metadata &operator<<(Metadata &metadata, const QuadtreeChunk &quadtreeChunk)
+	{
+		return metadata;
 	}
 
 	uint32_t QuadtreeChunk::CalculateVertexCount(const float &sideLength, const float &squareSize)

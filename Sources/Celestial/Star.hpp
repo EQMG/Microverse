@@ -1,15 +1,40 @@
 #pragma once
 
 #include <Maths/Colour.hpp>
-#include "ICelestial.hpp"
+#include "Celestial.hpp"
 
 using namespace acid;
 
 namespace micro
 {
 	class Star :
-		public ICelestial
+		public Celestial
 	{
+	public:
+		static const float MedianRadius;
+		static const float MedianDensity;
+		static const float MedianMass;
+		static const float AuToM;
+		static const float GConstant;
+
+		Star(const float &radius = MedianRadius, const float &density = MedianDensity);
+
+		void Start() override;
+
+		void Update() override;
+		
+		static Colour CalculateColour(const float &surfaceTemperature);
+
+		const float &GetRadius() const override { return m_radius; }
+
+		const float &GetMass() const override { return m_mass; }
+
+		const Colour &GetColour() const { return m_surfaceColour; }
+
+		friend const Metadata &operator>>(const Metadata &metadata, Star &star);
+
+		friend Metadata &operator<<(Metadata &metadata, const Star &star);
+
 	private:
 		float m_radius; // The stars radius (m).
 		float m_density; // The stars density (kg/m^3).
@@ -24,29 +49,5 @@ namespace micro
 		float m_planetFrostLine; // The planetary frost line for planets (AU).
 		float m_habitableMin; // The habitable min distance for carbon based life (AU).
 		float m_habitableMax; // The habitable max distance for carbon based life (AU).
-	public:
-		static const float MEDIAN_RADIUS;
-		static const float MEDIAN_DENSITY;
-		static const float MEDIAN_MASS;
-		static const float AU_TO_M;
-		static const float G_CONSTANT;
-
-		Star(const float &radius = MEDIAN_RADIUS, const float &density = MEDIAN_DENSITY);
-
-		void Start() override;
-
-		void Update() override;
-
-		void Decode(const Metadata &metadata) override;
-
-		void Encode(Metadata &metadata) const override;
-
-		static Colour CalculateColour(const float &surfaceTemperature);
-
-		float GetRadius() const { return m_radius; }
-
-		float GetMass() const { return m_mass; }
-
-		Colour GetColour() const { return m_surfaceColour; }
 	};
 }
